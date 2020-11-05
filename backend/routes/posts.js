@@ -30,7 +30,7 @@ router.get("/", async function (req, res, next) {
        FROM posts p
        LEFT JOIN votes v ON p.id = v.post_id
        GROUP BY p.id
-       ORDER BY p.id;
+       ORDER BY p.id
       `
     );
     return res.json(result.rows);
