@@ -155,7 +155,7 @@ router.post("/", authRequired, async function (req, res, next) {
 
 router.put("/:id", ensureCorrectUser, async function (req, res, next) {
   try {
-    const {title, body, description} = req.body;
+    const {title, body, description, photo_id} = req.body;
     const result = await db.query(
       `UPDATE posts SET title=$1, description=$2, body=$3, photo_id=$4
         WHERE id = $5 
