@@ -10,7 +10,6 @@ CREATE TABLE users (
     first_name TEXT,
     last_name TEXT,
     email TEXT,
-    photo_url TEXT,
     city TEXT,
     state TEXT,
     country TEXT,
@@ -21,22 +20,10 @@ CREATE TABLE posts (
   id TEXT PRIMARY KEY, 
   title TEXT NOT NULL, 
   description TEXT NOT NULL,
-  body TEXT NOT NULL,
-  username TEXT NOT NULL,
-  photo_id TEXT DEFAULT null
-);
-                    
-CREATE TABLE comments (
-  id TEXT PRIMARY KEY, 
-  text TEXT NOT NULL, 
-  post_id TEXT NOT NULL REFERENCES posts ON DELETE CASCADE,
-  photo_id TEXT DEFAULT null
-);
-
-CREATE TABLE comment_user (
-  comment_id TEXT NOT NULL REFERENCES comments ON DELETE CASCADE,
+  body TEXT NOT NULL,    
   username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
-  PRIMARY KEY (comment_id, username)
+  parent_post TEXT DEFAULT null,
+  photo_id TEXT DEFAULT null
 );
 
 CREATE TABLE votes (
@@ -51,7 +38,8 @@ CREATE TABLE photos (
   url TEXT NOT NULL
 );
 
-CREATE TABLE  photo_user (
+CREATE TABLE  user_photo (
   photo_id TEXT NOT NULL REFERENCES photos ON DELETE CASCADE,
   username TEXT NOT NULL REFERENCES users ON DELETE CASCADE
 );
+                    

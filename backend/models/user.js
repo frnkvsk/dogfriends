@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const partialUpdate = require("../helpers/partialUpdate");
 
 const BCRYPT_WORK_FACTOR = 10;
-
+const { v4: uuid } = require('uuid');
 
 /** Related functions for users. */
 
@@ -16,10 +16,6 @@ class User {
     const result = await db.query(
         `SELECT username, 
                 password, 
-                first_name, 
-                last_name, 
-                email, 
-                photo_url, 
                 is_admin
           FROM users 
           WHERE UPPER(username) = UPPER($1)`,
@@ -58,24 +54,46 @@ class User {
     }
 
     const hashedPassword = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
-
+    
+    
     const result = await db.query(
         `INSERT INTO users 
-            (username, password, first_name, last_name, email, photo_url, is_admin, city, state, country) 
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) 
-          RETURNING username, password, first_name, last_name, email, photo_url, is_admin, city, state, country`,
+            (username, password, first_name, last_name, email, is_admin, city, state, country) 
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+          RETURNING username, password, first_name, last_name, email, is_admin, city, state, country`,
         [
           data.username,
           hashedPassword,
           data.first_name,
           data.last_name,
           data.email,
-          data.photo_url,
           data.is_admin,
           data.city,
           data.state,
           data.country
-        ]);
+        ]
+    );
+    /**
+     * If new user uploads a photo_url
+     *    -Create photo id with uuid()
+     *    -Insert into photos (id, url)
+     *    -Insert into user_photo (username, photo_id)
+     */
+    if(data.photo_url && data.photo_url.length) {
+      const id = uuid();
+      await db.query(
+        `INSERT INTO photos
+            (id, url)
+          VALUES ($1, $2)`,
+          [id, data.photo_url]
+      );
+      await db.query(
+        `INSERT INTO user_photo
+            (username, photo_id)
+          VALUES ($1, $2)`,
+          [data.username, id]
+      );
+    }
 
     return result.rows[0];
   }
@@ -95,7 +113,7 @@ class User {
 
   static async findOne(username) {
     const userRes = await db.query(
-        `SELECT username, first_name, last_name, email, photo_url, is_admin, city, state, country 
+        `SELECT username, first_name, last_name, email, is_admin, city, state, country 
             FROM users 
             WHERE UPPER(username) = UPPER($1)`,
         [username]);

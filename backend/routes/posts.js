@@ -56,12 +56,11 @@ router.get("/", async function (req, res, next) {
 router.get("/:id", async function (req, res, next) {
   try {
     const result = await db.query(
-      `SELECT p.id,
-              p.title,
-              p.description,
-              p.body,
-              p.username,  
-              p.photo_id,             
+      `SELECT p1.id,
+              p1.title,
+              p1.description,
+              p1.body,
+              p1.username,            
               CASE WHEN COUNT(c.id) = 0 THEN JSON '[]' ELSE JSON_AGG(
                 CASE 
                   WHEN ph.id <> null THEN 
@@ -70,13 +69,33 @@ router.get("/:id", async function (req, res, next) {
                     JSON_BUILD_OBJECT('id', c.id, 'text', c.text, 'url', null)
                 END
                 ) END AS comments
-        FROM posts p 
+        FROM posts p1 
         LEFT JOIN comments c ON c.post_id = $1 
         LEFT JOIN photos ph ON ph.id = c.photo_id
       WHERE p.id = $1  
       GROUP BY p.id    
       ORDER BY p.id
       `, [req.params.id]
+      // `SELECT p1.id,
+      //         p1.title,
+      //         p1.description,
+      //         p1.body,
+      //         p1.username,            
+      //         CASE WHEN COUNT(c.id) = 0 THEN JSON '[]' ELSE JSON_AGG(
+      //           CASE 
+      //             WHEN ph.id <> null THEN 
+      //               JSON_BUILD_OBJECT('id', c.id, 'text', c.text, 'url', ph.url)
+      //             ELSE
+      //               JSON_BUILD_OBJECT('id', c.id, 'text', c.text, 'url', null)
+      //           END
+      //           ) END AS comments
+      //   FROM posts p1 
+      //   LEFT JOIN comments c ON c.post_id = $1 
+      //   LEFT JOIN photos ph ON ph.id = c.photo_id
+      // WHERE p.id = $1  
+      // GROUP BY p.id    
+      // ORDER BY p.id
+      // `, [req.params.id]
     );
     if(result.rows.length) {
       const votes = await db.query(
@@ -129,6 +148,7 @@ router.post("/", authRequired, async function (req, res, next) {
     const newId = uuid();
     const {title, body, description, photo_id} = req.body;
     const username = req.username;
+    
     const result = await db.query(
       `INSERT INTO posts (id, title, description, body, username, photo_id) 
         VALUES ($1, $2, $3, $4, $5, $6) 
@@ -136,7 +156,7 @@ router.post("/", authRequired, async function (req, res, next) {
       [newId, title, description, body, username, photo_id]);
 
     if(photo_id && photo_id.length) {
-      await db.query(`INSERT INTO photo_user (photo_id, username) 
+      await db.query(`INSERT INTO user_photo (photo_id, username) 
       VALUES ($1, $2)`,
       [photo_id, username]);
     }    

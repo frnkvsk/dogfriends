@@ -4,7 +4,7 @@ import Navbar from './features/dogfriends/components/Navbar';
 import Home from './features/dogfriends/pages/Home';
 import NewPost from './features/dogfriends/pages/NewPost';
 import Login from './features/dogfriends/pages/Login';
-import Post from './features/dogfriends/pages/Post';
+import PostList from './features/dogfriends/pages/PostList';
 import { makeStyles } from '@material-ui/core';
 import Profile from './features/dogfriends/pages/Profile';
 
@@ -56,7 +56,7 @@ function App() {
                 <Profile/>        
               </Route>
               <Route exact path="/:id">
-                <Post/>        
+                <PostList/>        
               </Route>                 
                                
             </Switch> 

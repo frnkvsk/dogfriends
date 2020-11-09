@@ -43,7 +43,7 @@ router.post("/", authRequired, async function (req, res, next) {
        [newId, req.body.url]);
     
     await db.query(
-      `INSERT INTO photo_user (photo_id, username) 
+      `INSERT INTO user_photo (photo_id, username) 
                     VALUES ($1, $2)`,
                     [newId, req.username]);
       

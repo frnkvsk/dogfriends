@@ -23,7 +23,7 @@ export default function UserAvatar() {
   const auth = useContext(AuthContext);
   const alt = auth.authState.userInfo.username || "";
   const src = auth.authState.userInfo.photo_url || "";
-  const initials = (auth.authState.userInfo.first_name[0] + auth.authState.userInfo.last_name[0]).toUpperCase();
+  const initials = "tt";// (auth.authState.userInfo.first_name[0] + auth.authState.userInfo.last_name[0]).toUpperCase();
   return (
     <div className={classes.root}>
       {src === "" ? 

@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     width: '100%',
     margin: '30px 0 20px 0',
+    border: '1px solid red',
   },
   input: {
     width: '100%',

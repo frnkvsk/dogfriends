@@ -1,99 +1,135 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import { makeStyles, Tooltip } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import EditIcon from '@material-ui/icons/Edit';
+
 import { useSelector, useDispatch } from 'react-redux';
+import { 
+  getPostDataById,
+  removePost, 
+  selectPosts, 
+  getPostsData,
+} from '../dogfriendsPostsSlice';
+import BlogForm from './../components/BlogForm';
+import BlogComments from '../components/BlogComments';
 import { AuthContext } from '../context/AuthContext';
-import { getPostsData, selectPosts } from '../dogfriendsPostsSlice';
-import { makeStyles } from '@material-ui/core';
-import BlogVotes from './../components/BlogVotes';
-import PaginationComp from './../components/Pagination';
-import { selectPageCount } from '../dogfriendsPageCountSlice'; 
 
 const useStyles = makeStyles((theme) => ({
-  root: {       
-    margin: '15px 0 0 0' ,
+  root: {    
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%', 
+    fontSize: '22px',
+    padding: '7px',
+    border: '1px solid blue', 
+    // border: '1px solid #e0e0e0', 
   },
-  title: {
-    fontSize: '32px',
-    width: '100%',
-    paddingRight: '10px',
-  },
-  display: {
+  titleWrapper: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    marginTop: '20px',
-    paddingRight: '10px',
+    width: '100%',
+    fontSize: '32px',
+    fontWeight: '500',
+    marginBottom: '0px',
   },
-  blog: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    minWidth: '400px',
-    [theme.breakpoints.down('xs')]: {
-      width: '100%'
-    },
-    [theme.breakpoints.up('md')]: {
-      width: '48%'
-    },
-    height: '120px',
-    margin: '10px 0 10px 0',
-    flexWrap: 'wrap',
-    border: '1px solid #e0e0e0',
-    
+  title: {
+    fontSize: '56px',
   },
-  link: {
-   textDecoration: 'none', 
-   color: '#2196f3',
-   padding: '7px',
+  closeIcon: {
+    color: 'red',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    marginRight: '10px',
+  },
+  editIcon: {
+    color: '#2196f3',
+    cursor: 'pointer',
+    marginRight: '10px',
+  },
+  hr: {
+    width: '100%',
+    border: '1px solid #9e9e9e',
+  },
+  button: {
+    width: '80px',
   },
   description: {
-    width: '93%',
-    padding: '7px',
-    flexWrap: 'wrap',
-    overflow: 'hidden',
-  }
+    fontSize: '22px',
+    fontStyle: 'italic',
+    margin: '12px 0 5px 0',
+    
+  },
+  body: {
+    fontSize: '22px',
+
+    margin: '25px 0 5px 0',
+  },
+  
 }));
 
-export default function Home() {
+export default function PostList() {
   const classes = useStyles();
   const auth = useContext(AuthContext);
+  const history = useHistory();
+  const [state, setState] = useState('display');
   const dispatch = useDispatch();
   const postList = useSelector(selectPosts);
-  const { pageCurr } = useSelector(selectPageCount);
-  const [currentPages, setCurrentPages] = useState({
-    from: pageCurr * 10,
-    to: pageCurr * 10 + 10,
-  });
+  const {id} = useParams();
+  const rootRef = React.useRef(null);
 
   useEffect(() => {
-    dispatch(getPostsData());
-  }, [dispatch]);
-
-  useEffect(() => {
-    setCurrentPages({
-      from: pageCurr * 10,
-      to: pageCurr * 10 + 10,
-    })
-  }, [pageCurr]);
+    dispatch(getPostDataById(id));
+  }, [dispatch, id]);
   
+  const handleEdit = () => {
+    setState('edit');
+  }
+
+  const handleDelete = () => {
+    dispatch(removePost({
+      id: id, 
+      username: auth.authState.userInfo.username,
+      token: auth.authState.token
+    }));
+    setTimeout(() => {
+      dispatch(getPostsData());
+    }, 100);
+    history.push('/');
+  }
 
   return (
-    
     <div className={classes.root}>
-      <div className={classes.title}>
-        Welcome to <b> Dog Friends</b>, our innovative site for communicating on the information superhighway.
-      </div>
-      <div className={classes.display}>
-        {(postList && postList.status === 'fulfilled' && postList.data.length) && postList.data.slice(currentPages.from, currentPages.to).map(e => (
-          <div className={classes.blog} key={e.id}>
-            <a className={classes.link} href={`/${e.id}`}>{e.title}</a>
-            <div className={classes.description}>{e.description}</div>
-            <BlogVotes id={e.id} auth={auth}/>
-          </div>
-        ))}
-      </div>
-      <PaginationComp pageCount={postList.data.length}/> 
+      {console.log('postList',postList)}
+      {state === 'display' ? (
+        postList && postList.data && (
+          <>
+            <div className={classes.titleWrapper}>
+              <div className={classes.title}>{postList.data.title}</div>
+              <div className={classes.iconWrapper} >
+                {postList.data.username === auth.authState.userInfo.username &&
+                  <>
+                  <Tooltip title="Edit Post" ref={() => rootRef.current}>
+                    <EditIcon className={classes.editIcon} onClick={handleEdit}/>
+                  </Tooltip>
+                  <Tooltip title="Delete Post" ref={() => rootRef.current}>
+                    <CloseIcon className={classes.closeIcon} onClick={handleDelete}/>
+                  </Tooltip> 
+                  </> 
+                }
+                                
+              </div>
+            </div>          
+            <div className={classes.description}>{postList.data.description}</div>
+            <div className={classes.body}>{postList.data.body}</div>
+            <hr className={classes.hr}/>
+            <div className={classes.titleWrapper}>Comments</div>
+            <BlogComments id={id}/>
+          </>
+      )) : (
+        <BlogForm data={postList.data}/>
+      )}      
     </div>
   );
 }

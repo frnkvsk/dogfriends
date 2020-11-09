@@ -39,7 +39,8 @@ const useStyles = makeStyles((theme) => ({
     height: '120px',
     margin: '10px 0 10px 0',
     flexWrap: 'wrap',
-    border: '1px solid #e0e0e0',
+    border: '1px solid red',
+    // border: '1px solid #e0e0e0',
     
   },
   link: {
@@ -82,16 +83,16 @@ export default function Home() {
     
     <div className={classes.root}>
       <div className={classes.title}>
-        Welcome to <b> Dog Friends</b>, our innovative site for communicating on the information superhighway.
+        Welcome to <b> Dog Friends</b>.
       </div>
       <div className={classes.display}>
-        {/* {(postList && postList.status === 'fulfilled' && postList.data.length) && postList.data.slice(currentPages.from, currentPages.to).map(e => (
+        {(postList && postList.status === 'fulfilled' && postList.data.length) && postList.data.slice(currentPages.from, currentPages.to).map(e => (
           <div className={classes.blog} key={e.id}>
             <a className={classes.link} href={`/${e.id}`}>{e.title}</a>
             <div className={classes.description}>{e.description}</div>
             <BlogVotes id={e.id} auth={auth}/>
           </div>
-        ))} */}
+        ))}
       </div>
       {/* <PaginationComp pageCount={postList.data.length}/>  */}
     </div>

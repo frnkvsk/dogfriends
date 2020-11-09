@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100%', 
     fontSize: '22px',
     padding: '7px',
-    border: '1px solid #e0e0e0', 
+    border: '1px solid blue', 
+    // border: '1px solid #e0e0e0', 
   },
   titleWrapper: {
     display: 'flex',
@@ -100,6 +101,7 @@ export default function Post() {
 
   return (
     <div className={classes.root}>
+      <h1>POST.JS POST.JS</h1>
       {state === 'display' ? (
         postList && postList.data && (
           <>
