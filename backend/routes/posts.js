@@ -12,7 +12,6 @@ const { ensureCorrectUser, authRequired } = require("../middleware/auth");
  *
  * => [ { id,
  *        title,
- *        description,
  *        votes,
  *      },
  *      ...
@@ -25,7 +24,6 @@ router.get("/", async function (req, res, next) {
     const result = await db.query(
       `SELECT p.id,
               p.title,
-              p.description,
               COALESCE(SUM(v.direction),0) votes
        FROM posts p
        LEFT JOIN votes v ON p.id = v.post_id
@@ -39,63 +37,35 @@ router.get("/", async function (req, res, next) {
   }
 });
 
-/** GET /[id]  get detail on post w/comments
+/** GET /[id]  get detail on post
  *
- * Returns:
+ * Returns: [ parent_post, children_post ... ]
  *
- * =>   { id,
- *        title,
- *        description,
- *        body,
- *        username,
- *        photo_id,
- *        comments: [ { id, text, url }, ... ],
- *      }
+ * =>   [{ id,
+ *         body,
+ *         created_on,
+ *         username,
+ *         parent_id,
+ *         photo_id
+ *       }, 
+ *       ...
+ *      ]
  */
 
 router.get("/:id", async function (req, res, next) {
   try {
     const result = await db.query(
-      `SELECT p1.id,
-              p1.title,
-              p1.description,
-              p1.body,
-              p1.username,            
-              CASE WHEN COUNT(c.id) = 0 THEN JSON '[]' ELSE JSON_AGG(
-                CASE 
-                  WHEN ph.id <> null THEN 
-                    JSON_BUILD_OBJECT('id', c.id, 'text', c.text, 'url', ph.url)
-                  ELSE
-                    JSON_BUILD_OBJECT('id', c.id, 'text', c.text, 'url', null)
-                END
-                ) END AS comments
-        FROM posts p1 
-        LEFT JOIN comments c ON c.post_id = $1 
-        LEFT JOIN photos ph ON ph.id = c.photo_id
-      WHERE p.id = $1  
-      GROUP BY p.id    
-      ORDER BY p.id
-      `, [req.params.id]
-      // `SELECT p1.id,
-      //         p1.title,
-      //         p1.description,
-      //         p1.body,
-      //         p1.username,            
-      //         CASE WHEN COUNT(c.id) = 0 THEN JSON '[]' ELSE JSON_AGG(
-      //           CASE 
-      //             WHEN ph.id <> null THEN 
-      //               JSON_BUILD_OBJECT('id', c.id, 'text', c.text, 'url', ph.url)
-      //             ELSE
-      //               JSON_BUILD_OBJECT('id', c.id, 'text', c.text, 'url', null)
-      //           END
-      //           ) END AS comments
-      //   FROM posts p1 
-      //   LEFT JOIN comments c ON c.post_id = $1 
-      //   LEFT JOIN photos ph ON ph.id = c.photo_id
-      // WHERE p.id = $1  
-      // GROUP BY p.id    
-      // ORDER BY p.id
-      // `, [req.params.id]
+      `SELECT id,
+              title,
+              body,
+              created_on,
+              username,
+              parent_id,
+              photo_id
+       FROM posts
+       WHERE id=$1 OR parent_id=$1
+       ORDER BY created_on
+      `, [req.params.id]      
     );
     if(result.rows.length) {
       const votes = await db.query(
@@ -107,7 +77,7 @@ router.get("/:id", async function (req, res, next) {
       result.rows[0].votes = votes.rows[0].votes;
     }
     
-    return res.json(result.rows[0]);
+    return res.json(result.rows);
   } catch (err) {
     return next(err);
   }
@@ -139,21 +109,21 @@ router.post("/:id/vote/:direction", authRequired, async function (req, res, next
 
 /** POST /     add a new post
  *
- * { title, body, description, username }  =>  { id, title, body, description, username }
+ * { title, body, username }  =>  { id, title, body, username }
  *
  */
 
 router.post("/", authRequired, async function (req, res, next) {
   try {
-    const newId = uuid();
-    const {title, body, description, photo_id} = req.body;
+    // const newId = uuid();
+    const {title, body, parent_id, photo_id} = req.body;
     const username = req.username;
     
     const result = await db.query(
-      `INSERT INTO posts (id, title, description, body, username, photo_id) 
-        VALUES ($1, $2, $3, $4, $5, $6) 
-        RETURNING id, title, description, body, username, photo_id`,
-      [newId, title, description, body, username, photo_id]);
+      `INSERT INTO posts (title, body, username, parent_id, photo_id) 
+        VALUES ($1, $2, $3, $4, $5) 
+        RETURNING id, title, body, username, parent_id, photo_id`,
+      [title, body, username, parent_id, photo_id]);
 
     if(photo_id && photo_id.length) {
       await db.query(`INSERT INTO user_photo (photo_id, username) 
@@ -169,18 +139,18 @@ router.post("/", authRequired, async function (req, res, next) {
 
 /** PUT /[id]     update existing post
  *
- * { title, description, body }  =>  { id, title, description, body, username }
+ * { title, body }  =>  { id, title, body, username }
  *
  */
 
 router.put("/:id", ensureCorrectUser, async function (req, res, next) {
   try {
-    const {title, body, description, photo_id} = req.body;
+    const {title, body, photo_id} = req.body;
     const result = await db.query(
-      `UPDATE posts SET title=$1, description=$2, body=$3, photo_id=$4
-        WHERE id = $5 
-        RETURNING id, title, description, body, photo_id, username`,
-      [title, description, body, photo_id, req.params.id]);
+      `UPDATE posts SET title=$1, body=$2, photo_id=$3
+        WHERE id = $4 
+        RETURNING id, title, body, photo_id, username`,
+      [title, body, photo_id, req.params.id]);
     return res.json(result.rows[0]);
   } catch (e) {
     return next(e);

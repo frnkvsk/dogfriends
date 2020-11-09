@@ -44,7 +44,7 @@ function adminRequired(req, res, next) {
     let token = jwt.verify(tokenStr, SECRET_KEY);
     req.username = token.username;
 
-    if (token.is_admin) {
+    if (token.admin) {
       return next();
     }
 

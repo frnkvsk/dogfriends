@@ -3,7 +3,6 @@
 const express = require("express");
 const morgan = require("morgan");
 const postsRoutes = require("./routes/posts");
-const postCommentsRoutes = require("./routes/postComments");
 const authRoutes = require("./routes/auth");
 const usersRoutes = require("./routes/users");
 const photosRoutes = require("./routes/photos");
@@ -27,7 +26,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/posts/comments", postCommentsRoutes);
 app.use("/api/posts", postsRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/photos", photosRoutes);

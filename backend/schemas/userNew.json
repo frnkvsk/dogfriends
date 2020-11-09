@@ -58,12 +58,12 @@
         "https://avatars0.githubusercontent.com/u/13444851?s=460&v=4"
       ]
     },
-    "is_admin": {
-      "$id": "/properties/is_admin",
+    "admin": {
+      "$id": "/properties/admin",
       "type": "boolean",
       "minLength": 4,
       "maxLength": 5,
-      "title": "The is_admin Schema ",
+      "title": "The admin Schema ",
       "default": false,
       "examples": [false]
     },

@@ -16,7 +16,7 @@ class User {
     const result = await db.query(
         `SELECT username, 
                 password, 
-                is_admin
+                admin
           FROM users 
           WHERE UPPER(username) = UPPER($1)`,
         [data.username]
@@ -58,16 +58,16 @@ class User {
     
     const result = await db.query(
         `INSERT INTO users 
-            (username, password, first_name, last_name, email, is_admin, city, state, country) 
+            (username, password, first_name, last_name, email, admin, city, state, country) 
           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
-          RETURNING username, password, first_name, last_name, email, is_admin, city, state, country`,
+          RETURNING username, password, first_name, last_name, email, admin, city, state, country`,
         [
           data.username,
           hashedPassword,
           data.first_name,
           data.last_name,
           data.email,
-          data.is_admin,
+          data.admin,
           data.city,
           data.state,
           data.country
@@ -102,7 +102,7 @@ class User {
 
   static async findAll() {
     const result = await db.query(
-        `SELECT username, first_name, last_name, email, is_admin, city, state, country
+        `SELECT username, first_name, last_name, email, admin, city, state, country
           FROM users
           ORDER BY username`);
 
@@ -113,7 +113,7 @@ class User {
 
   static async findOne(username) {
     const userRes = await db.query(
-        `SELECT username, first_name, last_name, email, is_admin, city, state, country 
+        `SELECT username, first_name, last_name, email, admin, city, state, country 
             FROM users 
             WHERE UPPER(username) = UPPER($1)`,
         [username]);
@@ -159,7 +159,7 @@ class User {
     }
 
     delete user.password;
-    delete user.is_admin;
+    delete user.admin;
 
     return result.rows[0];
   }
