@@ -36,22 +36,41 @@ class User {
     throw invalidPass;
   }
 
+  /** Check if username already in use */
+  static async usernameCheck(username) {
+    const duplicateCheck = await db.query(
+      `SELECT username 
+          FROM users 
+          WHERE UPPER(username) = UPPER($1)`,
+      [username]
+    );
+    console.log('-------usernameCheck',duplicateCheck.rows)
+    // returns true if username is already in use
+    return duplicateCheck.rows
+    // if (duplicateCheck.rows[0]) {
+    //   const err = new Error(
+    //       `There already exists a user with username '${data.username}`);
+    //   err.status = 409;
+    //   throw err;
+    // }
+  }
   /** Register user with data. Returns new user data. */
 
   static async register(data) {
-    const duplicateCheck = await db.query(
-        `SELECT username 
-            FROM users 
-            WHERE UPPER(username) = UPPER($1)`,
-        [data.username]
-    );
+    console.log('-----------data',data)
+    // const duplicateCheck = await db.query(
+    //     `SELECT username 
+    //         FROM users 
+    //         WHERE UPPER(username) = UPPER($1)`,
+    //     [data.username]
+    // );
 
-    if (duplicateCheck.rows[0]) {
-      const err = new Error(
-          `There already exists a user with username '${data.username}`);
-      err.status = 409;
-      throw err;
-    }
+    // if (duplicateCheck.rows[0]) {
+    //   const err = new Error(
+    //       `There already exists a user with username '${data.username}`);
+    //   err.status = 409;
+    //   throw err;
+    // }
 
     const hashedPassword = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
     

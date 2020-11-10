@@ -7,14 +7,12 @@
       "$id": "/properties/username",
       "type": "string",
       "title": "The Username Schema ",
-      "default": "",
       "examples": ["hueter"]
     },
     "password": {
       "$id": "/properties/password",
       "type": "string",
       "title": "The Password Schema ",
-      "default": "",
       "examples": ["foo123"]
     }
   },

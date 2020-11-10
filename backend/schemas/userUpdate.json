@@ -6,8 +6,7 @@
     "password": {
       "$id": "/properties/password",
       "type": "string",
-      "title": "The Password Schema ",
-      "default": "",
+      "title": "The Password Schema ",      
       "minLength": 5,
       "maxLength": 55,
       "examples": ["foo123"]
@@ -15,8 +14,7 @@
     "first_name": {
       "$id": "/properties/first_name",
       "type": "string",
-      "title": "The First_name Schema ",
-      "default": "",
+      "title": "The First_name Schema ",      
       "minLength": 1,
       "maxLength": 55,
       "examples": ["Michael"]
@@ -25,7 +23,6 @@
       "$id": "/properties/last_name",
       "type": "string",
       "title": "The Last_name Schema ",
-      "default": "",
       "minLength": 1,
       "maxLength": 55,
       "examples": ["Hueter"]
@@ -43,7 +40,6 @@
       "$id": "/properties/token",
       "type": "string",
       "title": "The Token Schema ",
-      "default": "",
       "examples": [
         "foo123"
       ]
@@ -54,7 +50,6 @@
       "minLength": 2,
       "maxLength": 60,
       "title": "The City Schema ",
-      "default": "",
       "examples": ["Seattle"]
     },
     "state": {
@@ -63,7 +58,6 @@
       "minLength": 2,
       "maxLength": 60,
       "title": "The State Schema ",
-      "default": "",
       "examples": ["WA"]
     },
     "country": {
@@ -72,17 +66,15 @@
       "minLength": 2,
       "maxLength": 60,
       "title": "The Country Schema ",
-      "default": "",
       "examples": ["usa"]
     },
     "photo_url": {
       "$id": "/properties/photo",
       "type": "string",
       "title": "The Photo Schema ",
-      "format": "uri",
       "default": "",
       "examples": [
-        "https://avatars0.githubusercontent.com/u/13444851?s=460&v=4"
+        "https://avatars0.githubusercontent.com/u/13444851?s=460&v=4", ""
       ]
     }
   }

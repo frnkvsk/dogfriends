@@ -33,6 +33,16 @@ router.get("/:username", authRequired, async function(req, res, next) {
   }
 });
 
+/**
+ * pre registration username check
+ * check if username is already taken
+ */
+
+router.post("/:username", async function(req, res, next) {
+  console.log('------users User.usernameCheck',req.params.username)
+  return await User.usernameCheck(req.params.username);
+});
+
 /** 
  * register
  * POST / {userdata}  => {token: token} */
@@ -43,6 +53,7 @@ router.post("/", async function(req, res, next) {
     const validation = validate(req.body, userNewSchema);
 
     if (!validation.valid) {
+      console.log('---------!validation.valid')
       return next({
         status: 400,
         message: validation.errors.map(e => e.stack)

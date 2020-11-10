@@ -33,20 +33,20 @@ const getPostById = async (id) => {
 const postPostVote = async (id, direction, token) => {
   return await request(`posts/${id}/vote/${direction}`, {_token: token}, 'post');
 }
-const postPostNew = async (title, description, body, token) => {
+const postPostNew = async (title, parent_id, photo_id, body, token) => {
   const data = {
     title: title,
-    description: description,
+    parent_id: parent_id, 
+    photo_id: photo_id, 
     body: body, 
     _token: token   
   }
   return await request('posts/', data, 'post');
 }
-const putPostUpdate = async (id, title, description, body, username, token) => {
+const putPostUpdate = async (id, title, body, username, token) => {
   
   const data = {
     title: title,
-    description: description,
     body: body,  
     username: username,
     _token: token  
@@ -86,15 +86,32 @@ const login = async (username, password) => {
     console.error(error);
   }   
 }
-const signup = async (username, password, first_name, last_name, photo_url, email) => {
+
+const signup = async (
+                      {username, 
+                      password, 
+                      first_name, 
+                      last_name, 
+                      email, 
+                      photo_url, 
+                      admin, 
+                      city, 
+                      state, 
+                      country}) => {
+  
   try {
     return await request('users/', {
       username: username, 
       password: password, 
       first_name: first_name, 
       last_name: last_name, 
+      email: email,
       photo_url: photo_url, 
-      email: email}, 'post');
+      admin: false, 
+      city: city, 
+      state: state, 
+      country: country, 
+      }, 'post');
   } catch (error) {
     console.error(error);
   }   

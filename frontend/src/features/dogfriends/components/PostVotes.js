@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const BlogVotes = ({id}) => {
+const PostVotes = ({id}) => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
   const dispatch = useDispatch();
@@ -83,4 +83,4 @@ const BlogVotes = ({id}) => {
   );
 }
 
-export default BlogVotes;
+export default PostVotes;
