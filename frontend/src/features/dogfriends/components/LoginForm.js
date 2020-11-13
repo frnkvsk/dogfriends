@@ -47,7 +47,7 @@ export default function LoginForm() {
   const classes = useStyles();
   const history = useHistory();
   const username = useFormInput();
-  const password = useFormInput('password');
+  const password = useFormInput('', 'password');
   const auth = useContext(AuthContext);
   // const [errorMessage, setErrorMessage] = useState(false);
   // const [usernameValue, setUsernameValue] = useState('username'); 
@@ -62,10 +62,8 @@ export default function LoginForm() {
     try {
       // verify username and password are correct
       const resp = await login(username.value, password.value);
-      
       // if logged in, use resp.token to get user information
-      const userInfo = await getUserInfo(resp.data.token, username.value);
-
+      const userInfo = await getUserInfo({token: resp.data.token, username: username.value});
       auth.setAuthState({
         userInfo: userInfo.data.user,
         token: resp.data.token,
@@ -79,7 +77,7 @@ export default function LoginForm() {
   
   return (
     <form className={classes.form}>
-      <FormInputOutlined name='usr_name' label='username' formInput={username}/>
+      <FormInputOutlined label='Username' formInput={username}/>
       <FormInputOutlined label='Password' formInput={password} />
       <div className={classes.button}>
         <Button variant="contained" color="primary" onClick={handleSubmitLogin}>Submit</Button>

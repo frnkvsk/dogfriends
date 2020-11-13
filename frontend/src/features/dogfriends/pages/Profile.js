@@ -1,135 +1,196 @@
-import React, {useState, useContext} from 'react';
+/** Login and Signup */
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, FormHelperText, } from '@material-ui/core';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import { Button, Box } from '@material-ui/core';
-import { AuthContext } from '../context/AuthContext';
+import { Button, Stepper, Step, StepLabel, Typography } from '@material-ui/core';
+// import Stepper from '@material-ui/core/Stepper';
+// import Step from '@material-ui/core/Step';
+// import StepLabel from '@material-ui/core/StepLabel';
+// import Typography from '@material-ui/core/Typography';
 import { useFormInput } from '../hooks/useFormInput';
+import { AuthContext } from '../context/AuthContext';
+import FormInputOutlined from '../components/FormInputOutlined';
 import { patchUserInfo } from '../api/DogfriendsApi';
+import { useHistory } from 'react-router-dom';
+
+import { selectUser } from '../dogfriendsUserSlice';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    maxWidth: '500px',
-    padding: '30px',
+    justifyContent: 'flex-start',
+    width: '100%',
+    minHeight: '100vh',
+    maxWidth: '700px',
+    padding: '2px',
     height: '100vh',
   },
   form: {
     width: '100%',
     backgroundColor: '#ffffff',
   },
-  label: {
-    fontSize: '18px',
-    fontWeight: 'bold',
-    width: '90%',
-    margin: '10px 20px 0 20px',
-  },
-  input: {
-    width: '90%',
-    margin: '0 20px 0 20px',
-  },
   button: {
     display: 'flex',
     justifyContent: 'flex-end',
     margin: '10px 20px 15px',
   },
-  success: {
-    color: '#4caf50',
-    fontSize: '24px',
-  },
   err: {
     color: '#ff1744',
     fontSize: '24px',
-  }
+  },
+  backButton: {
+    marginRight: theme.spacing(1),
+  },
+  completed: {
+    display: 'inline-block',
+  },
 
 }));
 
-export default function Profile() {
-  const auth = useContext(AuthContext);
-  const user = auth.authState.userInfo;
-  const classes = useStyles();
-  const username = useFormInput(user.username);
-  const password = useFormInput("");
-  const first_name = useFormInput(user.first_name);
-  const last_name = useFormInput(user.last_name);
-  const email = useFormInput(user.email);
-  const photo_url = useFormInput(user.photo_url);  
-  const [successMessage, setSuccessMessage] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
 
-  const handleClick = async () => {
+const Profile = () => {
+  const classes = useStyles();
+  const userList = useSelector(selectUser);
+  // let _first_name, _last_name;
+  // if(userList.status === 'fulfilled') {
+  //   _first_name = userList.data.user.first_name;
+  //   _last_name = userList.data.user.last_name;
+  // }
+
+  const history = useHistory();
+  const auth = useContext(AuthContext);
+  const password = useFormInput('', 'password');
+  const first_name = useFormInput(userList.data.user.first_name);
+  const last_name = useFormInput(userList.data.user.last_name); 
+  const photo_url = useFormInput(userList.data.user.photo_id);
+  const email = useFormInput(userList.data.user.email);
+  const city = useFormInput(userList.data.user.city);
+  const state = useFormInput(userList.data.user.state);
+  const country = useFormInput(userList.data.user.country);
+  
+  
+  const handleSubmitPatch = async () => {
     try {
-      const userInfo = {
-        username: username.value,
-        first_name: first_name.value,
-        last_name: last_name.value,        
+      const data = {
+        username: auth.authState.userInfo.username,
+        password: password.value, 
+        first_name: first_name.value, 
+        last_name: last_name.value, 
         email: email.value,
-        photo_url: photo_url.value || first_name.value,
+        photo_url: photo_url.value,
+        city: city.value, 
+        state: state.value, 
+        country: country.value
       }
-      console.log('userInfo',userInfo)
-      // set context state and save it to localstorage
+      // data - user info collected from the form inputs
+      // The one column that will change is photo_url -> photo_id
+      // photo_url is inserted into table photos and we use the id of that record
+      // to refer to that photo
+      await patchUserInfo(auth.authState.token, data);
       auth.setAuthState({
         token: auth.authState.token,
-        userInfo: userInfo,
+        userInfo: {
+          ...auth.userInfo,
+          first_name: first_name.value,
+          last_name: last_name.value,
+          photo_url: photo_url.value,
+          email: email.value,
+        }
       });
-      // persist data to the database
-      userInfo.password = password.value;
-      if(Object.values(userInfo).every(e => e.length)) {
-        await patchUserInfo(auth.authState.token, userInfo);
-        setErrorMessage(false);
-        setSuccessMessage(true);
-      } else {
-        setSuccessMessage(false);
-        setErrorMessage(true);
-      }
-      
+      history.push(`/`);
     } catch (error) {
-      console.error('Profile err',error);
-    }
-    
+      console.log(error)
+    }    
   }
+  
+  const [activeStep, setActiveStep] = useState(0);
+  const steps = ['User Info', 'Contact', 'Confirm'];
 
+  const handleNext = () => {
+    if(activeStep === 0) {
+      if(password.value.length && first_name.value.length && last_name.value.length) {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      }
+    } else if(activeStep === 1) {
+      if(email.value.length && city.value.length && state.value.length && country.value.length) {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      }
+    } else {
+      handleSubmitPatch();
+    }    
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
+  
   return (
-    
-    <Container className={classes.root}>
-      <h1>Profile</h1>  
-      <Box className={classes.success} 
-        component="span" 
-        display={successMessage ? 'block' : 'none'}
-        >
-          Success: Profile updated
-      </Box>    
-      <Box className={classes.err} 
-        component="span" 
-        display={errorMessage ? 'block' : 'none'}
-        >
-          Error: Inputs incomplete
-      </Box>    
-      <form className={classes.form}>      
-        <FormHelperText className={classes.label} >Username</FormHelperText>
-        <FormHelperText className={classes.label}>{username.value}</FormHelperText>
+    <>
+    <div className={classes.root}>
+      <Stepper activeStep={activeStep}>
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
 
-        <FormHelperText className={classes.label}>Confirm Password</FormHelperText>
-        <OutlinedInput required={true} className={classes.input} name="password" type="password" variant="outlined" {...password} />
+      {activeStep === 0 ?
+        <form className={classes.form}> 
+          <FormInputOutlined label='Password' formInput={password} />
+          <FormInputOutlined label='First Name' formInput={first_name}/>
+          <FormInputOutlined label='Last Name' formInput={last_name} />
+          <FormInputOutlined label='Photo URL' formInput={photo_url} />              
+        </form> :
+        activeStep === 1 ?
+        <form className={classes.form}> 
+          <FormInputOutlined label={'Email'} formInput={email} />
+          <FormInputOutlined label={'City'} formInput={city} />
+          <FormInputOutlined label={'State'} formInput={state} />
+          <FormInputOutlined label={'Country'} formInput={country} />        
+        </form> :
+        <>
+        <div>{first_name.value}</div>
+        <div>{last_name.value}</div>
+        <div>{email.value}</div>
+        <div>{city.value}</div>
+        <div>{state.value}</div>
+        <div>{country.value}</div>
+        </>
+      }      
 
-        <FormHelperText className={classes.label}>First Name</FormHelperText>
-        <OutlinedInput className={classes.input} name="first_name" variant="outlined" {...first_name}/>
-
-        <FormHelperText className={classes.label}>Last Name</FormHelperText>
-        <OutlinedInput className={classes.input} name="last_name" variant="outlined" {...last_name}/>
-
-        <FormHelperText className={classes.label}>Email</FormHelperText>
-        <OutlinedInput className={classes.input} name="email" variant="outlined" {...email}/>
-
-        <FormHelperText className={classes.label}>Photo URL</FormHelperText>
-        <OutlinedInput className={classes.input} name="photo_url" variant="outlined" {...photo_url}/>
-        <div className={classes.button}>
-          <Button onClick={handleClick} variant="contained" color="primary">Update Profile</Button>
-        </div>          
-      </form>
-      
-    </Container>
+      <div>
+        {activeStep === steps.length ? 
+          <div>
+            <Typography className={classes.instructions}>All steps completed</Typography>
+            <Button onClick={handleReset}>Reset</Button>
+          </div>
+         : 
+          <div>
+            <div>
+              <Button
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                className={classes.backButton}
+              >
+                Back
+              </Button>
+              <Button variant="contained" color="primary" onClick={handleNext}>
+                {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
+              </Button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  
+   </>
   );
 }
+export default Profile;

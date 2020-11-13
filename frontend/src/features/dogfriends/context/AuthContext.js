@@ -9,12 +9,16 @@ const AuthProvider = ({ children }) => {
   const { userInfo, setUserInfoStorage } = useUserInfo();
   const [authState, setAuthState] = useState({
     token: token,
-    userInfo: userInfo,
+    userInfo: {
+      ...this,
+      ...userInfo,
+      
+    }
   });
   const setAuthInfo = ({ token, userInfo }) => {
     try {
       setTokenStorage(token);
-      setUserInfoStorage(userInfo);
+      setUserInfoStorage({username: authState.userInfo.username});
       setAuthState({
         token,
         userInfo,      

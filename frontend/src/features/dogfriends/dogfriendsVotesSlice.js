@@ -29,7 +29,7 @@ export const dogfriendsVotesSlice = createSlice({
     }
   },
   extraReducers: {
-    // // get all posts
+    // get all posts
     [getPostsData.pending]: (state, action) => {
       state.votesList = {
         status: 'pending',

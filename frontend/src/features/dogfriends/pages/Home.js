@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AuthContext } from '../context/AuthContext';
 import { getPostsData, selectPosts } from '../dogfriendsPostsSlice';
+// import {  selectUser } from '../dogfriendsUserSlice';
 import { Box, makeStyles } from '@material-ui/core';
 import PaginationComp from './../components/Pagination';
 import { selectPageCount } from '../dogfriendsPageCountSlice'; 
@@ -77,6 +78,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
+  // const userList = useSelector(selectUser);
+  // console.log('Home userList',userList)
   const auth = useContext(AuthContext);
   const dispatch = useDispatch();
   const postList = useSelector(selectPosts);
@@ -85,6 +88,10 @@ export default function Home() {
     from: pageCurr * 10,
     to: pageCurr * 10 + 10,
   });
+
+  // useEffect(() => {
+  //   dispatch(getUserInfoData(auth.authState.token, 'henry'));
+  // }, [dispatch]);
 
   useEffect(() => {
     dispatch(getPostsData());

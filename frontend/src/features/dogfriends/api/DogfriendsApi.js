@@ -6,13 +6,13 @@ const BASE_URL = 'http://localhost:5000/api/';
 const request = async (endpoint, paramsOrData = {}, verb = "get") => {  
   
   console.debug("API Call:", endpoint, paramsOrData, verb);
-
   try {
     const res = await axios({
       method: verb,
       url: `${BASE_URL}${endpoint}`,
       [verb === "get" ? "params" : "data"]: paramsOrData});
     
+      // console.log("API Call2:", endpoint, res, verb);
     return res;
       // axios sends query string data via the "params" key,
       // and request body data via the "data" key,
@@ -62,22 +62,6 @@ const deletePost = async (id, username, token) => {
   return await request(`posts/${id}`, data, 'delete');
 }
 
-// comments
-const getComments = async (id) => {
-  return await request(`posts/comments/${id}`)
-}
-const postCommentNew = async (id, text, token) => {
-  const res = await request(`posts/comments/${id}`, {text: text, _token: token}, 'post');
-  return res
-}
-const putCommentUpdate = async (id, text, token) => {
-  const res = await request(`posts/comments/${id}`, {text: text, _token: token}, 'put');
-  return res
-}
-const deleteComment = async (id, username, token) => {
-  return await request(`posts/comments/${id}`, {username: username, _token: token}, 'delete');
-}
-
 // login / signup
 const login = async (username, password) => {
   try {
@@ -87,51 +71,91 @@ const login = async (username, password) => {
   }   
 }
 
-const signup = async (
-                      {username, 
+const signup = async ({username, 
                       password, 
                       first_name, 
                       last_name, 
                       email, 
                       photo_url, 
-                      admin, 
                       city, 
                       state, 
                       country}) => {
-  
+                        
   try {
-    return await request('users/', {
+    const res = await request('users/', {
       username: username, 
       password: password, 
       first_name: first_name, 
       last_name: last_name, 
       email: email,
-      photo_url: photo_url, 
+      photo_id: null,
       admin: false, 
       city: city, 
       state: state, 
       country: country, 
       }, 'post');
+    
+    // if a photo_url is provided during registration
+    //  1. add a new photo to the photos table
+    //  2. patch user table to show photo_id of the new photo
+    if(photo_url.length) {
+      const photoInfo = await postPhotoNew(res.data.token, photo_url, username);
+      const data = {
+        username: username, 
+        password: password, 
+        first_name: first_name, 
+        last_name: last_name, 
+        email: email,
+        photo_id: photoInfo.data.id,
+        city: city, 
+        state: state, 
+        country: country,
+        _token: res.data.token
+      }
+
+      await request(`users/${username}`, data, 'patch');
+    }
+    return res;
   } catch (error) {
     console.error(error);
   }   
 }
-const getUserInfo = async (token, username) => {
-  try {
-    return await request(`users/${username}/`, {_token: token});
+const getUserInfo = async (payload) => {
+  const {username, token} = payload;
+  let photo_url = null;
+  try {  
+    const res = await request(`users/${username}/`, {_token: token});
+    if(res.data.user.photo_id) {
+      photo_url = await request(`photos/${res.data.user.photo_id}`);
+    }
+    res.data.user.photo_url = photo_url;
+    return res;
   } catch (error) {
     console.error(error);
   }   
 }
 const patchUserInfo = async (token, userInfo) => {
   userInfo._token = token;
+  let photo_id = null;
+  if(userInfo.photo_url) {
+    photo_id = await postPhotoNew(token, userInfo.photo_url, userInfo.username);
+  }
+  delete userInfo.photo_url;
+  userInfo.photo_id = photo_id.data.id;
   try {
-    return await request(`users/${userInfo.username}/`, userInfo, 'patch');
+    return await request(`users/${userInfo.username}`, userInfo, 'patch');
   } catch (error) {
     console.error(error);
   }   
 }
-
+const postPhotoNew = async (token, photo_url, username) => {
+  const data = {
+    _token: token,
+    url: photo_url,
+    username: username
+  }
+  return await request('photos', data, 'post');
+}
 
 export {
   getPosts,
@@ -140,10 +164,6 @@ export {
   postPostNew,
   putPostUpdate,
   deletePost,
-  getComments,
-  postCommentNew,
-  putCommentUpdate,
-  deleteComment,
   login,
   signup,
   getUserInfo,

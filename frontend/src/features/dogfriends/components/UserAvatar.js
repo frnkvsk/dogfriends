@@ -3,6 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import { AuthContext } from '../context/AuthContext';
 import { deepOrange } from '@material-ui/core/colors';
+import { selectUser } from '../dogfriendsUserSlice';
+import { useSelector } from 'react-redux';
+
+// import { getUserInfoData, selectUser } from '../dogfriendsUserSlice';
+// import { useSelector, useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,10 +25,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserAvatar() {
   const classes = useStyles();
+  const userList = useSelector(selectUser);
+  // const userList = useSelector(selectUser);
+  // console.log('UserAvatar userList',userList)
+
   const auth = useContext(AuthContext);
   const alt = auth.authState.userInfo.username || "";
-  const src = auth.authState.userInfo.photo_url || "";
-  const initials = (auth.authState.userInfo.first_name[0] + auth.authState.userInfo.last_name[0]).toUpperCase();
+
+  let src = "";
+  if(userList.status === 'fulfilled') {
+    src = userList.data.user.photo_id;
+  }
+  const initials = 'TT'//(auth.authState.userInfo.first_name[0] + auth.authState.userInfo.last_name[0]).toUpperCase();
+  // console.log('UserAvatar auth.authState.userInfo',auth.authState.userInfo)
   return (
     <div className={classes.root}>
       {src === "" ? 

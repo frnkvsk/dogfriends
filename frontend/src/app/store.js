@@ -3,6 +3,7 @@ import dogfriendsCommentsSlice from '../features/dogfriends/dogfriendsCommentsSl
 import dogfriendsPageCountSlice from '../features/dogfriends/dogfriendsPageCountSlice';
 import dogfriendsPostsSlice from '../features/dogfriends/dogfriendsPostsSlice';
 import dogfriendsVotesSlice from '../features/dogfriends/dogfriendsVotesSlice';
+import dogfriendsUserSlice from '../features/dogfriends/dogfriendsUserSlice';
 
 export default configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export default configureStore({
     commentList: dogfriendsCommentsSlice,
     votesList: dogfriendsVotesSlice,
     pageCount: dogfriendsPageCountSlice,
+    userList: dogfriendsUserSlice,
   },
 });

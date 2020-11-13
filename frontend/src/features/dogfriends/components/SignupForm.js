@@ -51,7 +51,7 @@ export default function SignupForm() {
   const classes = useStyles();
   const history = useHistory();
   const username = useFormInput();
-  const password = useFormInput('password');
+  const password = useFormInput('', 'password');
   const first_name = useFormInput();
   const last_name = useFormInput();  
   const photo_url = useFormInput();
@@ -60,12 +60,6 @@ export default function SignupForm() {
   const state = useFormInput();
   const country = useFormInput();
   const auth = useContext(AuthContext);
-  // const [usernameValue, setUsernameValue] = useState('username'); 
-  // const [formState, setFormState] = useState("userInfo"); 
-
-  // const handleChange = (e, newValue) => {
-  //   setValue(newValue);
-  // }
 
   const handleSubmitSignup = async () => {
     // setErrorMessage(false);
@@ -81,15 +75,21 @@ export default function SignupForm() {
         state: state.value, 
         country: country.value
       }
+
       const resp = await signup(data);
+      delete data.password;
       auth.setAuthState({
         token: resp.data.token,
         userInfo: {
-          username: username.value,
-          first_name: first_name.value,
-          last_name: last_name.value,
-          photo_url: photo_url.value,
-          email: email.value,
+          ...data
+          // username: username.value, 
+          // first_name: first_name.value, 
+          // last_name: last_name.value, 
+          // email: email.value,
+          // photo_url: photo_url.value,
+          // city: city.value, 
+          // state: state.value, 
+          // country: country.value
         }
       });
       history.push(`/`);
@@ -138,7 +138,7 @@ export default function SignupForm() {
 
       {activeStep === 0 ?
         <form className={classes.form}> 
-          <FormInputOutlined name='usr_name' label='username' formInput={username}/>
+          <FormInputOutlined inputRef={input => input && input.focus()} name='usr_name' label='username' formInput={username}/>
           <FormInputOutlined label='Password' formInput={password} />
           <FormInputOutlined label='First Name' formInput={first_name} />
           <FormInputOutlined label='Last Name' formInput={last_name} />
@@ -146,7 +146,7 @@ export default function SignupForm() {
         </form> :
         activeStep === 1 ?
         <form className={classes.form}> 
-          <FormInputOutlined label={'Email'} formInput={email} />
+          <FormInputOutlined inputRef={input => input && input.focus()} label={'Email'} formInput={email} />
           <FormInputOutlined label={'City'} formInput={city} />
           <FormInputOutlined label={'State'} formInput={state} />
           <FormInputOutlined label={'Country'} formInput={country} />        

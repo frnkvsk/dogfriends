@@ -1,7 +1,8 @@
 import {useState} from 'react';
-function useFormInput(initialValue='text') {
-  const [value, setValue] = useState("");
-  const [type] = useState(initialValue);
+
+function useFormInput(inititalValue='', _type='text') {
+  const [value, setValue] = useState(inititalValue);
+  const [type] = useState(_type);
 
   const handleChange = async (e) => {
     setValue(e.target.value);

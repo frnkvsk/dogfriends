@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { AuthContext } from '../context/AuthContext';
 import UserAvatar from './UserAvatar';
+import { getUserInfoData, selectUser } from '../dogfriendsUserSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,14 +59,28 @@ const useStyles = makeStyles((theme) => ({
 export default function Navbar() {
   const classes = useStyles();
   const auth = useContext(AuthContext);
+  const dispatch = useDispatch();
   
+  const userList = useSelector(selectUser);
+
+  useEffect(() => {
+    const usr = auth.authState.userInfo.username;
+    const token = auth.authState.token;
+    const payload = {
+      username: usr,
+      token: token
+    }
+    dispatch(getUserInfoData(payload));
+    // eslint-disable-next-line
+  }, [dispatch]);
+
   const handleClick = () => {
     auth.setAuthState({
       token: "",
       userInfo: {}
     });
   }
-  console.log(auth.authState.userInfo.username)
+    
   return (
     <AppBar position="static">
       <Toolbar className={classes.root}>

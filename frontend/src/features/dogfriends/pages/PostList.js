@@ -101,7 +101,6 @@ export default function PostList() {
 
   return (
     <div className={classes.root}>
-      {console.log('postList',postList)}
       {state === 'display' ? (
         postList && postList.data && (
           <>
