@@ -126,9 +126,13 @@ const getUserInfo = async (payload) => {
   try {  
     const res = await request(`users/${username}/`, {_token: token});
     if(res.data.user.photo_id) {
-      photo_url = await request(`photos/${res.data.user.photo_id}`);
+      console.log('DogfriendsApi getUserInfo res.data.user.photo_id',res.data.user.photo_id)
+      const resp = await request(`photos/${res.data.user.photo_id}`);
+      photo_url = resp.data[0].url;
+    
     }
     res.data.user.photo_url = photo_url;
+    console.log('DogfriendsApi getUserInfo res',res)
     return res;
   } catch (error) {
     console.error(error);

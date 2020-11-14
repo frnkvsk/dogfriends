@@ -7,8 +7,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { AuthContext } from '../context/AuthContext';
 import UserAvatar from './UserAvatar';
-import { getUserInfoData, selectUser } from '../dogfriendsUserSlice';
-import { useSelector, useDispatch } from 'react-redux';
+import { getUserInfoData } from '../dogfriendsUserSlice';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,7 +61,7 @@ export default function Navbar() {
   const auth = useContext(AuthContext);
   const dispatch = useDispatch();
   
-  const userList = useSelector(selectUser);
+  // const userList = useSelector(selectUser);
 
   useEffect(() => {
     const usr = auth.authState.userInfo.username;
@@ -70,6 +70,7 @@ export default function Navbar() {
       username: usr,
       token: token
     }
+    console.log('Navbar useEffect payload',payload)
     dispatch(getUserInfoData(payload));
     // eslint-disable-next-line
   }, [dispatch]);

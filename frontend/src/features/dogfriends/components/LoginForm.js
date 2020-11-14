@@ -1,7 +1,7 @@
 /** Login and Signup */
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import { Box, Button } from '@material-ui/core';
 import { useFormInput } from '../hooks/useFormInput';
 import { AuthContext } from '../context/AuthContext';
 import FormInputOutlined from './FormInputOutlined';
@@ -46,37 +46,50 @@ const useStyles = makeStyles((theme) => ({
 export default function LoginForm() {
   const classes = useStyles();
   const history = useHistory();
-  const username = useFormInput();
-  const password = useFormInput('', 'password');
+  const username = useFormInput('usr');
+  const password = useFormInput('pw', '', 'password');
   const auth = useContext(AuthContext);
-  // const [errorMessage, setErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
   // const [usernameValue, setUsernameValue] = useState('username'); 
   // const [formState, setFormState] = useState("userInfo"); 
 
   // const handleChange = (e, newValue) => {
   //   setValue(newValue);
   // }
+  useEffect(() => {
+    setErrorMessage(false);
+  }, [username.value, password.value])
 
   const handleSubmitLogin = async () => {
-    // setErrorMessage(false);
+    setErrorMessage(false);
     try {
       // verify username and password are correct
       const resp = await login(username.value, password.value);
       // if logged in, use resp.token to get user information
       const userInfo = await getUserInfo({token: resp.data.token, username: username.value});
+
+      console.log('LoginForm handleSubmitLogin userInfo',userInfo.data.user)
+
       auth.setAuthState({
         userInfo: userInfo.data.user,
         token: resp.data.token,
       });
       history.push(`/`);
     } catch (error) {
-      // setErrorMessage(true);
+      setErrorMessage(true);
       console.log(error)
     }     
   }
   
   return (
     <form className={classes.form}>
+      {console.log(errorMessage)}
+       <Box className={classes.err} 
+        component="span" 
+        display={errorMessage ? 'block' : 'none'}
+        >
+          Error: Invalid credentials
+      </Box>
       <FormInputOutlined label='Username' formInput={username}/>
       <FormInputOutlined label='Password' formInput={password} />
       <div className={classes.button}>

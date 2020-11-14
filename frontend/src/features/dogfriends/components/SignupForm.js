@@ -50,15 +50,23 @@ const useStyles = makeStyles((theme) => ({
 export default function SignupForm() {
   const classes = useStyles();
   const history = useHistory();
-  const username = useFormInput();
-  const password = useFormInput('', 'password');
-  const first_name = useFormInput();
-  const last_name = useFormInput();  
-  const photo_url = useFormInput();
-  const email = useFormInput();
-  const city = useFormInput();
-  const state = useFormInput();
-  const country = useFormInput();
+  const username = useFormInput('usr');
+  const password = useFormInput('', '', 'password');
+  const first_name = useFormInput('first_name');
+  const last_name = useFormInput('last_name');
+  const photo_url = useFormInput('phot_url');
+  const email = useFormInput('email');
+  const city = useFormInput('city');
+  const state = useFormInput('state');
+  const country = useFormInput('country');
+
+  // const first_name = useFormInput();
+  // const last_name = useFormInput();  
+  // const photo_url = useFormInput();
+  // const email = useFormInput();
+  // const city = useFormInput();
+  // const state = useFormInput();
+  // const country = useFormInput();
   const auth = useContext(AuthContext);
 
   const handleSubmitSignup = async () => {
@@ -138,7 +146,7 @@ export default function SignupForm() {
 
       {activeStep === 0 ?
         <form className={classes.form}> 
-          <FormInputOutlined inputRef={input => input && input.focus()} name='usr_name' label='username' formInput={username}/>
+          <FormInputOutlined label='Username' formInput={username}/>
           <FormInputOutlined label='Password' formInput={password} />
           <FormInputOutlined label='First Name' formInput={first_name} />
           <FormInputOutlined label='Last Name' formInput={last_name} />
@@ -146,7 +154,7 @@ export default function SignupForm() {
         </form> :
         activeStep === 1 ?
         <form className={classes.form}> 
-          <FormInputOutlined inputRef={input => input && input.focus()} label={'Email'} formInput={email} />
+          <FormInputOutlined label={'Email'} formInput={email} />
           <FormInputOutlined label={'City'} formInput={city} />
           <FormInputOutlined label={'State'} formInput={state} />
           <FormInputOutlined label={'Country'} formInput={country} />        

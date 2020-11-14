@@ -1,5 +1,5 @@
 /** Login and Signup */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Stepper, Step, StepLabel, Typography } from '@material-ui/core';
 // import Stepper from '@material-ui/core/Stepper';
@@ -12,8 +12,8 @@ import FormInputOutlined from '../components/FormInputOutlined';
 import { patchUserInfo } from '../api/DogfriendsApi';
 import { useHistory } from 'react-router-dom';
 
-import { selectUser } from '../dogfriendsUserSlice';
-import { useSelector } from 'react-redux';
+import { selectUser, getUserInfoData } from '../dogfriendsUserSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,25 +52,39 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = () => {
   const classes = useStyles();
+  const auth = useContext(AuthContext);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const usr = auth.authState.userInfo.username;
+    const token = auth.authState.token;
+    const payload = {
+      username: usr,
+      token: token
+    }
+    console.log('Profile useEffect payload',payload)
+    dispatch(getUserInfoData(payload));
+    // eslint-disable-next-line
+  }, [dispatch]);
   const userList = useSelector(selectUser);
   // let _first_name, _last_name;
   // if(userList.status === 'fulfilled') {
   //   _first_name = userList.data.user.first_name;
   //   _last_name = userList.data.user.last_name;
   // }
-
+  console.log('Profile userList',userList)
   const history = useHistory();
-  const auth = useContext(AuthContext);
-  const password = useFormInput('', 'password');
-  const first_name = useFormInput(userList.data.user.first_name);
-  const last_name = useFormInput(userList.data.user.last_name); 
-  const photo_url = useFormInput(userList.data.user.photo_id);
-  const email = useFormInput(userList.data.user.email);
-  const city = useFormInput(userList.data.user.city);
-  const state = useFormInput(userList.data.user.state);
-  const country = useFormInput(userList.data.user.country);
+  
+  const password = useFormInput('', '', 'password');
+  const first_name = useFormInput('first_name');
+  const last_name = useFormInput('last_name');
+  const photo_url = useFormInput('photo_url');
+  const email = useFormInput('email');
+  const city = useFormInput('city');
+  const state = useFormInput('state');
+  const country = useFormInput('country');
   
   
+
   const handleSubmitPatch = async () => {
     try {
       const data = {
@@ -84,6 +98,8 @@ const Profile = () => {
         state: state.value, 
         country: country.value
       }
+      console.log('handleSubmitPatch data',data)
+      console.log('handleSubmitPatch auth.authState',auth.authState)
       // data - user info collected from the form inputs
       // The one column that will change is photo_url -> photo_id
       // photo_url is inserted into table photos and we use the id of that record
@@ -91,13 +107,7 @@ const Profile = () => {
       await patchUserInfo(auth.authState.token, data);
       auth.setAuthState({
         token: auth.authState.token,
-        userInfo: {
-          ...auth.userInfo,
-          first_name: first_name.value,
-          last_name: last_name.value,
-          photo_url: photo_url.value,
-          email: email.value,
-        }
+        userInfo: data
       });
       history.push(`/`);
     } catch (error) {

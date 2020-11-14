@@ -11,8 +11,8 @@ import {
   selectPosts, 
   getPostsData,
 } from '../dogfriendsPostsSlice';
-import BlogForm from './../components/BlogForm';
-import BlogComments from '../components/BlogComments';
+import NewPostForm from './../components/NewPostForm';
+// import BlogComments from '../components/BlogComments';
 import { AuthContext } from '../context/AuthContext';
 
 const useStyles = makeStyles((theme) => ({
@@ -124,10 +124,10 @@ export default function PostList() {
             <div className={classes.body}>{postList.data.body}</div>
             <hr className={classes.hr}/>
             <div className={classes.titleWrapper}>Comments</div>
-            <BlogComments id={id}/>
+            {/* <BlogComments id={id}/> */}
           </>
       )) : (
-        <BlogForm data={postList.data}/>
+        <NewPostForm data={postList.data}/>
       )}      
     </div>
   );

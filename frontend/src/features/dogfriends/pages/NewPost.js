@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core';
-import BlogForm from './../components/BlogForm';
+import NewPostForm from './../components/NewPostForm';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +25,7 @@ export default function NewPost() {
 
   return (
     <div className={classes.root}>
-      <BlogForm data={{}}/>
+      <NewPostForm data={{}}/>
     </div>
   );
 }

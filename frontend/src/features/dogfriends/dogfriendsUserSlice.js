@@ -7,6 +7,7 @@ import {
 export const getUserInfoData = createAsyncThunk(
   'getVotes',
   async (payload) => {
+    console.log('dogfriendsUserSlice payload',payload)
     const response = await getUserInfo(payload);
     return response.data;
   }

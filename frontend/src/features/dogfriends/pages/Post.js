@@ -11,7 +11,7 @@ import {
   selectPosts, 
   getPostsData,
 } from '../dogfriendsPostsSlice';
-import BlogForm from './../components/BlogForm';
+import NewPostForm from './../components/NewPostForm';
 import BlogComments from '../components/BlogComments';
 import { AuthContext } from '../context/AuthContext';
 
@@ -125,10 +125,10 @@ export default function Post() {
             <div className={classes.body}>{postList.data.body}</div>
             <hr className={classes.hr}/>
             <div className={classes.titleWrapper}>Comments</div>
-            <BlogComments id={id}/>
+            {/* <BlogComments id={id}/> */}
           </>
       )) : (
-        <BlogForm data={postList.data}/>
+        <NewPostForm data={postList.data}/>
       )}      
     </div>
   );

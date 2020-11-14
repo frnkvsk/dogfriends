@@ -27,14 +27,14 @@ export default function UserAvatar() {
   const classes = useStyles();
   const userList = useSelector(selectUser);
   // const userList = useSelector(selectUser);
-  // console.log('UserAvatar userList',userList)
+  console.log('UserAvatar userList',userList)
 
   const auth = useContext(AuthContext);
   const alt = auth.authState.userInfo.username || "";
 
   let src = "";
   if(userList.status === 'fulfilled') {
-    src = userList.data.user.photo_id;
+    src = userList.data.user.photo_url;
   }
   const initials = 'TT'//(auth.authState.userInfo.first_name[0] + auth.authState.userInfo.last_name[0]).toUpperCase();
   // console.log('UserAvatar auth.authState.userInfo',auth.authState.userInfo)
