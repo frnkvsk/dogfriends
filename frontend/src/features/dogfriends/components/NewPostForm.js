@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,16 +8,17 @@ import {
   TextField,
   Checkbox,
   FormControlLabel,
+  Box,
 } from '@material-ui/core';
 import { 
   addNewPost,
   editPost,
  } from '../dogfriendsPostsSlice';
- import { useFormInput } from '../hooks/useFormInput';
- import { AuthContext } from '../context/AuthContext';
- import FormInputOutlined from './FormInputOutlined';
+import { useFormInput } from '../hooks/useFormInput';
+import { AuthContext } from '../context/AuthContext';
+import FormInputOutlined from './FormInputOutlined';
+import PostPhoto from './PostPhoto';
 
-let visibleFormInput = 'none';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -41,13 +42,17 @@ const useStyles = makeStyles((theme) => ({
   memeInput: {
     // display: formInputState,
   },
-  // paper: {
-  //   width: 400,
-  //   backgroundColor: theme.palette.background.paper,
-  //   border: '2px solid #000',
-  //   boxShadow: theme.shadows[5],
-  //   padding: theme.spacing(2, 4, 3),
-  // },
+  imagePreview: {
+    width: 'auto',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+  },
+  image: {
+    width: '400px',
+    height: '400px',
+    borderRadius: '10px',
+    padding: '10px',
+  }
 }));
 
 const NewPostForm = ({data}) => {
@@ -79,6 +84,38 @@ const NewPostForm = ({data}) => {
   const bottom = useFormInput('');
   const body = useFormInput('');
   const [formInputState, setFormInputState] = useState('none');
+  const [photoShowState, setPhotoShowState] = useState('none');
+  const [photo, setPhoto] = useState({
+    url: '',
+    top: '',
+    bottom: '',
+    textColor: '#000000'
+  });
+  const [textColor, setTextColor] = useState('#000000');  
+  const handleTextColor = (e) => {
+    e.preventDefault();
+    setTextColor(e.target.value);
+  }
+  useEffect(() => {
+    console.log('useEffect photoShowState',photoShowState)
+    if(photo_url.value !== '') {
+      setPhotoShowState('flex');
+      setPhoto({
+        url: photo_url.value,
+        top: top.value,
+        bottom: bottom.value,
+        textColor: textColor
+      });
+    } else {
+      setPhotoShowState('none');
+      setPhoto({
+        url: '',
+        top: '',
+        bottom: '',
+        textColor: textColor
+      });
+    }
+  }, [photo_url.value, top.value, bottom.value, textColor]);
 
   const handleCheckBox = () => {
     if(formInputState === 'none') setFormInputState('inline')
@@ -86,7 +123,9 @@ const NewPostForm = ({data}) => {
   }
   return (
     <div className={classes.root}>    
-      
+      <Box className={classes.imagePreview} style={{display: photoShowState}}>
+        <PostPhoto photo={photo}/>
+      </Box>
       <form className={classes.form} noValidate autoComplete="off">   
 
         <FormInputOutlined label="Title" formInput={title} />
@@ -96,6 +135,11 @@ const NewPostForm = ({data}) => {
           label="Add text to photo."
       />
         <div style={{display: formInputState}}>
+          Text Color&nbsp;  
+          <input           
+            type="color" 
+            onChange={handleTextColor}
+            defaultValue={textColor} />
           <FormInputOutlined label="Top Text" formInput={top} />
           <FormInputOutlined label="Bottom Text" formInput={bottom} />
         </div>
