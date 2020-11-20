@@ -4,7 +4,6 @@ import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import { 
   Button, 
-  FormHelperText, 
   TextField,
   Checkbox,
   FormControlLabel,
@@ -18,6 +17,7 @@ import { useFormInput } from '../hooks/useFormInput';
 import { AuthContext } from '../context/AuthContext';
 import FormInputOutlined from './FormInputOutlined';
 import PostPhoto from './PostPhoto';
+import NewPhotoForm from './NewPhotoForm';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,10 +79,11 @@ const NewPostForm = ({data}) => {
   }
   
   const title = useFormInput('');
-  const photo_url = useFormInput('');
+  
   const top = useFormInput('');
   const bottom = useFormInput('');
   const body = useFormInput('');
+  const [url, setUrl] = useState('');
   const [formInputState, setFormInputState] = useState('none');
   const [photoShowState, setPhotoShowState] = useState('none');
   const [photo, setPhoto] = useState({
@@ -98,10 +99,11 @@ const NewPostForm = ({data}) => {
   }
   useEffect(() => {
     console.log('useEffect photoShowState',photoShowState)
-    if(photo_url.value !== '') {
+    console.log('useEffect url', url)
+    if(url !== '') {
       setPhotoShowState('flex');
       setPhoto({
-        url: photo_url.value,
+        url: url,
         top: top.value,
         bottom: bottom.value,
         textColor: textColor
@@ -115,11 +117,24 @@ const NewPostForm = ({data}) => {
         textColor: textColor
       });
     }
-  }, [photo_url.value, top.value, bottom.value, textColor]);
+  }, [url, top.value, bottom.value, textColor]);
 
   const handleCheckBox = () => {
     if(formInputState === 'none') setFormInputState('inline')
     else setFormInputState('none')
+  }
+  const handleSetUrl = (failedImages, successImages) => {
+    const parts = successImages[0].split(';');
+    const mime = parts[0].split(':')[1];
+    const name = parts[1].split('=')[1];
+    const data = parts[2];
+    // const res = await axios.post(url, { mime, name, image: data });
+    console.log('parts',parts)
+    console.log('mime',mime)
+    console.log('name',name)
+    console.log('data',data)
+    console.log('data.imageURL',data.imageURL)
+    setUrl(data.imageURL);
   }
   return (
     <div className={classes.root}>    
@@ -129,12 +144,12 @@ const NewPostForm = ({data}) => {
       <form className={classes.form} noValidate autoComplete="off">   
 
         <FormInputOutlined label="Title" formInput={title} />
-        <FormInputOutlined label="Photo URL" formInput={photo_url} />
         <FormControlLabel
           control={<Checkbox onChange={handleCheckBox} />}
           label="Add text to photo."
       />
         <div style={{display: formInputState}}>
+          <NewPhotoForm url={url} handleSetUrl={handleSetUrl} />
           Text Color&nbsp;  
           <input           
             type="color" 
