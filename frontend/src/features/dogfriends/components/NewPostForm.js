@@ -9,15 +9,16 @@ import {
   FormControlLabel,
   Box,
 } from '@material-ui/core';
-import { 
-  addNewPost,
-  editPost,
- } from '../dogfriendsPostsSlice';
+// import { 
+//   addNewPost,
+//   editPost,
+//  } from '../dogfriendsPostsSlice';
 import { useFormInput } from '../hooks/useFormInput';
 import { AuthContext } from '../context/AuthContext';
 import FormInputOutlined from './FormInputOutlined';
-import PostPhoto from './PostPhoto';
-import NewPhotoForm from './NewPhotoForm';
+// import PostPhoto from './PostPhoto';
+// import NewPhotoForm from './NewPhotoForm';
+import UploadPhoto from './UploadPhoto';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -139,7 +140,8 @@ const NewPostForm = ({data}) => {
   return (
     <div className={classes.root}>    
       <Box className={classes.imagePreview} style={{display: photoShowState}}>
-        <PostPhoto photo={photo}/>
+        {/* <PostPhoto photo={photo}/> */}
+        
       </Box>
       <form className={classes.form} noValidate autoComplete="off">   
 
@@ -149,7 +151,8 @@ const NewPostForm = ({data}) => {
           label="Add text to photo."
       />
         <div style={{display: formInputState}}>
-          <NewPhotoForm url={url} handleSetUrl={handleSetUrl} />
+          {/* <NewPhotoForm url={url} handleSetUrl={handleSetUrl} /> */}
+          <UploadPhoto />
           Text Color&nbsp;  
           <input           
             type="color" 
