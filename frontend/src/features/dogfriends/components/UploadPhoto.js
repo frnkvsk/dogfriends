@@ -21,27 +21,31 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-export default function UploadPhoto() {
+export default function UploadPhoto({setUrl}) {
   const classes = useStyles();
+
   const onDrop = useCallback((acceptedFiles) => {
-    const url = `https://api.cloudinary.com/v1_1/dsxlpdoea/${process.env.CLOUDINARY_CLOUD_NAME}/upload`;
+    const url = process.env.REACT_APP_CLOUDINARY_BASE_URL+'upload';
 
     acceptedFiles.forEach(async (acceptedFile) => {
       const formData = new FormData();
       formData.append('file', acceptedFile);
-      formData.append('upload_preset', process.env.CLOUDINARY_UPLOAD_PRESET);
+      formData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
 
-      const response = await fetch(url, {
-        method: 'post',
-        body: formData,
-      });
-      const data = await response.json();
-      console.log('data',data)
+      // const response = await fetch(url, {
+      //   method: 'post',
+      //   body: formData,
+      // });
+      // const data = await response.json();
+      // // console.log('UploadPhoto data',data)
+      // console.log('UploadPhoto data.url',data.url)
+      // setUrl(data.url)
+      setUrl("http://res.cloudinary.com/dsxlpdoea/image/upload/v1605993605/photo-1544568100-847a948585b9_evaw8c.jpg")
     });
     
-  }, []);
+  }, [setUrl]);
 
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({
+  const {getRootProps, getInputProps} = useDropzone({
     onDrop, 
     accepts: 'image/*',
     multiple: false,

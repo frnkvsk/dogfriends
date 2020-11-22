@@ -44,14 +44,14 @@ const useStyles = makeStyles((theme) => ({
 export default function PostPhoto({photo}) {
   const classes = useStyles();
   
-  
+  console.log('PostPhoto photo',photo)
   return (  
     <div key={uuid()} className={classes.root} >
       <Box className={classes.box}>          
         <div className={classes.labelTop} style={{color: photo.textColor}}>
           <label >{photo.top}</label>
         </div>
-        <img className={classes.box} src={photo.url} alt='Photo' />
+        <img className={classes.box} src={photo.url} alt='postphoto' />
         <div className={classes.labelBottom} style={{color: photo.textColor}} >
           <label >{photo.bottom}</label>
         </div>      

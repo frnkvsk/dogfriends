@@ -13,10 +13,10 @@ import {
 //   addNewPost,
 //   editPost,
 //  } from '../dogfriendsPostsSlice';
-import { useFormInput } from '../hooks/useFormInput';
+// import { useFormInput } from '../hooks/useFormInput';
 import { AuthContext } from '../context/AuthContext';
 import FormInputOutlined from './FormInputOutlined';
-// import PostPhoto from './PostPhoto';
+import PostPhoto from './PostPhoto';
 // import NewPhotoForm from './NewPhotoForm';
 import UploadPhoto from './UploadPhoto';
 
@@ -61,7 +61,7 @@ const NewPostForm = ({data}) => {
   const auth = useContext(AuthContext);
   const dispatch = useDispatch();
   const history = useHistory();
-  
+  console.log('NewPostForm auth',auth)
 
   const handleSubmit = e => {   
     // e.preventDefault();
@@ -118,29 +118,18 @@ const NewPostForm = ({data}) => {
         textColor: textColor
       });
     }
+    // eslint-disable-next-line
   }, [url, top.value, bottom.value, textColor]);
 
   const handleCheckBox = () => {
     if(formInputState === 'none') setFormInputState('inline')
     else setFormInputState('none')
   }
-  const handleSetUrl = (failedImages, successImages) => {
-    const parts = successImages[0].split(';');
-    const mime = parts[0].split(':')[1];
-    const name = parts[1].split('=')[1];
-    const data = parts[2];
-    // const res = await axios.post(url, { mime, name, image: data });
-    console.log('parts',parts)
-    console.log('mime',mime)
-    console.log('name',name)
-    console.log('data',data)
-    console.log('data.imageURL',data.imageURL)
-    setUrl(data.imageURL);
-  }
+  
   return (
     <div className={classes.root}>    
       <Box className={classes.imagePreview} style={{display: photoShowState}}>
-        {/* <PostPhoto photo={photo}/> */}
+        <PostPhoto photo={photo}/>
         
       </Box>
       <form className={classes.form} noValidate autoComplete="off">   
@@ -148,11 +137,10 @@ const NewPostForm = ({data}) => {
         <FormInputOutlined label="Title" formInput={title} />
         <FormControlLabel
           control={<Checkbox onChange={handleCheckBox} />}
-          label="Add text to photo."
-      />
+          label="Add text to photo."/>
         <div style={{display: formInputState}}>
           {/* <NewPhotoForm url={url} handleSetUrl={handleSetUrl} /> */}
-          <UploadPhoto />
+          <UploadPhoto setUrl={setUrl}/>
           Text Color&nbsp;  
           <input           
             type="color" 
@@ -167,12 +155,8 @@ const NewPostForm = ({data}) => {
           rows={4} 
           label="Body" 
           variant="outlined" 
-          formInput={body} />
-        {/* <FormHelperText className={classes.label}>Body:</FormHelperText> */}
-        {/* <FormControlLabel
-          control={<Checkbox checked={state.checkedA} onChange={handleChange} name="checkedA" />}
-          label="Add text to photo"
-        /> */}
+          {...body} />
+        
         <div className={classes.buttons}>
           <Button variant="contained" color="primary" onClick={handleSubmit} >
             Save
@@ -185,5 +169,12 @@ const NewPostForm = ({data}) => {
     </div>
   );
 }
-
+const useFormInput = () => {
+  const [value, setValue] = useState('');
+  const handleChange = e => setValue(e.target.value);
+  return {
+    value,
+    onChange: handleChange,
+  }
+}
 export default NewPostForm;

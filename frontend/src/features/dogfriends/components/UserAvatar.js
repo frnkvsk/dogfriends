@@ -27,7 +27,7 @@ export default function UserAvatar() {
   const classes = useStyles();
   const userList = useSelector(selectUser);
   // const userList = useSelector(selectUser);
-  console.log('UserAvatar userList',userList)
+  // console.log('UserAvatar userList',userList)
 
   const auth = useContext(AuthContext);
   const alt = auth.authState.userInfo.username || "";

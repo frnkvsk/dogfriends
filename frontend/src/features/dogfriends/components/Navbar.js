@@ -70,7 +70,7 @@ export default function Navbar() {
       username: usr,
       token: token
     }
-    console.log('Navbar useEffect payload',payload)
+    
     dispatch(getUserInfoData(payload));
     // eslint-disable-next-line
   }, [dispatch]);
