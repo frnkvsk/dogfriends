@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-const BASE_URL = 'http://localhost:5000/api/';
+const BASE_URL = process.env.REACT_APP_EXPRESS_BASE_URL;//'http://localhost:5000/api/';
 
 const request = async (endpoint, paramsOrData = {}, verb = "get") => {  
   
@@ -12,7 +12,6 @@ const request = async (endpoint, paramsOrData = {}, verb = "get") => {
       url: `${BASE_URL}${endpoint}`,
       [verb === "get" ? "params" : "data"]: paramsOrData});
     
-      // console.log("API Call2:", endpoint, res, verb);
     return res;
       // axios sends query string data via the "params" key,
       // and request body data via the "data" key,
@@ -151,14 +150,6 @@ const patchUserInfo = async (token, userInfo) => {
   } catch (error) {
     console.error(error);
   }   
-}
-const postPhotoNew = async (token, photo_url, username) => {
-  const data = {
-    _token: token,
-    url: photo_url,
-    username: username
-  }
-  return await request('photos', data, 'post');
 }
 
 export {

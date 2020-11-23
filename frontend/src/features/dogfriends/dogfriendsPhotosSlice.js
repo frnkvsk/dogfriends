@@ -1,90 +1,86 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
-  getPosts,
-  getPostById,
-  postPostNew,
-  putPostUpdate,
-  deletePost,
-} from './api/DogfriendsApi';
+  postNewPhoto,
+  postDestroyPhoto
+} from './api/DogfriendsPhotosApi';
 
-export const getPostsData = createAsyncThunk(
-  'getPosts',
-  async () => {
-    const response = await getPosts();
+export const postPhotoNew = createAsyncThunk(
+  'postPhotoNew',
+  async (acceptedFiles) => {
+    const response = await postNewPhoto(acceptedFiles);
+    return response.data;
+  }
+);
+export const postPhotoDestroy = createAsyncThunk(
+  'postPhotoDestroy',
+  async (public_id, signature) => {
+    const response = await postDestroyPhoto(public_id, signature);
     return response.data;
   }
 );
 
-export const getPostDataById = createAsyncThunk(
-  'getPostById',
-  async (id) => {
-    const response = await getPostById(id);
-    return response.data;
-  }
-);
+// export const getPhotoById = createAsyncThunk(
+//   'getPhotoById',
+//   async (id) => {
+//     const response = await getPhotoById(id);
+//     return response.data;
+//   }
+// );
 
 export const dogfriendsPostsSlice = createSlice({
-  name: 'postList',
+  name: 'photoList',
   initialState: {
-    postList: {
+    photoList: {
       status: 'idle',
       data: [],
       error: {}
     }
   },
-  reducers: {
-    addNewPost: (state, action) => {
-      const {title, body, parent_id, photo_id, token} = action.payload;
-      postPostNew(title, body, parent_id, photo_id, token);
-    },
-    editPost: (state, action) => {
-      const {id, title, body, username, token} = action.payload;
-      putPostUpdate(id, title, body, username, token);
-    },
-    removePost: (state, action) => {
-      deletePost(action.payload.id, action.payload.username, action.payload.token);
-    },
-  },
+  // reducers: {
+  //   removePhoto: (state, action) => {
+  //     deletePhoto(action.payload.id, action.payload.username, action.payload.token);
+  //   },
+  // },
   extraReducers: {
-    // get all posts
-    [getPostsData.pending]: (state, action) => {
-      state.postList = {
+    // post a new photo
+    [postPhotoNew.pending]: (state, action) => {
+      state.photoList = {
         status: 'pending',
         data: {},
         error: {}
       };
     },
-    [getPostsData.fulfilled]: (state, action) => {
-      state.postList = {
+    [postPhotoNew.fulfilled]: (state, action) => {
+      state.photoList = {
         status: 'fulfilled',
         data: action.payload,
         error: {}
       };
     },
-    [getPostsData.rejected]: (state, action) => {
-      state.postList = {
+    [postPhotoNew.rejected]: (state, action) => {
+      state.photoList = {
         status: 'rejected',
         data: {},
         error: action.payload,
       };
-    },
-    // get post by id
-    [getPostDataById.pending]: (state, action) => {
-      state.postList = {
+    },    
+    // delete a photo
+    [postPhotoDestroy.pending]: (state, action) => {
+      state.photoList = {
         status: 'pending',
         data: {},
         error: {}
       };
     },
-    [getPostDataById.fulfilled]: (state, action) => {
-      state.postList = {
+    [postPhotoDestroy.fulfilled]: (state, action) => {
+      state.photoList = {
         status: 'fulfilled',
         data: action.payload,
         error: {}
       };
     },
-    [getPostDataById.rejected]: (state, action) => {
-      state.postList = {
+    [postPhotoDestroy.rejected]: (state, action) => {
+      state.photoList = {
         status: 'rejected',
         data: {},
         error: action.payload,
@@ -93,12 +89,10 @@ export const dogfriendsPostsSlice = createSlice({
   }
 });
 
-export const {
-  addNewPost,
-  editPost,
-  removePost,
-} = dogfriendsPostsSlice.actions;
+// export const {
+//   deletePhoto,
+// } = dogfriendsPhotosSlice.actions;
 
-export const selectPosts = state => state.postList.postList;
+export const selectPosts = state => state.photoList.photoList;
 
-export default dogfriendsPostsSlice.reducer;
+export default dogfriendsPhotosSlice.reducer;

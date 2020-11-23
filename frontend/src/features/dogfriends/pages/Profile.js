@@ -1,4 +1,3 @@
-/** Login and Signup */
 import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Stepper, Step, StepLabel, Typography } from '@material-ui/core';
@@ -66,14 +65,8 @@ const Profile = () => {
     // eslint-disable-next-line
   }, [dispatch]);
   const userList = useSelector(selectUser);
-  // let _first_name, _last_name;
-  // if(userList.status === 'fulfilled') {
-  //   _first_name = userList.data.user.first_name;
-  //   _last_name = userList.data.user.last_name;
-  // }
   console.log('Profile userList',userList)
-  const history = useHistory();
-  
+  const history = useHistory();  
   const password = useFormInput('', '', 'password');
   const first_name = useFormInput('first_name');
   const last_name = useFormInput('last_name');
@@ -82,8 +75,6 @@ const Profile = () => {
   const city = useFormInput('city');
   const state = useFormInput('state');
   const country = useFormInput('country');
-  
-  
 
   const handleSubmitPatch = async () => {
     try {

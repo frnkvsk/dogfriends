@@ -1,6 +1,9 @@
 import React , { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { makeStyles } from '@material-ui/core';
+import {
+  postPhotoNew
+} from '../dogfriendsPhotosSlice';
 
 const useStyles = makeStyles((theme) => ({
   dropzone: {
@@ -24,24 +27,11 @@ const useStyles = makeStyles((theme) => ({
 export default function UploadPhoto({setUrl}) {
   const classes = useStyles();
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const url = process.env.REACT_APP_CLOUDINARY_BASE_URL+'upload';
+  const onDrop = useCallback(async (acceptedFiles) => {
+    const response = await postPhotoNew(acceptedFiles);
+    const data = await response.json();
 
-    acceptedFiles.forEach(async (acceptedFile) => {
-      const formData = new FormData();
-      formData.append('file', acceptedFile);
-      formData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
-
-      // const response = await fetch(url, {
-      //   method: 'post',
-      //   body: formData,
-      // });
-      // const data = await response.json();
-      // // console.log('UploadPhoto data',data)
-      // console.log('UploadPhoto data.url',data.url)
-      // setUrl(data.url)
-      setUrl("http://res.cloudinary.com/dsxlpdoea/image/upload/v1605993605/photo-1544568100-847a948585b9_evaw8c.jpg")
-    });
+    console.log('UploadPhoto data',data)   
     
   }, [setUrl]);
 
