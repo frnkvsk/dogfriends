@@ -75,7 +75,7 @@ const signup = async ({username,
                       first_name, 
                       last_name, 
                       email, 
-                      photo_url, 
+                      photo_id, 
                       city, 
                       state, 
                       country}) => {
@@ -87,34 +87,13 @@ const signup = async ({username,
       first_name: first_name, 
       last_name: last_name, 
       email: email,
-      photo_id: null,
+      photo_id: photo_id,
       admin: false, 
       city: city, 
       state: state, 
       country: country, 
       }, 'post');
-    
-    // if a photo_url is provided during registration
-    //  1. add a new photo to the photos table
-    //  2. patch user table to show photo_id of the new photo
-    if(photo_url.length) {
-      const photoInfo = await postPhotoNew(res.data.token, photo_url, username);
-      const data = {
-        username: username, 
-        password: password, 
-        first_name: first_name, 
-        last_name: last_name, 
-        email: email,
-        photo_id: photoInfo.data.id,
-        city: city, 
-        state: state, 
-        country: country,
-        _token: res.data.token
-      }
-
-      await request(`users/${username}`, data, 'patch');
-    }
-    return res;
+    return res;    
   } catch (error) {
     console.error(error);
   }   
@@ -139,12 +118,12 @@ const getUserInfo = async (payload) => {
 }
 const patchUserInfo = async (token, userInfo) => {
   userInfo._token = token;
-  let photo_id = null;
-  if(userInfo.photo_url) {
-    photo_id = await postPhotoNew(token, userInfo.photo_url, userInfo.username);
-  }
-  delete userInfo.photo_url;
-  userInfo.photo_id = photo_id.data.id;
+  // let photo_id = null;
+  // if(userInfo.photo_url) {
+  //   photo_id = await postPhotoNew(token, userInfo.photo_url, userInfo.username);
+  // }
+  // delete userInfo.photo_url;
+  // userInfo.photo_id = photo_id.data.id;
   try {
     return await request(`users/${userInfo.username}`, userInfo, 'patch');
   } catch (error) {

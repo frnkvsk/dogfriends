@@ -34,7 +34,7 @@ export default function UserAvatar() {
 
   let src = "";
   if(userList.status === 'fulfilled') {
-    src = userList.data.user.photo_url;
+    src = userList.data.user.photo_id;
   }
   const initials = 'TT'//(auth.authState.userInfo.first_name[0] + auth.authState.userInfo.last_name[0]).toUpperCase();
   // console.log('UserAvatar auth.authState.userInfo',auth.authState.userInfo)

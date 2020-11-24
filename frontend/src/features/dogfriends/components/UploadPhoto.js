@@ -1,9 +1,18 @@
 import React , { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { makeStyles } from '@material-ui/core';
+// import {
+//   postPhotoNew
+// } from '../dogfriendsPhotosSlice';
+
 import {
-  postPhotoNew
-} from '../dogfriendsPhotosSlice';
+  postNewPhoto,
+  // postDestroyPhoto
+} from '../api/DogfriendsPhotosApi';
+
+
+// import axios from 'axios';
+
 
 const useStyles = makeStyles((theme) => ({
   dropzone: {
@@ -24,16 +33,26 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-export default function UploadPhoto({setUrl}) {
+
+export default function UploadPhoto({token}) {
   const classes = useStyles();
 
-  const onDrop = useCallback(async (acceptedFiles) => {
-    const response = await postPhotoNew(acceptedFiles);
-    const data = await response.json();
+  const onDrop = useCallback(async (acceptedFiles, setUrl) => {
+    console.log('UploadPhoto acceptedFiles',acceptedFiles)
+    const url = process.env.REACT_APP_CLOUDINARY_BASE_URL+'upload';
+    const formData = new FormData();
+    formData.append('file', acceptedFiles[0]);
+    formData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
 
-    console.log('UploadPhoto data',data)   
+    const response = await postNewPhoto(url, formData, token);
+
+    console.log('UploadPhoto response',response)   
+    // console.log('UploadPhoto response',response.data)
+    if(response.status === 200) {
+      setUrl(response.data.url)
+    }   
     
-  }, [setUrl]);
+  }, [token]);
 
   const {getRootProps, getInputProps} = useDropzone({
     onDrop, 

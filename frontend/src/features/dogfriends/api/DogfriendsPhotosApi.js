@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const BASE_URL = process.env.REACT_APP_CLOUDINARY_BASE_URL;
+const BASE_URL = process.env.REACT_APP_EXPRESS_BASE_URL;//'http://localhost:5000/api/';
 
-const request = async (endpoint, paramsOrData = {}, verb = 'get') => {
-
-  console.debug('API Call:', endpoint, paramsOrData, verb);
+const request = async (endpoint, paramsOrData = {}, verb = "get") => {  
+  
+  console.debug("API Call:", endpoint, paramsOrData, verb);
   try {
     const res = await axios({
       method: verb,
@@ -22,22 +22,30 @@ const request = async (endpoint, paramsOrData = {}, verb = 'get') => {
 }
 
 // photos
-const postNewPhoto = async (acceptedFiles) => {
-  const url = process.env.REACT_APP_CLOUDINARY_BASE_URL+'upload';
-
-  acceptedFiles.forEach(async (acceptedFile) => {
-    const formData = new FormData();
-    formData.append('file', acceptedFile);
-    formData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
-
-    const response = await request(url, formData, 'post');
-    const data = await response.json();      
-    return data;
-
-    // for dev we will just return this url so we don't keep making calls to Cloudinary API
-    // return "http://res.cloudinary.com/dsxlpdoea/image/upload/v1605993605/photo-1544568100-847a948585b9_evaw8c.jpg";
-
-  });
+const postNewPhoto = async (url, formData, token) => {
+  /* commented out for testing
+  const response1 = await fetch(url, {method: 'post', body: formData});
+  const data1 = await response1.json(); 
+  // public_id, url, signature
+  // insert (public_id, url, signature) into photos table
+  const data2 = {
+    public_id: data1.public_id,
+    url: data1.url,
+    signature: data1.signature,
+    _token: token   
+  }
+  return await request('photos/', data2, 'post');
+  */
+  let response = {
+    status: 200,
+    data: {
+      id: "01ddd810-5980-455e-ad24-4e127906eb8e",
+      public_id: "photo-1605812276723-c31bb1a68285_fzrbhx",
+      signature: "7fcad400b727a90e8ccf03ec687745e62dbfa909",
+      url: "http://res.cloudinary.com/dsxlpdoea/image/upload/v1606176164/photo-1605812276723-c31bb1a68285_fzrbhx.jpg",
+    }
+  }
+  return await response;
 }
 const postDestroyPhoto = async (public_id, signature) => {
   //https://api.cloudinary.com/v1_1/demo/image/destroy -X POST --data 'public_id=sample&timestamp=173719931&api_key=436464676&signature=a788d68f86a6f868af'
@@ -50,8 +58,7 @@ const postDestroyPhoto = async (public_id, signature) => {
   const url = process.env.REACT_APP_CLOUDINARY_BASE_URL+'image/destroy';
 
   const response = await request(url, data, 'post');
-  const data = await response.json();      
-  return data;
+  return await response.json();
 
   // for dev we will just return this url so we don't keep making calls to Cloudinary API
   // return data 

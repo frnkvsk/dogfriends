@@ -51,7 +51,7 @@ export default function PostPhoto({photo}) {
         <div className={classes.labelTop} style={{color: photo.textColor}}>
           <label >{photo.top}</label>
         </div>
-        <img className={classes.box} src={photo.url} alt='postphoto' />
+        {/* <img className={classes.box} src={photo.url} alt='postphoto' /> */}
         <div className={classes.labelBottom} style={{color: photo.textColor}} >
           <label >{photo.bottom}</label>
         </div>      

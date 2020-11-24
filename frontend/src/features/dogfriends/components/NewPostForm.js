@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import { 
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 const NewPostForm = ({data}) => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const history = useHistory();
   console.log('NewPostForm auth',auth)
 
@@ -140,7 +140,7 @@ const NewPostForm = ({data}) => {
           label="Add text to photo."/>
         <div style={{display: formInputState}}>
           {/* <NewPhotoForm url={url} handleSetUrl={handleSetUrl} /> */}
-          <UploadPhoto setUrl={setUrl}/>
+          <UploadPhoto token={auth.authState.token} setUrl={setUrl}/>
           Text Color&nbsp;  
           <input           
             type="color" 

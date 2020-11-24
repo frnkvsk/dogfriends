@@ -1,23 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   postNewPhoto,
-  postDestroyPhoto
+  // postDestroyPhoto
 } from './api/DogfriendsPhotosApi';
 
 export const postPhotoNew = createAsyncThunk(
-  'postPhotoNew',
-  async (acceptedFiles) => {
-    const response = await postNewPhoto(acceptedFiles);
+  'postNewPhoto',
+  async (url, formData) => {
+    const response = await postNewPhoto(url, formData);
     return response.data;
   }
 );
-export const postPhotoDestroy = createAsyncThunk(
-  'postPhotoDestroy',
-  async (public_id, signature) => {
-    const response = await postDestroyPhoto(public_id, signature);
-    return response.data;
-  }
-);
+// export const postPhotoDestroy = createAsyncThunk(
+//   'postPhotoDestroy',
+//   async (public_id, signature) => {
+//     const response = await postDestroyPhoto(public_id, signature);
+//     return response.data;
+//   }
+// );
 
 // export const getPhotoById = createAsyncThunk(
 //   'getPhotoById',
@@ -27,7 +27,7 @@ export const postPhotoDestroy = createAsyncThunk(
 //   }
 // );
 
-export const dogfriendsPostsSlice = createSlice({
+export const dogfriendsPhotosSlice = createSlice({
   name: 'photoList',
   initialState: {
     photoList: {
@@ -65,27 +65,27 @@ export const dogfriendsPostsSlice = createSlice({
       };
     },    
     // delete a photo
-    [postPhotoDestroy.pending]: (state, action) => {
-      state.photoList = {
-        status: 'pending',
-        data: {},
-        error: {}
-      };
-    },
-    [postPhotoDestroy.fulfilled]: (state, action) => {
-      state.photoList = {
-        status: 'fulfilled',
-        data: action.payload,
-        error: {}
-      };
-    },
-    [postPhotoDestroy.rejected]: (state, action) => {
-      state.photoList = {
-        status: 'rejected',
-        data: {},
-        error: action.payload,
-      };
-    },    
+    // [postPhotoDestroy.pending]: (state, action) => {
+    //   state.photoList = {
+    //     status: 'pending',
+    //     data: {},
+    //     error: {}
+    //   };
+    // },
+    // [postPhotoDestroy.fulfilled]: (state, action) => {
+    //   state.photoList = {
+    //     status: 'fulfilled',
+    //     data: action.payload,
+    //     error: {}
+    //   };
+    // },
+    // [postPhotoDestroy.rejected]: (state, action) => {
+    //   state.photoList = {
+    //     status: 'rejected',
+    //     data: {},
+    //     error: action.payload,
+    //   };
+    // },    
   }
 });
 
