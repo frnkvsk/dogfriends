@@ -62,13 +62,20 @@ const deletePost = async (id, username, token) => {
 }
 
 // login / signup
-const login = async (username, password) => {
+const login = async (data) => {
   try {
-    return await request('login/', {username: username, password: password}, 'post');
+    return await request('login/', data, 'post');
   } catch (error) {
     console.error(error);
   }   
 }
+// const login = async (username, password) => {
+//   try {
+//     return await request('login/', {username: username, password: password}, 'post');
+//   } catch (error) {
+//     console.error(error);
+//   }   
+// }
 
 const signup = async ({username, 
                       password, 

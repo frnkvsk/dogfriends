@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import { AuthContext } from '../context/AuthContext';
@@ -23,27 +23,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UserAvatar() {
+export default function UserAvatar({photo_url}) {
   const classes = useStyles();
   const userList = useSelector(selectUser);
   // const userList = useSelector(selectUser);
   // console.log('UserAvatar userList',userList)
+  // const [photo_url, setPhotoUrl] = useState(null);
 
   const auth = useContext(AuthContext);
   const alt = auth.authState.userInfo.username || "";
 
-  let src = "";
-  if(userList.status === 'fulfilled') {
-    src = userList.data.user.photo_id;
-  }
+  // useEffect(() => {
+  //   if(userList.status === 'fulfilled') {
+  //     setPhotoUrl(userList.data.user.photo_url);
+  //   }
+    
+  // }, [userList.status])
+
+  
   const initials = 'TT'//(auth.authState.userInfo.first_name[0] + auth.authState.userInfo.last_name[0]).toUpperCase();
   // console.log('UserAvatar auth.authState.userInfo',auth.authState.userInfo)
   return (
     <div className={classes.root}>
-      {src === "" ? 
+      {photo_url ? 
         <Avatar className={classes.orange}>{initials}</Avatar>
         :
-        <Avatar alt={alt} src={src} />
+        <Avatar alt={alt} src={photo_url} />
       }
       
     </div>

@@ -42,7 +42,7 @@ const postNewPhoto = async (url, formData, token) => {
       id: "01ddd810-5980-455e-ad24-4e127906eb8e",
       public_id: "photo-1605812276723-c31bb1a68285_fzrbhx",
       signature: "7fcad400b727a90e8ccf03ec687745e62dbfa909",
-      url: "http://res.cloudinary.com/dsxlpdoea/image/upload/v1606176164/photo-1605812276723-c31bb1a68285_fzrbhx.jpg",
+      url: "https://res.cloudinary.com/dsxlpdoea/image/upload/v1605813712/sample.jpg",
     }
   }
   return await response;

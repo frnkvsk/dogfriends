@@ -7,8 +7,9 @@ import { Link } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { AuthContext } from '../context/AuthContext';
 import UserAvatar from './UserAvatar';
-import { getUserInfoData } from '../dogfriendsUserSlice';
+import { getUserInfoSlice } from '../dogfriendsUserSlice';
 import { useDispatch } from 'react-redux';
+import { logout } from '../dogfriendsUserSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,7 +72,7 @@ export default function Navbar() {
       token: token
     }
     
-    dispatch(getUserInfoData(payload));
+    dispatch(getUserInfoSlice(payload));
     // eslint-disable-next-line
   }, [dispatch]);
 
@@ -80,6 +81,11 @@ export default function Navbar() {
       token: "",
       userInfo: {}
     });
+    dispatch(logout({
+      status: 'idle',
+      data: {},
+      error: {}
+    }));
   }
     
   return (

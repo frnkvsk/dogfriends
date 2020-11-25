@@ -11,8 +11,7 @@ const AuthProvider = ({ children }) => {
     token: token,
     userInfo: {
       ...this,
-      ...userInfo,
-      
+      ...userInfo,      
     }
   });
   const setAuthInfo = ({ token, userInfo }) => {

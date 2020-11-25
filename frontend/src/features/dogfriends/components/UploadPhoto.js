@@ -11,33 +11,38 @@ import {
 } from '../api/DogfriendsPhotosApi';
 
 
-// import axios from 'axios';
-
 
 const useStyles = makeStyles((theme) => ({
   dropzone: {
+    display: 'flex',
+    flexDirection: 'column',
     height: '8rem',
     margin: '1rem',
     padding: '1rem',
     border: '2px dashed salmon',
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     fontSize: '2rem',
     fontWeight: 'bold',
     cursor: 'pointer',
+    color: '#424242',
     active: {
       border: '2px solid rebeccapurple',
     },
   },
+  instruction: {
+    fontSize: '12px',
+    fontStyle: 'italic',
+    color: '#6d6d6d',
+  }
   
 }));
 
 
-export default function UploadPhoto({token}) {
+export default function UploadPhoto({token, setPhotoDetails}) {
   const classes = useStyles();
 
-  const onDrop = useCallback(async (acceptedFiles, setUrl) => {
+  const onDrop = useCallback(async (acceptedFiles) => {
     console.log('UploadPhoto acceptedFiles',acceptedFiles)
     const url = process.env.REACT_APP_CLOUDINARY_BASE_URL+'upload';
     const formData = new FormData();
@@ -49,7 +54,10 @@ export default function UploadPhoto({token}) {
     console.log('UploadPhoto response',response)   
     // console.log('UploadPhoto response',response.data)
     if(response.status === 200) {
-      setUrl(response.data.url)
+      setPhotoDetails({
+        photo_id: response.data.id,
+        photo_url: response.data.url
+      });
     }   
     
   }, [token]);
@@ -64,7 +72,8 @@ export default function UploadPhoto({token}) {
     <>
       <div className={classes.dropzone} {...getRootProps()}>
         <input {...getInputProps()} />
-        Drop Zone
+        Photo Drop Zone
+        <div className={classes.instruction}>Drag/Drop or Click to open.</div>
       </div>
     </>
   );

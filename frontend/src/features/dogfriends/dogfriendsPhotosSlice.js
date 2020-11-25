@@ -1,3 +1,4 @@
+/*
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   postNewPhoto,
@@ -96,3 +97,4 @@ export const dogfriendsPhotosSlice = createSlice({
 export const selectPosts = state => state.photoList.photoList;
 
 export default dogfriendsPhotosSlice.reducer;
+*/

@@ -5,8 +5,9 @@ import { Box, Button } from '@material-ui/core';
 import { useFormInput } from '../hooks/useFormInput';
 import { AuthContext } from '../context/AuthContext';
 import FormInputOutlined from './FormInputOutlined';
-import { login, getUserInfo } from '../api/DogfriendsApi';
+import { loginSlice, getUserInfoSlice } from '../dogfriendsUserSlice';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,6 +50,7 @@ export default function LoginForm() {
   const username = useFormInput('usr');
   const password = useFormInput('pw', '', 'password');
   const auth = useContext(AuthContext);
+  const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState(false);
   // const [usernameValue, setUsernameValue] = useState('username'); 
   // const [formState, setFormState] = useState("userInfo"); 
@@ -64,15 +66,23 @@ export default function LoginForm() {
     setErrorMessage(false);
     try {
       // verify username and password are correct
-      const resp = await login(username.value, password.value);
+      // const resp = await login(username.value, password.value);
+      const resp = await dispatch(loginSlice({
+        username: username.value,
+        password: password.value
+      }));
+      console.log('LoginForm handleSubmitForm resp',resp)
       // if logged in, use resp.token to get user information
-      const userInfo = await getUserInfo({token: resp.data.token, username: username.value});
+      const userInfo = await dispatch(getUserInfoSlice({
+        token: resp.payload.token, 
+        username: username.value
+      }));
 
-      console.log('LoginForm handleSubmitLogin userInfo',userInfo.data.user)
+      console.log('LoginForm handleSubmitLogin userInfo',userInfo)
 
       auth.setAuthState({
-        userInfo: userInfo.data.user,
-        token: resp.data.token,
+        userInfo: userInfo.payload.user,
+        token: resp.payload.token,
       });
       history.push(`/`);
     } catch (error) {
