@@ -23,32 +23,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UserAvatar({photo_url}) {
+export default function UserAvatar() {
   const classes = useStyles();
   const userList = useSelector(selectUser);
   // const userList = useSelector(selectUser);
   // console.log('UserAvatar userList',userList)
-  // const [photo_url, setPhotoUrl] = useState(null);
+  const [photo_url, setPhotoUrl] = useState(null);
 
   const auth = useContext(AuthContext);
   const alt = auth.authState.userInfo.username || "";
+  console.log('UserAvatar userList',userList)
+  useEffect(() => {
+    if(userList.status === 'fulfilled') {
+      setPhotoUrl(userList.data.user.photo_url);
+      console.log('UserAvatar userList.status',userList.status)
+    }
+    console.log('UserAvatar userList.status',userList.status)
+    console.log('UserAvatar userList',userList)
+    console.log('UserAvatar photo_url',photo_url)
+  }, [userList.status, photo_url, userList])
 
-  // useEffect(() => {
-  //   if(userList.status === 'fulfilled') {
-  //     setPhotoUrl(userList.data.user.photo_url);
-  //   }
-    
-  // }, [userList.status])
-
-  
-  const initials = 'TT'//(auth.authState.userInfo.first_name[0] + auth.authState.userInfo.last_name[0]).toUpperCase();
-  // console.log('UserAvatar auth.authState.userInfo',auth.authState.userInfo)
+  console.log('UserAvatar photo_url',photo_url)
+  console.log('UserAvatar photo_url',userList)
+  // const initials = '';
+  const initials = userList.status==='fulfilled' ? userList.data.user.first_name[0].toUpperCase() + userList.data.user.last_name[0].toUpperCase() : '';
   return (
+    
     <div className={classes.root}>
+      {console.log('UserAvatar return ',photo_url)}
       {photo_url ? 
-        <Avatar className={classes.orange}>{initials}</Avatar>
-        :
-        <Avatar alt={alt} src={photo_url} />
+      <Avatar alt={alt} src={photo_url} />
+      :
+      <Avatar className={classes.orange}>{initials}</Avatar>        
       }
       
     </div>

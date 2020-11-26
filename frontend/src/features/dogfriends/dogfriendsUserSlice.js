@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   login,
-  getUserInfo
+  getUserInfo,
 } from './api/DogfriendsApi';
 
 
@@ -41,7 +41,7 @@ export const dogfriendsUserSlice = createSlice({
     },
     setUserList: (state, action) => {
       state.userList = action.payload;
-    }
+    },
   },
   extraReducers: {
     // login

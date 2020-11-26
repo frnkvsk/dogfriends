@@ -22,6 +22,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import ModalUploadPhoto from './ModalUploadPhoto';
 import UploadPhoto from './UploadPhoto';
+import { patchUserInfo } from '../api/DogfriendsApi';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -137,19 +138,30 @@ const UserInfoForm = ({title}) => {
       newAuthState.userInfo.photo_id = photo_details.photo_id;
       auth.setAuthState(newAuthState);
       
-      let newList = {
-        ...userList.data.user
+      let newList1 = {
+        status: userList.status,
+        data: {
+          user: {
+            ...userList.data.user,
+            photo_id: photo_details.photo_id,
+            photo_url: photo_details.photo_url,
+          },
+        }
       }
-      newList.photo_id = photo_details.photo_id;
-
-      dispatch(setUserList(newList));
-      console.log('UserInfoForm useEffect userList',userList)
+      dispatch(setUserList(newList1));
+      
+      let newList2 = {
+        ...userList.data.user,
+        _token: auth.authState.token,
+        photo_id: photo_details.photo_id,         
+      };
+      delete newList2.photo_url;
+      patchUserInfo(newList2);
     }
     // eslint-disable-next-line
   }, [photo_details.photo_id, photo_details.photo_url]);
 
   const [showModal, setShowModel] = useState('none');
-  console.log('Profile userList',userList)
   const history = useHistory();  
   
   const handleClick = (target) => {
@@ -176,7 +188,8 @@ const UserInfoForm = ({title}) => {
      
     <div className={classes.form}>
       <div className={classes.formAvatar} onClick={() => handleClick('avatar')}>          
-        <UserAvatar photo_url={photo_details.photo_url}/>
+        <UserAvatar />
+        {/* <UserAvatar photo_url={photo_details.photo_url}/> */}
         {username}
         <Button 
           name="avatar" 

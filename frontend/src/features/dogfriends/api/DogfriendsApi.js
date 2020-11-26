@@ -123,8 +123,9 @@ const getUserInfo = async (payload) => {
     console.error(error);
   }   
 }
-const patchUserInfo = async (token, userInfo) => {
-  userInfo._token = token;
+const patchUserInfo = async (userInfo) => {
+  console.log('DogfriendsApi patchUserInfo userInfo',userInfo)
+  // userInfo._token = token;
   // let photo_id = null;
   // if(userInfo.photo_url) {
   //   photo_id = await postPhotoNew(token, userInfo.photo_url, userInfo.username);
