@@ -9,20 +9,21 @@ import { makeStyles } from '@material-ui/core/styles';
 import { AuthContext } from '../context/AuthContext';
 // import FormInputOutlined from '../components/FormInputOutlined';
 // import { patchUserInfo } from '../api/DogfriendsApi';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 
-import { selectUser, getUserInfoSlice, setUserList } from '../dogfriendsUserSlice';
+import { selectUser, setUserList } from '../dogfriendsUserSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import UserAvatar from '../components/UserAvatar';
 
 
 // import Tooltip from '@material-ui/core/Tooltip';
-import { Button, IconButton, TextField } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
+import { Button, TextField } from '@material-ui/core';
+// import EditIcon from '@material-ui/icons/Edit';
 
-import ModalUploadPhoto from './ModalUploadPhoto';
+// import ModalUploadPhoto from './ModalUploadPhoto';
 import UploadPhoto from './UploadPhoto';
 import { patchUserInfo } from '../api/DogfriendsApi';
+import { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -89,13 +90,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const UserInfoForm = ({title}) => {
+const UserInfoForm = ({title, handleSubmit}) => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
   const userList = useSelector(selectUser);
   const dispatch = useDispatch();
 
-  console.log('Profile userList',userList)
+  // console.log('UserInfoForm userList',userList)
   const [username, setUsername] = useState('');
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
@@ -122,66 +123,41 @@ const UserInfoForm = ({title}) => {
       setState(userList.data.user.state);
       setCountry(userList.data.user.country);
     }
-    console.log('Profile useEffect userList',userList)
+    // console.log('UserInfoForm useEffect userList',userList)
+    // eslint-disable-next-line
   }, [userList.status])
   
-  const handleChange = () => {
-
-  }
   
-  // const []
-  useEffect(() => {
-    if(photo_details.photo_id) {
-      let newAuthState = {
-        ...auth.authState
-      }
-      newAuthState.userInfo.photo_id = photo_details.photo_id;
-      auth.setAuthState(newAuthState);
-      
-      let newList1 = {
-        status: userList.status,
-        data: {
-          user: {
-            ...userList.data.user,
-            photo_id: photo_details.photo_id,
-            photo_url: photo_details.photo_url,
-          },
-        }
-      }
-      dispatch(setUserList(newList1));
-      
-      let newList2 = {
-        ...userList.data.user,
-        _token: auth.authState.token,
-        photo_id: photo_details.photo_id,         
-      };
-      delete newList2.photo_url;
-      patchUserInfo(newList2);
-    }
-    // eslint-disable-next-line
-  }, [photo_details.photo_id, photo_details.photo_url]);
 
-  const [showModal, setShowModel] = useState('none');
+  const [photoDropVisibility, setPhotoDropVisibility] = useState('none');
   const history = useHistory();  
   
-  const handleClick = (target) => {
-    console.log(target)
+  const handleClick = () => {
+    handleSubmit({
+       first_name,
+       last_name, 
+       email, 
+       photo_details,
+       city, 
+       state, 
+       country, 
+    });
   }
-  const handleOpenModel = () => {
-    setShowModel('inline');
-  }
-  console.log('UserInfoForm photo_details',photo_details)
+  // const handleOpenModel = () => {
+  //   setShowModel('inline');
+  // }
+  // console.log('UserInfoForm photo_details',photo_details)
   return (
     <div className={classes.root}>
-      <div style={{display: showModal}}>
+      <div style={{display: photoDropVisibility}}>
         <UploadPhoto token={auth.authState.token} setPhotoDetails={setPhotoDetails}/>
       </div>
       <div className={classes.header}>
         <p>{title}</p>
-        <Button name="avatar" className={classes.button} variant="contained">
+        <Button className={classes.button} variant="contained" onClick={() => history.push('/')}>
           Cancel
         </Button> 
-        <Button name="avatar" className={classes.button} variant="contained">
+        <Button className={classes.button} variant="contained" onClick={handleClick}>
           Done
         </Button>
       </div>
@@ -193,7 +169,8 @@ const UserInfoForm = ({title}) => {
         {username}
         <Button 
           name="avatar" 
-          onClick={handleOpenModel}
+          onClick={() => setPhotoDropVisibility('inline')}
+          // onClick={handleOpenModel}
           className={classes.button} 
           variant="contained">
           Change

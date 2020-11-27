@@ -8,7 +8,7 @@ import {
 export const loginSlice = createAsyncThunk(
   'login',
   async (payload) => {
-    console.log('dogfriendsUserSlice payload',payload)
+    // console.log('dogfriendsUserSlice payload',payload)
     const response = await login({
       username: payload.username,
       password: payload.password

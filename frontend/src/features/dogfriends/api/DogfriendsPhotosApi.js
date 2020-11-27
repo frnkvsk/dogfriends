@@ -42,7 +42,8 @@ const postNewPhoto = async (url, formData, token) => {
       id: "01ddd810-5980-455e-ad24-4e127906eb8e",
       public_id: "photo-1605812276723-c31bb1a68285_fzrbhx",
       signature: "7fcad400b727a90e8ccf03ec687745e62dbfa909",
-      url: "https://res.cloudinary.com/dsxlpdoea/image/upload/v1605813712/sample.jpg",
+      url: "https://images.unsplash.com/photo-1606245131568-de9896c3fdea?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyM3x8fGVufDB8fHw%3D&auto=format&fit=crop&w=500&q=60",
+      // url: "https://res.cloudinary.com/dsxlpdoea/image/upload/v1605813712/sample.jpg",
     }
   }
   return await response;

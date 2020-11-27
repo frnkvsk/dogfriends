@@ -43,7 +43,7 @@ export default function UploadPhoto({token, setPhotoDetails}) {
   const classes = useStyles();
 
   const onDrop = useCallback(async (acceptedFiles) => {
-    console.log('UploadPhoto acceptedFiles',acceptedFiles)
+    // console.log('UploadPhoto acceptedFiles',acceptedFiles)
     const url = process.env.REACT_APP_CLOUDINARY_BASE_URL+'upload';
     const formData = new FormData();
     formData.append('file', acceptedFiles[0]);
@@ -51,7 +51,7 @@ export default function UploadPhoto({token, setPhotoDetails}) {
 
     const response = await postNewPhoto(url, formData, token);
 
-    console.log('UploadPhoto response',response)   
+    // console.log('UploadPhoto response',response)   
     // console.log('UploadPhoto response',response.data)
     if(response.status === 200) {
       setPhotoDetails({
@@ -59,7 +59,7 @@ export default function UploadPhoto({token, setPhotoDetails}) {
         photo_url: response.data.url
       });
     }   
-    
+    // eslint-disable-next-line
   }, [token]);
 
   const {getRootProps, getInputProps} = useDropzone({

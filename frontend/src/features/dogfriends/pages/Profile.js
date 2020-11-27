@@ -75,8 +75,25 @@ import UserInfoForm from '../components/UserInfoForm';
 
 
 const Profile = () => {
+  const handleSubmit = ({
+    first_name,
+    last_name, 
+    email, 
+    photo_details,
+    city, 
+    state, 
+    country, 
+ }) => {
+    console.log('Profile handleSubmit',first_name,
+    last_name, 
+    email, 
+    photo_details,
+    city, 
+    state, 
+    country,)
+  }
   return (
-    <UserInfoForm title="Edit Profile"/>
+    <UserInfoForm title="Edit Profile" handleSubmit={handleSubmit}/>
   );
 }
 export default Profile;

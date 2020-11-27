@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 export default function PostPhoto({photo}) {
   const classes = useStyles();
   
-  console.log('PostPhoto photo',photo)
+  // console.log('PostPhoto photo',photo)
   return (  
     <div key={uuid()} className={classes.root} >
       <Box className={classes.box}>          

@@ -71,14 +71,14 @@ export default function LoginForm() {
         username: username.value,
         password: password.value
       }));
-      console.log('LoginForm handleSubmitForm resp',resp)
+      // console.log('LoginForm handleSubmitForm resp',resp)
       // if logged in, use resp.token to get user information
       const userInfo = await dispatch(getUserInfoSlice({
         token: resp.payload.token, 
         username: username.value
       }));
 
-      console.log('LoginForm handleSubmitLogin userInfo',userInfo)
+      // console.log('LoginForm handleSubmitLogin userInfo',userInfo)
 
       auth.setAuthState({
         userInfo: userInfo.payload.user,
@@ -93,7 +93,7 @@ export default function LoginForm() {
   
   return (
     <form className={classes.form}>
-      {console.log(errorMessage)}
+      {/* {console.log(errorMessage)} */}
        <Box className={classes.err} 
         component="span" 
         display={errorMessage ? 'block' : 'none'}

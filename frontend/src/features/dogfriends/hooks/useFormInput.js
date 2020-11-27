@@ -9,7 +9,7 @@ function useFormInput(name='none', inititalValue='', _type='text') {
   const [value, setValue] = useState(userList.status === 'fulfilled' && name !== 'none' ? userList.data.user[name] : inititalValue);
 
   useEffect(() => {
-    console.log('userFormInput useEffect', userList.status)
+    // console.log('userFormInput useEffect', userList.status)
     if(userList.status === 'fulfilled' && name !== 'none')
       setValue(userList.data.user[name]);
       // eslint-disable-next-line

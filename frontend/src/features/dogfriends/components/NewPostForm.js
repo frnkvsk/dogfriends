@@ -61,7 +61,7 @@ const NewPostForm = ({data}) => {
   const auth = useContext(AuthContext);
   // const dispatch = useDispatch();
   const history = useHistory();
-  console.log('NewPostForm auth',auth)
+  // console.log('NewPostForm auth',auth)
 
   const handleSubmit = e => {   
     // e.preventDefault();
@@ -99,8 +99,8 @@ const NewPostForm = ({data}) => {
     setTextColor(e.target.value);
   }
   useEffect(() => {
-    console.log('useEffect photoShowState',photoShowState)
-    console.log('useEffect url', url)
+    // console.log('useEffect photoShowState',photoShowState)
+    // console.log('useEffect url', url)
     if(url !== '') {
       setPhotoShowState('flex');
       setPhoto({

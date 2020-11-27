@@ -106,25 +106,29 @@ const signup = async ({username,
   }   
 }
 const getUserInfo = async (payload) => {
+  // console.log('DogfriendsApi payload',payload)
   const {username, token} = payload;
   let photo_url = null;
   try {  
     const res = await request(`users/${username}/`, {_token: token});
+    // console.log('DogfriendsApi getUserInfo 0res',res)
     if(res.data.user.photo_id) {
       // console.log('DogfriendsApi getUserInfo res.data.user.photo_id',res.data.user.photo_id)
       const resp = await request(`photos/${res.data.user.photo_id}`);
-      photo_url = resp.data[0].url;
+      // console.log('DogfriendsApi getUserInfo 0resp',resp)
+      photo_url = resp.data.url;
     
     }
     res.data.user.photo_url = photo_url;
-    // console.log('DogfriendsApi getUserInfo res',res)
+    // console.log('DogfriendsApi getUserInfo 1res',res)
     return res;
   } catch (error) {
+    // console.log('Error getUserInfo')
     console.error(error);
   }   
 }
 const patchUserInfo = async (userInfo) => {
-  console.log('DogfriendsApi patchUserInfo userInfo',userInfo)
+  // console.log('DogfriendsApi patchUserInfo userInfo',userInfo)
   // userInfo._token = token;
   // let photo_id = null;
   // if(userInfo.photo_url) {
