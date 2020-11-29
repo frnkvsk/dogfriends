@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { AuthContext } from '../context/AuthContext';
-import UserInfoForm from '../components/UserInfoForm';
-import { updateUserInfoSlice } from '../dogfriendsUserSlice';
+import { signUpSlice } from '../dogfriendsUserSlice';
+import SignupForm from './SignupForm';
 
 
-const Profile = () => {
+export default function Signup() { 
   const auth = useContext(AuthContext);
   const dispatch = useDispatch();
-  console.log('Profile auth',auth)
+  console.log('SignupForm auth',auth)
   const handleSubmit = ({
     first_name,
     last_name, 
@@ -16,23 +16,23 @@ const Profile = () => {
     photo_details,
     city, 
     state, 
-    country, 
+    country 
     }) => {
     const userInfo = {
       first_name,
       last_name, 
       email, 
-      photo_details,
+      photo_id: photo_details.photo_id,
       city, 
       state, 
-      country, 
+      country 
    }
     userInfo._token = auth.authState.token;
     userInfo.username = auth.authState.userInfo.username;
-    dispatch(updateUserInfoSlice(userInfo));
+    dispatch(signUpSlice(userInfo));
   }
   return (
-    <UserInfoForm title="Edit Profile" handleSubmit={handleSubmit}/>
+    <SignupForm handleSubmit={handleSubmit} />
   );
+    
 }
-export default Profile;

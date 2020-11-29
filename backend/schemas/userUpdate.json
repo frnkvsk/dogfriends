@@ -40,9 +40,7 @@
       "$id": "/properties/token",
       "type": "string",
       "title": "The Token Schema ",
-      "examples": [
-        "foo123"
-      ]
+      "examples": ["foo123"]
     },
     "city": {
       "$id": "/properties/city",
@@ -68,13 +66,13 @@
       "title": "The Country Schema ",
       "examples": ["usa"]
     },
-    "photo_url": {
+    "photo_id": {
       "$id": "/properties/photo",
-      "type": "string",
+      "type": "uuid",
       "title": "The Photo Schema ",
-      "default": "",
+      "default": null,
       "examples": [
-        "https://avatars0.githubusercontent.com/u/13444851?s=460&v=4", ""
+        "45ab-678a-123b-543z"
       ]
     }
   }

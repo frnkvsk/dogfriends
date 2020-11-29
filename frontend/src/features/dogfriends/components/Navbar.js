@@ -65,14 +65,17 @@ export default function Navbar() {
   // const userList = useSelector(selectUser);
 
   useEffect(() => {
-    const usr = auth.authState.userInfo.username;
-    const token = auth.authState.token;
-    const payload = {
-      username: usr,
-      token: token
+    if(auth.authState.userInfo.username) {
+      const usr = auth.authState.userInfo.username;
+      const token = auth.authState.token;
+      const payload = {
+        username: usr,
+        token: token
+      }
+      
+      dispatch(getUserInfoSlice(payload));
     }
     
-    dispatch(getUserInfoSlice(payload));
     // eslint-disable-next-line
   }, [dispatch]);
 

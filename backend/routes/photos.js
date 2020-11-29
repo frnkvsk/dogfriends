@@ -15,12 +15,14 @@ const { ensureCorrectUser, authRequired } = require("../middleware/auth");
 router.get("/:id", async function (req, res, next) {
   try {
     const result = await db.query(
-      `SELECT id, url 
+      `SELECT id, url, public_id, signature
        FROM photos 
        WHERE id = $1 
        ORDER BY id`,
       [req.params.id]);
-    return res.json(result.rows);
+    const result2 = res.json(result.rows[0]);
+    console.log('---result',result2)
+    return result2;
   } catch (err) {
     return next(err);
   }
@@ -37,15 +39,10 @@ router.post("/", authRequired, async function (req, res, next) {
   try {
     const newId = uuid();
     const result = await db.query(
-      `INSERT INTO photos (id, url) 
-       VALUES ($1, $2) 
-       RETURNING id, url`,
-       [newId, req.body.url]);
-    
-    await db.query(
-      `INSERT INTO user_photo (photo_id, username) 
-                    VALUES ($1, $2)`,
-                    [newId, req.username]);
+      `INSERT INTO photos (id, url, public_id, signature) 
+       VALUES ($1, $2, $3, $4) 
+       RETURNING id, url, public_id, signature`,
+       [newId, req.body.url, req.body.public_id, req.body.signature]);
       
     return res.json(result.rows[0]);
   } catch (err) {

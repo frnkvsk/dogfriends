@@ -37,82 +37,83 @@ class User {
   }
 
   /** Check if username already in use */
-  static async usernameCheck(username) {
-    const duplicateCheck = await db.query(
-      `SELECT username 
-          FROM users 
-          WHERE UPPER(username) = UPPER($1)`,
-      [username]
-    );
-    console.log('-------usernameCheck',duplicateCheck.rows)
-    // returns true if username is already in use
-    return duplicateCheck.rows
-    // if (duplicateCheck.rows[0]) {
-    //   const err = new Error(
-    //       `There already exists a user with username '${data.username}`);
-    //   err.status = 409;
-    //   throw err;
-    // }
-  }
+  // static async usernameCheck(username) {
+  //   const duplicateCheck = await db.query(
+  //     `SELECT username 
+  //         FROM users 
+  //         WHERE UPPER(username) = UPPER($1)`,
+  //     [username]
+  //   );
+  //   console.log('-------usernameCheck',duplicateCheck.rows)
+  //   // returns true if username is already in use
+  //   return duplicateCheck.rows
+  //   // if (duplicateCheck.rows[0]) {
+  //   //   const err = new Error(
+  //   //       `There already exists a user with username '${data.username}`);
+  //   //   err.status = 409;
+  //   //   throw err;
+  //   // }
+  // }
   /** Register user with data. Returns new user data. */
 
   static async register(data) {
     console.log('-----------data',data)
-    // const duplicateCheck = await db.query(
-    //     `SELECT username 
-    //         FROM users 
-    //         WHERE UPPER(username) = UPPER($1)`,
-    //     [data.username]
-    // );
+    const duplicateCheck = await db.query(
+        `SELECT username 
+            FROM users 
+            WHERE UPPER(username) = UPPER($1)`,
+        [data.username]
+    );
 
-    // if (duplicateCheck.rows[0]) {
-    //   const err = new Error(
-    //       `There already exists a user with username '${data.username}`);
-    //   err.status = 409;
-    //   throw err;
-    // }
+    if (duplicateCheck.rows[0]) {
+      const err = new Error(
+          `There already exists a user with username '${data.username}`);
+      err.status = 409;
+      throw err;
+    }
 
     const hashedPassword = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
     
     
     const result = await db.query(
         `INSERT INTO users 
-            (username, password, first_name, last_name, email, admin, city, state, country) 
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
-          RETURNING username, password, first_name, last_name, email, admin, city, state, country`,
+            (username, password, first_name, last_name, email, photo_id, admin, city, state, country) 
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) 
+          RETURNING username, password, first_name, last_name, email, photo_id, admin, city, state, country`,
         [
           data.username,
           hashedPassword,
           data.first_name,
           data.last_name,
           data.email,
+          data.photo_id,
           data.admin,
           data.city,
           data.state,
           data.country
         ]
     );
-    /**
-     * If new user uploads a photo_url
-     *    -Create photo id with uuid()
-     *    -Insert into photos (id, url)
-     *    -Insert into user_photo (username, photo_id)
-     */
-    if(data.photo_url && data.photo_url.length) {
-      const id = uuid();
-      await db.query(
-        `INSERT INTO photos
-            (id, url)
-          VALUES ($1, $2)`,
-          [id, data.photo_url]
-      );
-      await db.query(
-        `INSERT INTO user_photo
-            (username, photo_id)
-          VALUES ($1, $2)`,
-          [data.username, id]
-      );
-    }
+    // /**
+    //  * If new user uploads a photo_url
+    //  *    -Create photo id with uuid()
+    //  *    -Insert into photos (id, url)
+    //  *    -Insert into user_photo (username, photo_id)
+    //  */
+    // if(data.photo_url && data.photo_url.length) {
+    //   const id = uuid();
+    //   await db.query(
+    //     `INSERT INTO photos
+    //         (id, url)
+    //       VALUES ($1, $2)`,
+    //       [id, data.photo_url]
+    //   );
+    //   await db.query(
+    //     `INSERT INTO user_photo
+    //         (username, photo_id)
+    //       VALUES ($1, $2)`,
+    //       [data.username, id]
+    //   );
+    // }
 
     return result.rows[0];
   }
@@ -121,7 +122,7 @@ class User {
 
   static async findAll() {
     const result = await db.query(
-        `SELECT username, first_name, last_name, email, admin, city, state, country
+        `SELECT username, first_name, last_name, email, photo_id, admin, city, state, country
           FROM users
           ORDER BY username`);
 
@@ -132,7 +133,7 @@ class User {
 
   static async findOne(username) {
     const userRes = await db.query(
-        `SELECT username, first_name, last_name, email, admin, city, state, country 
+        `SELECT username, first_name, last_name, email, photo_id, admin, city, state, country 
             FROM users 
             WHERE UPPER(username) = UPPER($1)`,
         [username]);
@@ -158,6 +159,7 @@ class User {
    */
 
   static async update(username, data) {
+    console.log('---------update',data)
     if (data.password) {
       data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
     }

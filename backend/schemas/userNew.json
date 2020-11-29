@@ -43,13 +43,13 @@
       "title": "The Email Schema ",
       "examples": ["michael@rithmschool.com"]
     },
-    "photo_url": {
+    "photo_id": {
       "$id": "/properties/photo",
-      "type": "string",
+      "type": "uuid",
       "title": "The Photo Schema ",
-      "default": "",
+      "default": null,
       "examples": [
-        "https://avatars0.githubusercontent.com/u/13444851?s=460&v=4"
+        "45ab-678a-123b-543z"
       ]
     },
     "admin": {

@@ -71,13 +71,15 @@ router.post("/", async function(req, res, next) {
 /** PATCH /[handle] {userData} => {user: updatedUser} */
 
 router.patch("/:username", ensureCorrectUser, async function(req, res, next) {
+  console.log('---------patch',req.body)
   try {
-    await User.authenticate({
-      username: req.params.username,
-      password: req.body.password
-    });
-    delete req.body.password;
+    // await User.authenticate({
+    //   username: req.params.username,
+    //   password: req.body.password
+    // });
+    // delete req.body.password;
     delete req.body.username;
+    delete req.body.admin;
     const validation = validate(req.body, userUpdateSchema);
     if (!validation.valid) {
       return next({
@@ -89,6 +91,7 @@ router.patch("/:username", ensureCorrectUser, async function(req, res, next) {
     const user = await User.update(req.params.username, req.body);
     return res.json({ user });
   } catch (err) {
+    console.log('---patch error')
     return next(err);
   }
 });

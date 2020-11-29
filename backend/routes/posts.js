@@ -126,7 +126,7 @@ router.post("/", authRequired, async function (req, res, next) {
       [title, body, username, parent_id, photo_id]);
 
     if(photo_id && photo_id.length) {
-      await db.query(`INSERT INTO user_photo (photo_id, username) 
+      await db.query(`INSERT INTO photos (photo_id, username) 
       VALUES ($1, $2)`,
       [photo_id, username]);
     }    

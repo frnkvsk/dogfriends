@@ -2,6 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   login,
   getUserInfo,
+  patchUserInfo,
+  signup,
 } from './api/DogfriendsApi';
 
 
@@ -17,11 +19,40 @@ export const loginSlice = createAsyncThunk(
   }
 );
 
+export const signUpSlice = createAsyncThunk(
+  'signup',
+  async (payload) => {
+    // console.log('dogfriendsUserSlice payload',payload)
+    const response = await signup({
+      username: payload.username, 
+      password: payload.password, 
+      first_name: payload.first_name, 
+      last_name: payload.last_name, 
+      email: payload.email, 
+      photo_id: payload.photo_id, 
+      city: payload.city, 
+      state: payload.state, 
+      country: payload.country
+    });
+    return response.data;
+  }
+);
+
 export const getUserInfoSlice = createAsyncThunk(
   'getUserInfo',
   async (payload) => {
-    // console.log('dogfriendsUserSlice payload',payload)
+    console.log('dogfriendsUserSlice getUserInfoSlice payload',payload)
     const response = await getUserInfo(payload);
+    console.log('dogfriendsUserSlice getUserInfoSlice response',response)
+    return response.data;
+  }
+);
+
+export const updateUserInfoSlice = createAsyncThunk(
+  'patchUserInfo',
+  async (payload) => {
+    console.log('updateUserInfoSlice payload',payload)
+    const response = await patchUserInfo(payload);
     return response.data;
   }
 );
@@ -66,6 +97,28 @@ export const dogfriendsUserSlice = createSlice({
         error: action.payload,
       };
     }, 
+    // signup
+    [signup.pending]: (state, action) => {
+      state.userList = {
+        status: 'pending',
+        data: {},
+        error: {}
+      };
+    },
+    [signup.fulfilled]: (state, action) => {
+      state.userList = {
+        status: 'fulfilled',
+        data: action.payload,
+        error: {}
+      };
+    },
+    [signup.rejected]: (state, action) => {
+      state.userList = {
+        status: 'rejected',
+        data: {},
+        error: action.payload,
+      };
+    }, 
     // get user info
     [getUserInfoSlice.pending]: (state, action) => {
       state.userList = {
@@ -82,6 +135,28 @@ export const dogfriendsUserSlice = createSlice({
       };
     },
     [getUserInfoSlice.rejected]: (state, action) => {
+      state.userList = {
+        status: 'rejected',
+        data: {},
+        error: action.payload,
+      };
+    }, 
+    // patch/update user info
+    [updateUserInfoSlice.pending]: (state, action) => {
+      state.userList = {
+        status: 'pending',
+        data: {},
+        error: {}
+      };
+    },
+    [updateUserInfoSlice.fulfilled]: (state, action) => {
+      state.userList = {
+        status: 'fulfilled',
+        data: action.payload,
+        error: {}
+      };
+    },
+    [updateUserInfoSlice.rejected]: (state, action) => {
       state.userList = {
         status: 'rejected',
         data: {},

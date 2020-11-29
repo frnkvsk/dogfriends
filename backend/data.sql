@@ -15,8 +15,9 @@ CREATE TABLE users (
     city TEXT,
     state TEXT,
     country TEXT,
-    created_on DATE NOT NULL DEFAULT CURRENT_DATE,
-    updated_on DATE NOT NULL DEFAULT CURRENT_DATE,
+    photo_id uuid DEFAULT null,
+    created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     admin boolean DEFAULT false NOT NULL
 );
 
@@ -24,8 +25,8 @@ CREATE TABLE posts (
   id uuid DEFAULT uuid_generate_v4 (), 
   title TEXT NOT NULL, 
   body TEXT NOT NULL,  
-  created_on DATE NOT NULL DEFAULT CURRENT_DATE,
-  updated_on DATE NOT NULL DEFAULT CURRENT_DATE,  
+  created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
   username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
   parent_id uuid DEFAULT null,
   photo_id uuid DEFAULT null,
@@ -42,14 +43,9 @@ CREATE TABLE votes (
 CREATE TABLE photos (
   id uuid DEFAULT uuid_generate_v4 (), 
   url TEXT NOT NULL,
-  created_on DATE NOT NULL DEFAULT CURRENT_DATE,
-  updated_on DATE NOT NULL DEFAULT CURRENT_DATE,
+  public_id TEXT NOT NULL,
+  signature TEXT NOT NULL,
+  created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
-);
-
-CREATE TABLE  user_photo (
-  photo_id uuid DEFAULT uuid_generate_v4 () REFERENCES photos ON DELETE CASCADE,
-  username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
-  PRIMARY KEY (photo_id, username)
-);
-                    
+);                  
