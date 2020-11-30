@@ -51,9 +51,11 @@ export default function UploadPhoto({token, setPhotoDetails}) {
     try {
       const response = await postNewPhoto(url, formData, token);
       if(response.status === 200) {
+        console.log('UploadPhoto onDrop response',response)
+        let {id, url} = response.data;
         setPhotoDetails({
-          photo_id: response.data.id,
-          photo_url: response.data.url
+          photo_id: id,
+          photo_url: url
         });
       } 
     } catch (error) {

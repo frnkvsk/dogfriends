@@ -7,7 +7,7 @@
       "$id": "/properties/username",
       "type": "string",
       "title": "The Username Schema ",
-      "minLength": 1,
+      "minLength": 3,
       "maxLength": 55,
       "examples": ["hueter"]
     },
@@ -15,7 +15,7 @@
       "$id": "/properties/password",
       "type": "string",
       "title": "The Password Schema ",
-      "minLength": 5,
+      "minLength": 6,
       "maxLength": 55,
       "examples": ["foo123"]
     },
@@ -23,7 +23,7 @@
       "$id": "/properties/first_name",
       "type": "string",
       "title": "The First_name Schema ",
-      "minLength": 1,
+      "minLength": 3,
       "maxLength": 55,
       "examples": ["Michael"]
     },
@@ -31,7 +31,7 @@
       "$id": "/properties/last_name",
       "type": "string",
       "title": "The Last_name Schema ",
-      "minLength": 1,
+      "minLength": 3,
       "maxLength": 55,
       "examples": ["Hueter"]
     },
@@ -64,24 +64,24 @@
     "city": {
       "$id": "/properties/city",
       "type": "string",
-      "minLength": 2,
       "maxLength": 60,
+      "default": null,
       "title": "The State Schema ",
       "examples": ["Seattle"]
     },
     "state": {
       "$id": "/properties/state",
       "type": "string",
-      "minLength": 2,
       "maxLength": 60,
+      "default": null,
       "title": "The State Schema ",
       "examples": ["WA"]
     },
     "country": {
       "$id": "/properties/country",
       "type": "string",
-      "minLength": 2,
       "maxLength": 60,
+      "default": null,
       "title": "The Country Schema ",
       "examples": ["usa"]
     }

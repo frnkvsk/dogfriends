@@ -54,6 +54,7 @@ export default function SignupForm({handleSubmit}) {
   const classes = useStyles();
   const auth = useContext(AuthContext);
   const token = auth.authState.token;
+  console.log('SignupForm token',token)
   // Step 1 (required) make sure username and password are valid
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -76,19 +77,30 @@ export default function SignupForm({handleSubmit}) {
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
 
-  const handleNext = () => {
+  const handleNext = async () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if(activeStep === 1) {
+      console.log('activeStep === 1')
+      const resp = await handleSubmit({
+        username,
+        password,
+        first_name,
+        last_name, 
+        email, 
+        photo_id: null,
+        city, 
+        state, 
+        country
+      });
+      console.log('SignupForm handleNext resp',resp)
+    }
     if(activeStep === steps.length-1) {
       console.log('activeStep === steps.length =>',activeStep,'  photo_details',photo_details)
       // handleSubmit({
       //   first_name,
       //   last_name, 
       //   email, 
-      //   photo_id
-        
-        
-        
-      //   details,
+      //   photo_id: photo_details.photo_id,
       //   city, 
       //   state, 
       //   country
@@ -103,11 +115,6 @@ export default function SignupForm({handleSubmit}) {
   const handleReset = () => {
     setActiveStep(0);
   };
-
-  // const someFunc = (newPhotoId) => {
-  //   setPhoto_id(newPhotoId);
-  //   console.log(photo_id);
-  // }
 
   return (
     <div className={classes.root}>

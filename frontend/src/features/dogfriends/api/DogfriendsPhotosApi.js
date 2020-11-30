@@ -22,6 +22,16 @@ const request = async (endpoint, paramsOrData = {}, verb = "get") => {
 }
 
 // photos
+
+/**
+ * postNewPhoto 
+ *  1. Uploads the file/photo to the Cloudinary bucket.
+ *  2. Inserts (public_id, url, signature) into photos table 
+ *     in the database.
+ * @param {string} url - Cloudinary upload url
+ * @param {*} formData - Raw file/photo and upload preset
+ * @param {*} token - Token to identify ownership of Cloudinary bucket
+ */
 const postNewPhoto = async (url, formData, token) => {
   /* commented out for testing
   const response1 = await fetch(url, {method: 'post', body: formData});
@@ -39,14 +49,16 @@ const postNewPhoto = async (url, formData, token) => {
   let response = {
     status: 200,
     data: {
-      id: "01ddd810-5980-455e-ad24-4e127906eb8e",
+      // id: "01ddd810-5980-455e-ad24-4e127906eb8e",
       public_id: "photo-1605812276723-c31bb1a68285_fzrbhx",
       signature: "7fcad400b727a90e8ccf03ec687745e62dbfa909",
       url: "https://images.unsplash.com/photo-1606245131568-de9896c3fdea?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyM3x8fGVufDB8fHw%3D&auto=format&fit=crop&w=500&q=60",
-      // url: "https://res.cloudinary.com/dsxlpdoea/image/upload/v1605813712/sample.jpg",
+      _token: token
     }
   }
-  return await response;
+  console.log('DogfriendsPhotosApi response',response,' token',token)
+  return await request('photos/', response.data, 'post');
+  // return await response;
 }
 const postDestroyPhoto = async (public_id, signature) => {
   //https://api.cloudinary.com/v1_1/demo/image/destroy -X POST --data 'public_id=sample&timestamp=173719931&api_key=436464676&signature=a788d68f86a6f868af'

@@ -1,5 +1,5 @@
 /** Login and Signup */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -9,9 +9,11 @@ import Tab from '@material-ui/core/Tab';
 // import { useHistory } from "react-router-dom";
 // import { login, signup, getUserInfo } from '../api/DogfriendsApi';
 // import { useFormInput } from '../hooks/useFormInput';
-// import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
+import { useDispatch } from 'react-redux';
 import SignupForm from '../components/SignupForm';
 import LoginForm from '../components/LoginForm';
+import { signUpSlice } from '../dogfriendsUserSlice';
 
 function LinkTab(props) {
   return (
@@ -81,25 +83,36 @@ export default function Login() {
     setValue(newValue);
   }
 
-  // const handleSubmitLogin = async () => {
-  //   setErrorMessage(false);
-
-  //   try {
-  //     // verify username and password are correct
-  //     const resp = await login(username.value, password.value);
-      
-  //     // if logged in, use resp.token to get user information
-  //     const userInfo = await getUserInfo(resp.data.token, username.value);
-
-  //     auth.setAuthState({
-  //       userInfo: userInfo.data.user,
-  //       token: resp.data.token,
-  //     });
-  //     history.push(`/`);
-  //   } catch (error) {
-  //     setErrorMessage(true);
-  //   }    
-  // }
+  const auth = useContext(AuthContext);
+  const dispatch = useDispatch();
+  console.log('SignupForm auth',auth)
+  const handleSubmit = async ({
+    username,
+    password,
+    first_name,
+    last_name, 
+    email, 
+    photo_id,
+    city, 
+    state, 
+    country 
+    }) => {
+    const userInfo = {
+      username,
+      password,
+      first_name,
+      last_name, 
+      email, 
+      photo_id,
+      city, 
+      state, 
+      country 
+    }
+    userInfo._token = auth.authState.token;
+    // userInfo.username = auth.authState.userInfo.username;
+    console.log('SignupForm userInfo',userInfo)
+    return await dispatch(signUpSlice(userInfo));
+  }
   
 
   return (
@@ -123,7 +136,7 @@ export default function Login() {
         </Tabs>
       </AppBar>
       
-      { loginType === 'login' ? <LoginForm /> : <SignupForm /> }
+      { loginType === 'login' ? <LoginForm /> : <SignupForm handleSubmit={handleSubmit} /> }
     </div>
   );
 }
