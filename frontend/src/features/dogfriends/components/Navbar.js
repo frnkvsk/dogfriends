@@ -124,22 +124,26 @@ export default function Header(props) {
               value={value}               
               indicatorColor='primary'>
               <Tab className={classes.tab} label='Home' component={Link} to='/' />
-              {auth.authState.token !== "" ? <>
+              {auth.authState.token !== "" && <>
                 <Tab className={classes.tab} component={Link} to='/profile'>
                   <UserAvatar />
                   {auth.authState.userInfo.username}
                 </Tab>
                 <Tab className={classes.tab} label='Add a new post' component={Link} to='/new' />
                 <Tab className={classes.tab} label='Profile' component={Link} to='/profile' />
-                <Tab className={classes.tab} label='Logout' component={Link} to='/' onClick={handleClick} />
-              </> : <>
-                <Tab className={classes.tab} label='About Us' component={Link} to='/about' />
-                <Tab className={classes.tab} label='Contact Us' component={Link} to='/contact' />
-                <Tab className={classes.tab} label='Login' component={Link} to='/login' />
               </>
               }
+              <Tab className={classes.tab} label='About Us' component={Link} to='/about' />
+              <Tab className={classes.tab} label='Contact Us' component={Link} to='/contact' />
             </Tabs>
-            
+            {auth.authState.token !== "" ?
+              <Button className={classes.button} variant='contained' color='secondary' component={Link} to='/' onClick={handleClick} >
+                Logout
+              </Button> :
+              <Button className={classes.button} variant='contained' color='secondary' component={Link} to='/login' >
+                Login
+              </Button>
+            }
           </Toolbar>
         </AppBar>
       </ElevationScroll>
