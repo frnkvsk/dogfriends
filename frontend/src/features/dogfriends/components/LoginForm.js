@@ -1,42 +1,47 @@
 /** Login and Signup */
 import React, { useContext, useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Button } from '@material-ui/core';
-import { useFormInput } from '../hooks/useFormInput';
-import { AuthContext } from '../context/AuthContext';
-import FormInputOutlined from './FormInputOutlined';
-import { loginSlice, getUserInfoSlice } from '../dogfriendsUserSlice';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+
+import { makeStyles } from '@material-ui/core/styles';
+import { 
+  Box, 
+  Button, 
+  TextField, 
+   } from '@material-ui/core';
+
+// import { useFormInput } from '../hooks/useFormInput';
+import { AuthContext } from '../context/AuthContext';
+// import FormInputOutlined from './FormInputOutlined';
+import { loginSlice, getUserInfoSlice } from '../dogfriendsUserSlice';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     width: '100%',
-    minHeight: '100vh',
-    maxWidth: '700px',
-    padding: '2px',
-    height: '100vh',
+    maxWidth: '700px', 
+    paddingTop: '20px',
+    
   },
-  form: {
-    width: '100%',
-    backgroundColor: '#ffffff',
+  formElement: {
+    width: '95%',
+    marginTop: '20px',
+    marginBottom: '20px',
   },
   button: {
     display: 'flex',
-    justifyContent: 'flex-end',
-    margin: '10px 20px 15px',
+    width: '100%',
+    margin: '10px',
+    marginLeft: '40px',
   },
   err: {
     color: '#ff1744',
     fontSize: '24px',
-  },
-  backButton: {
-    marginRight: theme.spacing(1),
-  },
+  },  
   completed: {
     display: 'inline-block',
   },
@@ -47,22 +52,19 @@ const useStyles = makeStyles((theme) => ({
 export default function LoginForm() {
   const classes = useStyles();
   const history = useHistory();
-  const username = useFormInput('usr');
-  const password = useFormInput('pw', '', 'password');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const auth = useContext(AuthContext);
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState(false);
-  // const [usernameValue, setUsernameValue] = useState('username'); 
-  // const [formState, setFormState] = useState("userInfo"); 
-
-  // const handleChange = (e, newValue) => {
-  //   setValue(newValue);
-  // }
+  
   useEffect(() => {
     setErrorMessage(false);
   }, [username.value, password.value])
 
-  const handleSubmitLogin = async () => {
+  const handleSubmitLogin = async (e) => {
+    e.preventDefault();
+    console.log('LoginForm handleSubmitForm ',username,password)
     setErrorMessage(false);
     try {
       // verify username and password are correct
@@ -71,7 +73,7 @@ export default function LoginForm() {
         username: username.value,
         password: password.value
       }));
-      // console.log('LoginForm handleSubmitForm resp',resp)
+      console.log('LoginForm handleSubmitForm resp',resp)
       // if logged in, use resp.token to get user information
       const userInfo = await dispatch(getUserInfoSlice({
         token: resp.payload.token, 
@@ -92,7 +94,7 @@ export default function LoginForm() {
   }
   
   return (
-    <form className={classes.form}>
+    <form className={classes.root} onSubmit={handleSubmitLogin}>
       {/* {console.log(errorMessage)} */}
        <Box className={classes.err} 
         component="span" 
@@ -100,10 +102,21 @@ export default function LoginForm() {
         >
           Error: Invalid credentials
       </Box>
-      <FormInputOutlined label='Username' formInput={username}/>
-      <FormInputOutlined label='Password' formInput={password} />
+      <TextField 
+        className={classes.formElement} 
+        label='Username: (required)' 
+        variant='outlined' 
+        value={username} 
+        onChange={e => setUsername(e.target.value)}/>
+      <TextField 
+        className={classes.formElement} 
+        type='password'
+        label='Password: (required)' 
+        variant='outlined' 
+        value={password} 
+        onChange={e => setPassword(e.target.value)}/>
       <div className={classes.button}>
-        <Button variant="contained" color="primary" onClick={handleSubmitLogin}>Submit</Button>
+        <Button type="submit" variant="contained" color="primary" >Submit</Button>
       </div>
     </form>
   );

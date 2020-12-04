@@ -11,8 +11,10 @@ const dfYellowLight = '#c5c187';
 export default createMuiTheme({
   palette: {
     common: {
+      brown: `${dfBrown}`,
       brownDark: `${dfBrownDark}`,
       brownLight: `${dfBrownLight}`,
+      yellow: `${dfYellow}`,
       yellowDark: `${dfYellowDark}`,
       yellowLight: `${dfYellowLight}`,
     },
@@ -29,6 +31,7 @@ export default createMuiTheme({
       textTransform: 'none',
       fontWeight: 700,
       fontSize: '1rem',
+      color: 'white',
     },
     button: {
       fontFamily: 'Pacifico',

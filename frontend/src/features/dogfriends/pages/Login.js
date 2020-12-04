@@ -34,11 +34,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
-    minHeight: '100vh',
     maxWidth: '500px',
     paddingTop: '30px',
-    height: '100vh',
-    // border: '1px solid red'
+    maxHeight: '90vh',   
+    overflow: 'hidden'
   },
   form: {
     width: '100%',

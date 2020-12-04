@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+    border: '1px solid red'
   },
   backButton: {
     margin: '10px',
@@ -146,6 +147,7 @@ export default function SignupForm({handleSubmit}) {
                   <TextField 
                     className={classes.formElement} 
                     label='Password: (required)' 
+                    type='password'
                     variant='outlined' 
                     value={password} 
                     onChange={e => setPassword(e.target.value)}/>
