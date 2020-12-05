@@ -63,6 +63,7 @@ const deletePost = async (id, username, token) => {
 
 // login / signup
 const login = async (data) => {
+  console.log('DogfriendsApi login data',data)
   try {
     return await request('login/', data, 'post');
   } catch (error) {

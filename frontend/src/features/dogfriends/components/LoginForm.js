@@ -60,7 +60,7 @@ export default function LoginForm() {
   
   useEffect(() => {
     setErrorMessage(false);
-  }, [username.value, password.value])
+  }, [username, password])
 
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
@@ -70,14 +70,14 @@ export default function LoginForm() {
       // verify username and password are correct
       // const resp = await login(username.value, password.value);
       const resp = await dispatch(loginSlice({
-        username: username.value,
-        password: password.value
+        username: username,
+        password: password
       }));
       console.log('LoginForm handleSubmitForm resp',resp)
       // if logged in, use resp.token to get user information
       const userInfo = await dispatch(getUserInfoSlice({
         token: resp.payload.token, 
-        username: username.value
+        username: username
       }));
 
       // console.log('LoginForm handleSubmitLogin userInfo',userInfo)

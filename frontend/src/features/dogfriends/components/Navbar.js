@@ -17,18 +17,7 @@ import {
   ListItem, 
   ListItemText
 } from '@material-ui/core';
-
-// import Toolbar from '@material-ui/core/Toolbar';
-// import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-// import Tabs from '@material-ui/core/Tabs'
-// import Tab from '@material-ui/core/Tab'
-// import Button from '@material-ui/core/Button';
-// import useMediaQuery from '@material-ui/core/useMediaQuery';
-// import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import MenuIcon from '@material-ui/icons/Menu';
-// import IconButton from '@material-ui/core/IconButton';
-
-
 import { AuthContext } from '../context/AuthContext';
 // import UserAvatar from './UserAvatar';
 // import { getUserInfoSlice } from '../dogfriendsUserSlice';
@@ -104,9 +93,11 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+  },
+  appBar: {
+    zIndex: theme.zIndex.modal + 1,
   }
 }));
-
 
 function ElevationScroll(props) {
   const { children } = props;
@@ -136,47 +127,25 @@ export default function Header(props) {
   const [value, setValue] = useState(0);  
   const [openDrawer, setOpenDrawer] = useState(false);
 
+  const username = auth.authState.userInfo.username;
+  
+  const listItems = username ? {
+    '/': {name: 'Home', index: 0},
+    '/new': {name: 'New Post', index: 1},
+    '/profile': {name: 'Profile', index: 2},
+    '/about': {name: 'About Us', index: username !== undefined ? 3 : 1},
+    '/contact': {name: 'Contact Us', index: username ? 4 : 2},
+    '/login': {name: 'Logout', index: username ? 5 : 3},
+  } : {
+    '/': {name: 'Home', index: 0},
+    '/about': {name: 'About Us', index:1},
+    '/contact': {name: 'Contact Us', index: 2},
+    '/login': {name: 'Login', index: 3},
+  };
+
   useEffect(() => {
-    if(auth.authState.userInfo.username) {
-      switch(location.pathname) {        
-        case '/new':
-          setValue(1);
-          break;
-        case '/profile':
-          setValue(2);
-          break;
-        case '/about':
-          setValue(3);
-          break;
-        case '/contact':
-          setValue(4);
-          break
-        case '/login':
-          setValue(5);
-          break; 
-        default:
-          setValue(0);
-      } 
-      console.log('Navbar if switch value',value) 
-    } else {
-      switch(location.pathname) {        
-        case '/about':
-          setValue(1);
-          break;
-        case '/contact':
-          setValue(2);
-          break;
-        case '/login':
-          setValue(3);
-          break;        
-        default:
-          setValue(0);
-      }  
-      console.log('Navbar else switch value',value)
-    }
-    
-    console.log('Header useEffect value',value)  
-  }, [value, location.pathname, auth.authState.userInfo.username]);
+    setValue(listItems[location.pathname].index);    
+  }, [listItems, location.pathname]);
 
   const handleClick = async e => {
     if(!auth.authState.userInfo.username) {
@@ -192,49 +161,27 @@ export default function Header(props) {
       className={classes.tabContainer} 
       value={value && !auth.authState.userInfo ? value -2 : value}               
       indicatorColor='primary'>
-      <Tab 
-        className={classes.tab} 
-        label='Home' 
-        component={Link} 
-        to='/' />
-      {auth.authState.userInfo.username &&
-        <Tab 
-          className={classes.tab} 
-          label='New Post' 
-          component={Link} 
-          to='/new' />}
-      {auth.authState.userInfo.username &&
-          <Tab 
-            className={classes.tab} 
-            label='Profile' 
-            component={Link} 
-            to='/profile' />}
-      <Tab 
-        className={classes.tab} 
-        label='About Us' 
-        component={Link} 
-        to='/about' />
-      <Tab 
-        className={classes.tab} 
-        label='Contact Us' 
-        component={Link} 
-        to='/contact' />
-      <Tab 
-        className={classes.button} 
-        label={auth.authState.userInfo.username ? 'Logout' : 'Login'}
-        onClick={handleClick} 
-        component={Button} />
-    </Tabs>
-    {/* <Button 
-      className={classes.button} 
-      variant='contained' 
-      color='secondary'
-      onClick={handleLogout} 
-      component={Link} 
-      to='/login' >
-    {auth.authState.userInfo.username ? 'Logout' : 'Login'}
-    </Button> */}
-    
+        {Object.entries(listItems).map(e => 
+          e[0]==='/login' ? (
+            <Tab 
+              key={e}
+              className={classes.button}
+              component={Button}
+              label={e[1].name}
+              to={e[0]}
+              onClick={handleClick}
+            />
+          ) : (
+            <Tab 
+              key={e}
+              className={classes.tab}
+              component={Link}
+              label={e[1].name}
+              to={e[0]}
+            />
+          )          
+        )}      
+    </Tabs>    
     </>
   );
 
@@ -247,29 +194,32 @@ export default function Header(props) {
         onClose={() => setOpenDrawer(false)}
         onOpen={() => setOpenDrawer(true)} 
         classes={{paper: classes.drawer}}>
+          <div className={classes.toolbarMargin} />
         <List onClick={() => setOpenDrawer(false)} className={classes.list}>
-          <ListItem divider button component={Link} to='/' selected={value === 0}>
-            <ListItemText className={classes.drawerItem} disableTypography>Home</ListItemText>
-          </ListItem>        
-          {auth.authState.userInfo.username &&
-          <ListItem  divider button component={Link} to='/new' selected={value === 1}>
-            <ListItemText className={classes.drawerItem} disableTypography>New Post</ListItemText>
-          </ListItem>}
-          {auth.authState.userInfo.username &&
-          <ListItem  divider button component={Link} to='/profile' selected={value === 2}>
-            <ListItemText className={classes.drawerItem} disableTypography>Profile</ListItemText>
-          </ListItem>}
-          <ListItem  divider button component={Link} to='/about' selected={value === 3}>
-            <ListItemText className={classes.drawerItem} disableTypography>About Us</ListItemText>
-          </ListItem>
-          <ListItem  divider button component={Link} to='/contact' selected={value === 4}>
-            <ListItemText className={classes.drawerItem} disableTypography>Contact Us</ListItemText>
-          </ListItem>
-          <ListItem className={classes.drawerItemLogin} divider button component={Link} to='/login' selected={value === 5}>
-            <ListItemText className={classes.drawerItem} disableTypography>
-              {auth.authState.userInfo.username ? 'Logout' : 'Login'}
-            </ListItemText>
-          </ListItem>
+          {Object.entries(listItems).map((e,i) => 
+            e[0]==='/login' ? (
+              <ListItem 
+                key={e}
+                className={classes.drawerItemLogin}
+                divider 
+                button 
+                component={Link} 
+                to={e[0]} 
+                selected={value === i}>
+                <ListItemText className={classes.drawerItem} disableTypography>{e[1].name}</ListItemText>
+              </ListItem>
+            ) : (
+              <ListItem 
+                key={e}
+                divider 
+                button 
+                component={Link} 
+                to={e[0]} 
+                selected={value === i}>
+                <ListItemText className={classes.drawerItem} disableTypography>{e[1].name}</ListItemText>
+              </ListItem>
+            )          
+          )}          
         </List>
       </SwipeableDrawer>
       <IconButton 
@@ -283,8 +233,8 @@ export default function Header(props) {
 
   return (
     <>
-      <ElevationScroll>
-        <AppBar position='fixed'>
+      <ElevationScroll>        
+        <AppBar className={classes.appBar} position='fixed'>
           <Toolbar disableGutters>
             <Button className={classes.logoContainer} component={Link} to='/' disableRipple>
               <img src={logo} className={classes.logo} alt='company logo'/>
@@ -294,7 +244,6 @@ export default function Header(props) {
         </AppBar>
       </ElevationScroll>
       <div className={classes.toolbarMargin} />
-    </>
-    
+    </>    
   );
 }
