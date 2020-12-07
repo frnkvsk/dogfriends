@@ -10,6 +10,7 @@ import NewPost from './features/dogfriends/pages/NewPost';
 import Login from './features/dogfriends/pages/Login';
 import PostList from './features/dogfriends/pages/PostList';
 import Profile from './features/dogfriends/pages/Profile';
+import Footer from './features/dogfriends/components/Footer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,7 +66,8 @@ function App() {
                               
           </Switch> 
           </main>        
-        </div>        
+        </div> 
+        <Footer />       
       </BrowserRouter>
     </ThemeProvider>
     
