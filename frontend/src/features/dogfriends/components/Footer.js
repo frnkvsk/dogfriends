@@ -1,19 +1,152 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { 
+  Link,
+  useLocation 
+} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+import {
+  Grid,
+  Hidden
+} from '@material-ui/core';
+
+import { AuthContext } from '../context/AuthContext';
+
+import footerAdornment from '../assets/footerLogo3.png';
 
 const useStyles = makeStyles(theme => ({
   footer: {
     backgroundColor: theme.palette.common.brown,
     width: '100%',
-  }
+    zIndex: 1302,
+    position: 'fixed',
+    left: 0,
+    bottom: 0,
+    marginTop: '10px',
+  },
+  adornment: {
+    width: '11em',
+    verticalAlign: 'bottom',
+    [theme.breakpoints.down('md')]: {
+      width: '5em',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: '1em',
+    }
+  },
+  mainContainer: {
+    width: '100%',
+    position: 'absolute',
+    justifyContent: 'center',
+  },
+  link: {
+    color: 'white',
+    fontFamily: 'Arial',
+    fontSize: '0.75rem',
+    fontWeight: 'bold',
+    margin: '0.5em',
+    textDecoration: 'none',
+    // opacity: 0.7,
+    // '&:active': {
+    //   opacity: 1,
+    // }
+    
+  },
+  linkSelected: {
+    opacity: 1,
+  },
+  gridItem: {
+    margin: '3em',
+  },
+
 }));
 export default function Footer() {
   const classes = useStyles();
+  const location = useLocation();
+  const auth = useContext(AuthContext);
+  const username = auth.authState.userInfo.username;
+  const [value, setValue] = useState(0); 
 
+  const listItems = {
+    '/': {name: 'Home', index: 0},
+    '/about': {name: 'About Us', index: 1},
+    '/contact': {name: 'Contact Us', index: 2},
+    '/login': {name: 'Logout', index: 3},
+    '/profile': {name: 'Profile', index: 4},
+    '/new': {name: 'New', index: 5}    
+  } 
+  // : {
+  //   '/': {name: 'Home', index: 0},
+  //   '/about': {name: 'About Us', index:1},
+  //   '/contact': {name: 'Contact Us', index: 2},
+  //   '/login': {name: 'Login', index: 3},
+  // };
 
+  useEffect(() => {
+    setValue(listItems[location.pathname].index);
+    console.log(value)
+  }, [listItems, location.pathname]);
 
   return (
-    <footer className={classes.footer}>Example Footer</footer>
+    <footer className={classes.footer}>
+      <Hidden mdDown>
+        <Grid container className={classes.mainContainer}>
+          <Grid item className={classes.gridItem}>
+            <Grid container direction='column'>
+              <Grid 
+                className={classes.link}
+                item 
+                component={Link} 
+                to='/' 
+                style={{opacity: value === 0 ? 1 : 0.7}} >
+                Home
+              </Grid>
+              <Grid 
+                className={classes.link}
+                item 
+                component={Link} 
+                to='/about'  
+                style={{opacity: value === 1 ? 1 : 0.7}} >
+                About Us
+              </Grid>
+              <Grid 
+                className={classes.link}
+                item 
+                component={Link} 
+                to='/contact'  
+                style={{opacity: value === 2 ? 1 : 0.7}} >
+                Contact Us
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item className={classes.gridItem}>
+            <Grid container direction='column'>
+              <Grid 
+                className={classes.link}
+                item 
+                component={Link} 
+                to='/login'  
+                style={{opacity: value === 3 ? 1 : 0.7}} >
+                Login
+              </Grid>
+              <Grid 
+                className={classes.link}
+                item 
+                component={Link} 
+                to='/profile'                
+                style={{opacity: value === 4 ? 1 : 0.7}} >
+                Profile
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Hidden>
+      
+      <img
+        alt='black decorative slash'
+        src={footerAdornment}
+        className={classes.adornment}
+      />
+    </footer>
   )
 
 }

@@ -86,7 +86,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.common.yellow,
   },
   drawerItemSelected: {
-    opacity: 1,
+    // opacity: 1,
   },
   list: {
     display: 'flex',
