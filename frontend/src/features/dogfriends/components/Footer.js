@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { 
   Link,
+  useHistory,
   useLocation 
 } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Grid,
-  Hidden
+  Hidden,
+  Button
 } from '@material-ui/core';
 
 import { AuthContext } from '../context/AuthContext';
@@ -54,6 +56,14 @@ const useStyles = makeStyles(theme => ({
   linkSelected: {
     opacity: 1,
   },
+  button: {
+    color: 'white',
+    fontFamily: 'Arial',
+    fontSize: '0.75rem',
+    fontWeight: 'bold',
+    // margin: '0.5em',
+    // textDecoration: 'none',
+  },
   gridItem: {
     margin: '3em',
   },
@@ -61,6 +71,7 @@ const useStyles = makeStyles(theme => ({
 }));
 export default function Footer() {
   const classes = useStyles();
+  const history = useHistory();
   const location = useLocation();
   const auth = useContext(AuthContext);
   const username = auth.authState.userInfo.username;
@@ -82,16 +93,25 @@ export default function Footer() {
   // };
 
   useEffect(() => {
+    console.log('location ',location.pathname)
     setValue(listItems[location.pathname].index);
-    console.log(value)
   }, [listItems, location.pathname]);
+
+  const handleClick = async e => {
+    if(!username) {
+      history.push('/login');
+    } else {
+      await auth.setAuthState({token: "", userInfo: {}});
+      history.push('/login');
+    }    
+  }
 
   return (
     <footer className={classes.footer}>
       <Hidden mdDown>
         <Grid container className={classes.mainContainer}>
           <Grid item className={classes.gridItem}>
-            <Grid container direction='column'>
+            <Grid container direction='row'>
               <Grid 
                 className={classes.link}
                 item 
@@ -119,23 +139,26 @@ export default function Footer() {
             </Grid>
           </Grid>
           <Grid item className={classes.gridItem}>
-            <Grid container direction='column'>
+            <Grid container direction='row'>
               <Grid 
-                className={classes.link}
+                className={classes.button}
                 item 
-                component={Link} 
-                to='/login'  
+                component={Button}
+                onClick={handleClick} 
                 style={{opacity: value === 3 ? 1 : 0.7}} >
-                Login
+                {username ? 'Logout' : 'Login'}
               </Grid>
-              <Grid 
-                className={classes.link}
-                item 
-                component={Link} 
-                to='/profile'                
-                style={{opacity: value === 4 ? 1 : 0.7}} >
-                Profile
-              </Grid>
+              {username && 
+                <Grid 
+                  className={classes.link}
+                  item 
+                  component={Link} 
+                  to='/profile'                
+                  style={{opacity: value === 4 ? 1 : 0.7}} >
+                  Profile
+                </Grid>
+              }
+              
             </Grid>
           </Grid>
         </Grid>
