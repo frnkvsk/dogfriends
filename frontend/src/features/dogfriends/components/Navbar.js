@@ -144,7 +144,10 @@ export default function Header(props) {
   };
 
   useEffect(() => {
-    setValue(listItems[location.pathname].index);    
+    if(listItems[location.pathname]) {
+      setValue(listItems[location.pathname].index);   
+    }
+       
   }, [listItems, location.pathname]);
 
   const handleClick = async e => {

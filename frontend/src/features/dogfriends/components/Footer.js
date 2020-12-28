@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { 
-  Link,
+import {
   useHistory,
   useLocation 
 } from 'react-router-dom';
@@ -39,6 +38,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     position: 'absolute',
     justifyContent: 'center',
+    
   },
   link: {
     color: 'white',
@@ -47,11 +47,6 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 'bold',
     margin: '0.5em',
     textDecoration: 'none',
-    // opacity: 0.7,
-    // '&:active': {
-    //   opacity: 1,
-    // }
-    
   },
   linkSelected: {
     opacity: 1,
@@ -61,11 +56,10 @@ const useStyles = makeStyles(theme => ({
     fontFamily: 'Arial',
     fontSize: '0.75rem',
     fontWeight: 'bold',
-    // margin: '0.5em',
-    // textDecoration: 'none',
+    height: '2rem',
   },
   gridItem: {
-    margin: '3em',
+    margin: '2em',
   },
 
 }));
@@ -84,13 +78,7 @@ export default function Footer() {
     '/login': {name: 'Logout', index: 3},
     '/profile': {name: 'Profile', index: 4},
     '/new': {name: 'New', index: 5}    
-  } 
-  // : {
-  //   '/': {name: 'Home', index: 0},
-  //   '/about': {name: 'About Us', index:1},
-  //   '/contact': {name: 'Contact Us', index: 2},
-  //   '/login': {name: 'Login', index: 3},
-  // };
+  }
 
   useEffect(() => {
     console.log('location ',location.pathname)
@@ -113,26 +101,26 @@ export default function Footer() {
           <Grid item className={classes.gridItem}>
             <Grid container direction='row'>
               <Grid 
-                className={classes.link}
+                className={classes.button}
                 item 
-                component={Link} 
-                to='/' 
+                component={Button} 
+                onClick={() => history.push('/')} 
                 style={{opacity: value === 0 ? 1 : 0.7}} >
                 Home
               </Grid>
               <Grid 
-                className={classes.link}
+                className={classes.button}
                 item 
-                component={Link} 
-                to='/about'  
+                component={Button} 
+                onClick={() => history.push('/about')} 
                 style={{opacity: value === 1 ? 1 : 0.7}} >
                 About Us
               </Grid>
               <Grid 
-                className={classes.link}
+                className={classes.button}
                 item 
-                component={Link} 
-                to='/contact'  
+                component={Button} 
+                onClick={() => history.push('/contact')} 
                 style={{opacity: value === 2 ? 1 : 0.7}} >
                 Contact Us
               </Grid>
@@ -150,26 +138,23 @@ export default function Footer() {
               </Grid>
               {username && 
                 <Grid 
-                  className={classes.link}
+                  className={classes.button}
                   item 
-                  component={Link} 
-                  to='/profile'                
+                  component={Button}
+                  onClick={() => history.push('/profile')}  
                   style={{opacity: value === 4 ? 1 : 0.7}} >
                   Profile
                 </Grid>
-              }
-              
+              }              
             </Grid>
           </Grid>
         </Grid>
-      </Hidden>
-      
+      </Hidden>      
       <img
         alt='black decorative slash'
         src={footerAdornment}
         className={classes.adornment}
       />
     </footer>
-  )
-
+  );
 }
