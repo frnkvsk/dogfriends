@@ -11,18 +11,18 @@ const dfYellowLight = '#c5c187';
 export default createMuiTheme({
   palette: {
     common: {
-      brown: `${dfBrown}`,
-      brownDark: `${dfBrownDark}`,
-      brownLight: `${dfBrownLight}`,
-      yellow: `${dfYellow}`,
-      yellowDark: `${dfYellowDark}`,
-      yellowLight: `${dfYellowLight}`,
+      brown: dfBrown,
+      brownDark: dfBrownDark,
+      brownLight: dfBrownLight,
+      yellow: dfYellow,
+      yellowDark: dfYellowDark,
+      yellowLight: dfYellowLight,
     },
     primary: {
-      main: `${dfBrown}`
+      main: dfBrown
     },
     secondary: {
-      main: `${dfYellow}`
+      main: dfYellow
     }
   },
   typography: {
@@ -38,6 +38,13 @@ export default createMuiTheme({
       fontSize: '1rem',
       textTransform: 'none',
       color: 'white',
+    },
+    h2: {
+      fontFamily: 'Raleway',
+      fontWeight: 700,
+      fontSize: '2.5rem',
+      color: `${dfBrown}`,
+      lineHeight: 1.5,
     }
   }
 })

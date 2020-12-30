@@ -10,6 +10,8 @@ import NewPost from './features/dogfriends/pages/NewPost';
 import Login from './features/dogfriends/pages/Login';
 import PostList from './features/dogfriends/pages/PostList';
 import Profile from './features/dogfriends/pages/Profile';
+import About from './features/dogfriends/pages/About';
+import Contact from './features/dogfriends/pages/Contact';
 import Footer from './features/dogfriends/components/Footer';
 
 const useStyles = makeStyles((theme) => ({
@@ -51,11 +53,17 @@ function App() {
             <Route exact path="/">
               <Home />        
             </Route>
-            <Route exact path="/profile">
-              <Profile/>        
-            </Route>
             <Route exact path="/new">
               <NewPost/>        
+            </Route>
+            <Route exact path="/profile">
+              <Profile/>        
+            </Route>            
+            <Route exact path="/about">
+              <About/>        
+            </Route>
+            <Route exact path="/contact">
+              <Contact/>        
             </Route>
             <Route exact path="/login">
               <Login/>        

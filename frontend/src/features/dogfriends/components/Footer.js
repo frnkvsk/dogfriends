@@ -12,7 +12,7 @@ import {
 
 import { AuthContext } from '../context/AuthContext';
 
-import footerAdornment from '../assets/footerLogo3.png';
+import footerAdornment from '../assets/footerLogo.png';
 
 const useStyles = makeStyles(theme => ({
   footer: {

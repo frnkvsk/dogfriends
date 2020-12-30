@@ -63,6 +63,9 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '50px',
     margin: '0 25px 0 50px',    
     height: '45px',
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.light,
+    }
   },
   drawer: {
     backgroundColor: theme.palette.common.brown,
