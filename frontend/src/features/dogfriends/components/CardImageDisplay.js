@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MediaCard({src, title, body}) {
+export default function MediaCard({src, title}) {
   const classes = useStyles();
 
   return (
@@ -34,21 +34,13 @@ export default function MediaCard({src, title, body}) {
           <Typography gutterBottom variant="h5">
             {title}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {body}
-          </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
+          Explore Post
         </Button>
       </CardActions>
     </Card>
-  );
-
-  
+  );  
 }

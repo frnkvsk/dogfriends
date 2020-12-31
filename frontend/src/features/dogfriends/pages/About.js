@@ -1,7 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
 
-const About = props => {
+const About = () => {
   return (
     <div>
       About page
@@ -9,8 +8,5 @@ const About = props => {
   )
 }
 
-About.propTypes = {
-
-}
 
 export default About

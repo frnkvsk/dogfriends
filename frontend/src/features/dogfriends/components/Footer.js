@@ -71,19 +71,20 @@ export default function Footer() {
   const username = auth.authState.userInfo.username;
   const [value, setValue] = useState(0); 
 
-  const listItems = {
-    '/': {name: 'Home', index: 0},
-    '/about': {name: 'About Us', index: 1},
-    '/contact': {name: 'Contact Us', index: 2},
-    '/login': {name: 'Logout', index: 3},
-    '/profile': {name: 'Profile', index: 4},
-    '/new': {name: 'New', index: 5}    
-  }
+  
 
   useEffect(() => {
+    const listItems = {
+      '/': {name: 'Home', index: 0},
+      '/about': {name: 'About Us', index: 1},
+      '/contact': {name: 'Contact Us', index: 2},
+      '/login': {name: 'Logout', index: 3},
+      '/profile': {name: 'Profile', index: 4},
+      '/new': {name: 'New', index: 5}    
+    }
     console.log('location ',location.pathname)
     setValue(listItems[location.pathname].index);
-  }, [listItems, location.pathname]);
+  }, [location.pathname]);
 
   const handleClick = async e => {
     if(!username) {

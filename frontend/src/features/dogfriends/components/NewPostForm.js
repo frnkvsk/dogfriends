@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import { 
@@ -9,16 +9,18 @@ import {
   FormControlLabel,
   Box,
 } from '@material-ui/core';
-// import { 
-//   addNewPost,
-//   editPost,
-//  } from '../dogfriendsPostsSlice';
+import { 
+  addNewPost,
+  editPost,
+ } from '../dogfriendsPostsSlice';
 // import { useFormInput } from '../hooks/useFormInput';
 import { AuthContext } from '../context/AuthContext';
 import FormInputOutlined from './FormInputOutlined';
 import PostPhoto from './PostPhoto';
 // import NewPhotoForm from './NewPhotoForm';
 import UploadPhoto from './UploadPhoto';
+
+import { v4 as uuid } from 'uuid';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,24 +61,34 @@ const useStyles = makeStyles((theme) => ({
 const NewPostForm = ({data}) => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const history = useHistory();
   // console.log('NewPostForm auth',auth)
 
   const handleSubmit = e => {   
-    // e.preventDefault();
+    e.preventDefault();
     // if(title.length && description.length && body.length) {
     //   const payload = {
-    //     id: id,
+    //     id: 'id',
     //     title: title, 
-    //     description: description, 
+    //     description: 'description', 
     //     body: body,
     //     username: auth.authState.userInfo.username,
-    //     token: token
+    //     token: auth.authState.token
     //   }
     //   dispatch(addNewPost(payload));    
     //   history.push('/');
     // } 
+    const payload = {
+      parent_id: uuid(),
+      photo_id: uuid(),
+      title: title, 
+      // description: 'description', 
+      body: uuid(),
+      // username: auth.authState.userInfo.username,
+      token: auth.authState.token
+    }
+    dispatch(addNewPost(payload));    
   }
   
   const title = useFormInput('');

@@ -34,8 +34,8 @@ export const dogfriendsPostsSlice = createSlice({
   },
   reducers: {
     addNewPost: (state, action) => {
-      const {title, body, parent_id, photo_id, token} = action.payload;
-      postPostNew(title, body, parent_id, photo_id, token);
+      const {title, parent_id, photo_id, body, token} = action.payload;
+      postPostNew(title, parent_id, photo_id, body, token);
     },
     editPost: (state, action) => {
       const {id, title, body, username, token} = action.payload;
