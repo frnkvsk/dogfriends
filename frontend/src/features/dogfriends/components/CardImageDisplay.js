@@ -15,6 +15,7 @@ const useStyles = makeStyles({
     margin: '15px',
   },
   media: {
+    // width: 'auto',
     height: 140,
   },
 });

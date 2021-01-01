@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { 
   Grid,
@@ -9,6 +9,7 @@ import {
  
 import ButtonArrow from '../components/ButtonArrow';
 import CardImageList from '../components/CardImageList';
+import { AuthContext } from '../context/AuthContext';
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -32,30 +33,34 @@ const useStyles = makeStyles((theme) => ({
 }))
 const Home = () => {
   const classes = useStyles();
-
+  const auth = useContext(AuthContext);
+  const username = auth.authState.userInfo.username;
   return (
     <Grid container direction='column'>
       <Grid sm item>
         <Grid container justify='center' alignItems='center' direction='row'>
           <Grid container className={classes.heading}>
+            {username ? 
+            <Typography variant='h2' align='center'>
+              Welcome back {username}.
+            </Typography> :
             <Typography variant='h2' align='center'>
               Share Your Dog Photos
               <br />
               with other dog friends
             </Typography>
+            }
           </Grid>
-          <Grid container className={classes.buttons}>
-            <Grid item>
-              <Button variant='contained'>
+          <Grid container className={classes.buttons}>            
+            {!username && 
+              <Grid item>
+                <Button variant='contained'>
                 Get Started
                 <ButtonArrow width='15' height='15' fill='red' />
               </Button>
-            </Grid>
-            <Grid item>
-              <Button variant='outlined'>Login</Button>
-            </Grid>
-          </Grid>
-          
+              </Grid>
+            }            
+          </Grid>          
         </Grid>
       </Grid>
       <Grid sm item>

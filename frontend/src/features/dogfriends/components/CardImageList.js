@@ -378,14 +378,15 @@ const FadeInUpAnimation = styled.div`
 
 const CardImageList = ({imageCount}) => {
   return (
-    <div style={{display: 'flex', alignContent: 'center', marginBottom: '80px'}}>
+    // <div style={{display: 'flex', alignContent: 'center', justifyContent: 'center', width: '100%', marginBottom: '80px'}}>
+    <>
     {imagesList.map(e => (
       <FadeInUpAnimation>
         <CardImageDisplay src={e.src} title={e.title} body={e.body} />
       </FadeInUpAnimation>      
     ))}
     <div style={{marginBottom: '20px'}} />
-    </div>
+    </>
     )
 }
 
