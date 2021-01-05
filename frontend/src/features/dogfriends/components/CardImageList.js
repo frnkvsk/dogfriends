@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import fadeInUp from 'react-animations/lib/fade-in-up';
 import CardImageDisplay from './CardImageDisplay';
-
+import { v4 as uuid } from 'uuid';
 // in development we are using fake data so we don't make too many calls to the server
 const imagesList = [
   // {
@@ -373,7 +373,7 @@ const imagesList = [
 
 const fadeInUpAnimation = keyframes`${fadeInUp}`;
 const FadeInUpAnimation = styled.div`
-  animation: 1s ${fadeInUpAnimation};
+  animation: 3s ${fadeInUpAnimation};
 `;
 
 const CardImageList = ({imageCount}) => {
@@ -381,7 +381,7 @@ const CardImageList = ({imageCount}) => {
     // <div style={{display: 'flex', alignContent: 'center', justifyContent: 'center', width: '100%', marginBottom: '80px'}}>
     <>
     {imagesList.map(e => (
-      <FadeInUpAnimation>
+      <FadeInUpAnimation key={uuid()}>
         <CardImageDisplay src={e.src} title={e.title} body={e.body} />
       </FadeInUpAnimation>      
     ))}

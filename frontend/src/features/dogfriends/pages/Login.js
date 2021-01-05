@@ -13,7 +13,11 @@ import { AuthContext } from '../context/AuthContext';
 import { useDispatch } from 'react-redux';
 import SignupForm from '../components/SignupForm';
 import LoginForm from '../components/LoginForm';
-import { signUpSlice } from '../dogfriendsUserSlice';
+import { 
+  signUpSlice, 
+  loginSlice, 
+  getUserInfoSlice 
+} from '../dogfriendsUserSlice';
 
 function LinkTab(props) {
   return (
@@ -68,24 +72,49 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
   const classes = useStyles();
   // const history = useHistory();
-  // const auth = useContext(AuthContext);
+  const auth = useContext(AuthContext);
+  const dispatch = useDispatch();
   const [loginType, setValue] = useState("login");
-  // const [errorMessage, setErrorMessage] = useState(false);  
-  // const username = useFormInput("");
-  // const password = useFormInput("");
-  // const first_name = useFormInput("");
-  // const last_name = useFormInput("");  
-  // const photo_url = useFormInput("");
-  // const email = useFormInput("");
 
   const handleChange = (e, newValue) => {
     setValue(newValue);
   }
 
-  const auth = useContext(AuthContext);
-  const dispatch = useDispatch();
   console.log('SignupForm auth',auth)
-  const handleSubmit = async ({
+
+  const handleLogin = async ({
+    username,
+    password
+  }) => {
+    try {
+      // verify username and password are correct
+      // const resp = await login(username.value, password.value);
+      const resp = await dispatch(loginSlice({
+        username: username,
+        password: password
+      }));
+      console.log('LoginForm handleSubmitForm resp',resp)
+      // if logged in, use resp.token to get user information
+      const userInfo = await dispatch(getUserInfoSlice({
+        token: resp.payload.token, 
+        username: username
+      }));
+
+      // console.log('LoginForm handleSubmitLogin userInfo',userInfo)
+
+      auth.setAuthState({
+        userInfo: userInfo.payload.user,
+        token: resp.payload.token,
+      });
+      // history.push(`/`);
+      return false;
+    } catch (error) {
+      // setErrorMessage(true);
+      console.log(error)
+      return false;
+    }
+  }
+  const handleSignup = async ({
     username,
     password,
     first_name,
@@ -135,7 +164,7 @@ export default function Login() {
         </Tabs>
       </AppBar>
       
-      { loginType === 'login' ? <LoginForm /> : <SignupForm handleSubmit={handleSubmit} /> }
+      { loginType === 'login' ? <LoginForm handleLogin={handleLogin}/> : <SignupForm handleSubmit={handleSignup} /> }
     </div>
   );
 }

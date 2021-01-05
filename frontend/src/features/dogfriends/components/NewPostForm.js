@@ -11,7 +11,6 @@ import {
 } from '@material-ui/core';
 import { 
   addNewPost,
-  editPost,
  } from '../dogfriendsPostsSlice';
 // import { useFormInput } from '../hooks/useFormInput';
 import { AuthContext } from '../context/AuthContext';

@@ -51,13 +51,14 @@ function getSteps() {
   return ['Create a username and password (required)', 'Enter your contact info (required)', 'Further define your account (optional)', 'Review and confirm account creation'];
 }
 
-export default function SignupForm({handleSubmit}) {
+export default function SignupForm({handleSignup}) {
   const classes = useStyles();
   const auth = useContext(AuthContext);
   const token = auth.authState.token;
   console.log('SignupForm token',token)
   // Step 1 (required) make sure username and password are valid
   const [username, setUsername] = useState('');
+  const [usernameValid, setUsernameValid] = useState(true);
   const [password, setPassword] = useState('');
 
   // Step 2 (required) make sure email is valid and complete registration process
@@ -75,6 +76,10 @@ export default function SignupForm({handleSubmit}) {
     photo_url: null
   });
 
+  const handleSetUsername = e => {
+    setUsername(e.target.value)
+  }
+
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
 
@@ -82,7 +87,7 @@ export default function SignupForm({handleSubmit}) {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     if(activeStep === 1) {
       console.log('activeStep === 1')
-      const resp = await handleSubmit({
+      const resp = await handleSignup({
         username,
         password,
         first_name,
@@ -94,6 +99,7 @@ export default function SignupForm({handleSubmit}) {
         country
       });
       console.log('SignupForm handleNext resp',resp)
+      setUsernameValid(resp)
     }
     if(activeStep === steps.length-1) {
       console.log('activeStep === steps.length =>',activeStep,'  photo_details',photo_details)
@@ -138,12 +144,14 @@ export default function SignupForm({handleSubmit}) {
               {activeStep===0 ?
               (
                 <div className={classes.main}>
-                  <TextField 
+                  <TextField                     
                     className={classes.formElement} 
                     label='Username: (required)' 
                     variant='outlined' 
                     value={username} 
-                    onChange={e => setUsername(e.target.value)}/>
+                    error={!usernameValid}
+                    helperText= {usernameValid ? '' : 'Username is already taken.'}
+                    onChange={handleSetUsername}/>
                   <TextField 
                     className={classes.formElement} 
                     label='Password: (required)' 

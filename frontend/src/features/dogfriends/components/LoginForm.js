@@ -1,7 +1,7 @@
 /** Login and Signup */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { 
@@ -11,9 +11,9 @@ import {
    } from '@material-ui/core';
 
 // import { useFormInput } from '../hooks/useFormInput';
-import { AuthContext } from '../context/AuthContext';
+// import { AuthContext } from '../context/AuthContext';
 // import FormInputOutlined from './FormInputOutlined';
-import { loginSlice, getUserInfoSlice } from '../dogfriendsUserSlice';
+// import { loginSlice, getUserInfoSlice } from '../dogfriendsUserSlice';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,13 +49,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function LoginForm() {
+export default function LoginForm({handleLogin}) {
   const classes = useStyles();
   const history = useHistory();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const auth = useContext(AuthContext);
-  const dispatch = useDispatch();
+  // const auth = useContext(AuthContext);
+  // const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState(false);
   
   useEffect(() => {
@@ -65,32 +65,9 @@ export default function LoginForm() {
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
     console.log('LoginForm handleSubmitForm ',username,password)
-    setErrorMessage(false);
-    try {
-      // verify username and password are correct
-      // const resp = await login(username.value, password.value);
-      const resp = await dispatch(loginSlice({
-        username: username,
-        password: password
-      }));
-      console.log('LoginForm handleSubmitForm resp',resp)
-      // if logged in, use resp.token to get user information
-      const userInfo = await dispatch(getUserInfoSlice({
-        token: resp.payload.token, 
-        username: username
-      }));
-
-      // console.log('LoginForm handleSubmitLogin userInfo',userInfo)
-
-      auth.setAuthState({
-        userInfo: userInfo.payload.user,
-        token: resp.payload.token,
-      });
-      history.push(`/`);
-    } catch (error) {
-      setErrorMessage(true);
-      console.log(error)
-    }     
+    const valid = handleLogin({username, password});
+    setErrorMessage(valid);
+    if(valid) history.push('/'); 
   }
   
   return (

@@ -119,7 +119,7 @@ export default function Header(props) {
   const classes = useStyles();
   const history = useHistory();
   const auth = useContext(AuthContext);
-  console.log('Navbar auth',auth)
+  // console.log('Navbar auth',auth)
 //   const dispatch = useDispatch();
   const location = useLocation();
   const theme = useTheme();
@@ -131,26 +131,31 @@ export default function Header(props) {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const username = auth.authState.userInfo.username;
+  const [listItems, setListItems] = useState({});
   
-  const listItems = username ? {
-    '/': {name: 'Home', index: 0},
-    '/new': {name: 'New Post', index: 1},
-    '/profile': {name: 'Profile', index: 2},
-    '/about': {name: 'About Us', index: username !== undefined ? 3 : 1},
-    '/contact': {name: 'Contact Us', index: username ? 4 : 2},
-    '/login': {name: 'Logout', index: username ? 5 : 3},
-  } : {
-    '/': {name: 'Home', index: 0},
-    '/about': {name: 'About Us', index:1},
-    '/contact': {name: 'Contact Us', index: 2},
-    '/login': {name: 'Login', index: 3},
-  };
+  // if username not equal to undefined then user is logged in 
+  // and has a different set of Navbar options
+  useEffect(() => {
+    username ? setListItems({
+      '/': {name: 'Home', index: 0},
+      '/new': {name: 'New Post', index: 1},
+      '/profile': {name: 'Profile', index: 2},
+      '/about': {name: 'About Us', index: username !== undefined ? 3 : 1},
+      '/contact': {name: 'Contact Us', index: username ? 4 : 2},
+      '/login': {name: 'Logout', index: username ? 5 : 3},
+    }) : setListItems({
+      '/': {name: 'Home', index: 0},
+      '/about': {name: 'About Us', index:1},
+      '/contact': {name: 'Contact Us', index: 2},
+      '/login': {name: 'Login', index: 3},
+    });
+  }, [username]);
+   
 
   useEffect(() => {
     if(listItems[location.pathname]) {
       setValue(listItems[location.pathname].index);   
-    }
-       
+    }       
   }, [listItems, location.pathname]);
 
   const handleClick = async e => {
