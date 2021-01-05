@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
 import {
   useHistory,
   useLocation 
@@ -7,7 +8,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   Grid,
   Hidden,
-  Button
+  Button,
+  useScrollTrigger,
+  Slide,
 } from '@material-ui/core';
 
 import { AuthContext } from '../context/AuthContext';
@@ -18,11 +21,14 @@ const useStyles = makeStyles(theme => ({
   footer: {
     backgroundColor: theme.palette.common.brown,
     width: '100%',
-    zIndex: 1302,
+    // zIndex: 1302,
+    // position: 'relative',
+    // left: 0,
+    // bottom: 0,
+    // marginTop: '10px',
     position: 'fixed',
-    left: 0,
+    top: 'auto',
     bottom: 0,
-    marginTop: '10px',
   },
   adornment: {
     width: '11em',
@@ -63,15 +69,30 @@ const useStyles = makeStyles(theme => ({
   },
 
 }));
-export default function Footer() {
+
+function HideOnScroll(props) {
+  const { children } = props;
+  const trigger = useScrollTrigger({ 
+    threshold: 250
+  });
+  return (
+    <Slide appear={false} direction="up" in={!trigger}>
+      {children}
+    </Slide>
+  );
+}
+
+HideOnScroll.propTypes = {
+  children: PropTypes.element.isRequired
+};
+
+export default function Footer(props) {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
   const auth = useContext(AuthContext);
   const username = auth.authState.userInfo.username;
-  const [value, setValue] = useState(0); 
-
-  
+  const [value, setValue] = useState(0);   
 
   useEffect(() => {
     const listItems = {
@@ -82,7 +103,6 @@ export default function Footer() {
       '/profile': {name: 'Profile', index: 4},
       '/new': {name: 'New', index: 5}    
     }
-    console.log('location ',location.pathname)
     setValue(listItems[location.pathname].index);
   }, [location.pathname]);
 
@@ -96,7 +116,8 @@ export default function Footer() {
   }
 
   return (
-    <footer className={classes.footer}>
+    <HideOnScroll {...props}>
+      <footer className={classes.footer}>
       <Hidden mdDown>
         <Grid container className={classes.mainContainer}>
           <Grid item className={classes.gridItem}>
@@ -156,6 +177,8 @@ export default function Footer() {
         src={footerAdornment}
         className={classes.adornment}
       />
-    </footer>
+      </footer>
+    </HideOnScroll>
+    
   );
 }

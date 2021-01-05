@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 
 import { useTheme } from '@material-ui/core/styles';
@@ -15,7 +16,8 @@ import {
   SwipeableDrawer,
   List,
   ListItem, 
-  ListItemText
+  ListItemText,
+  Slide,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { AuthContext } from '../context/AuthContext';
@@ -99,22 +101,34 @@ const useStyles = makeStyles(theme => ({
   },
   appBar: {
     zIndex: theme.zIndex.modal + 1,
+    position: 'fixed'
   }
 }));
 
 function ElevationScroll(props) {
-  const { children } = props;
-  
+  const { children } = props;  
   const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 0,
+    threshold: 0
   });
-
   return React.cloneElement(children, {
     elevation: trigger ? 4 : 0
   });
 }
+function HideOnScroll(props) {
+  const { children } = props;
+  const trigger = useScrollTrigger({ 
+    threshold: 250
+  });
+  return (
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children}
+    </Slide>
+  );
+}
 
+HideOnScroll.propTypes = {
+  children: PropTypes.element.isRequired
+};
 export default function Header(props) {
   const classes = useStyles();
   const history = useHistory();
@@ -244,15 +258,17 @@ export default function Header(props) {
 
   return (
     <>
-      <ElevationScroll>        
-        <AppBar className={classes.appBar} position='fixed'>
-          <Toolbar disableGutters>
-            <Button className={classes.logoContainer} component={Link} to='/' disableRipple>
-              <img src={logo} className={classes.logo} alt='company logo'/>
-            </Button>            
-            {matches ? drawer : tabs}
-          </Toolbar>
-        </AppBar>
+      <ElevationScroll>    
+        <HideOnScroll {...props}>
+          <AppBar className={classes.appBar}>
+            <Toolbar disableGutters>
+              <Button className={classes.logoContainer} component={Link} to='/' disableRipple>
+                <img src={logo} className={classes.logo} alt='company logo'/>
+              </Button>            
+              {matches ? drawer : tabs}
+            </Toolbar>
+          </AppBar>
+        </HideOnScroll>            
       </ElevationScroll>
       <div className={classes.toolbarMargin} />
     </>    

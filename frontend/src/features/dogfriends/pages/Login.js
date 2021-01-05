@@ -40,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     maxWidth: '500px',
     paddingTop: '30px',
-    maxHeight: '90vh',   
     overflow: 'hidden'
   },
   form: {
