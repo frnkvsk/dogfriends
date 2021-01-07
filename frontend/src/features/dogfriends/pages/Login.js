@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import SignupForm from '../components/SignupForm';
 import LoginForm from '../components/LoginForm';
 import { 
+  preSignupSlice,
   signUpSlice, 
   loginSlice, 
   getUserInfoSlice 
@@ -79,7 +80,7 @@ export default function Login() {
     setValue(newValue);
   }
 
-  console.log('SignupForm auth',auth)
+  console.log('Login auth',auth)
 
   const handleLogin = async ({
     username,
@@ -113,6 +114,11 @@ export default function Login() {
       return false;
     }
   }
+
+  const handlePreSignup = async ({username}) => {
+    return await dispatch(preSignupSlice({username}));
+  }
+
   const handleSignup = async ({
     username,
     password,
@@ -163,7 +169,13 @@ export default function Login() {
         </Tabs>
       </AppBar>
       
-      { loginType === 'login' ? <LoginForm handleLogin={handleLogin}/> : <SignupForm handleSubmit={handleSignup} /> }
+      { loginType === 'login' ? 
+        <LoginForm handleLogin={handleLogin}/> : 
+        <SignupForm 
+          handlePreSignup={handlePreSignup}
+          handleSubmit={handleSignup} 
+        /> 
+      }
     </div>
   );
 }

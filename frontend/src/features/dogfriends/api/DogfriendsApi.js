@@ -70,13 +70,17 @@ const login = async (data) => {
     console.error(error);
   }   
 }
-// const login = async (username, password) => {
-//   try {
-//     return await request('login/', {username: username, password: password}, 'post');
-//   } catch (error) {
-//     console.error(error);
-//   }   
-// }
+
+const preSignupUsernameCheck = async ({username}) => {
+  try {
+    console.log('DogfriendsApi preSignupUsernameCheck username',username)
+    const res = await request(`users/${username}`, {}, 'post');
+    console.log('--DogfriendsApi preSignupUsernameCheck res',res.data)
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 const signup = async ({username, 
                       password, 
@@ -152,6 +156,7 @@ export {
   putPostUpdate,
   deletePost,
   login,
+  preSignupUsernameCheck,
   signup,
   getUserInfo,
   patchUserInfo,

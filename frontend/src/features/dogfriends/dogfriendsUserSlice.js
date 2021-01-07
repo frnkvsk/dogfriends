@@ -3,6 +3,7 @@ import {
   login,
   getUserInfo,
   patchUserInfo,
+  preSignupUsernameCheck,
   signup,
 } from './api/DogfriendsApi';
 
@@ -16,6 +17,23 @@ export const loginSlice = createAsyncThunk(
       password: payload.password
     });
     return response.data;
+  }
+);
+
+export const preSignupSlice = createAsyncThunk(
+  'preSignup',
+  async (payload) => {
+    try {
+      console.log('preSignupSlice payload',payload)
+      const response = await preSignupUsernameCheck({
+        username: payload.username
+      });
+      console.log('--preSignupSlice response',response)
+      return response;
+    } catch (error) {
+      console.error('dogfriendsUserSlice preSignupSlice error',error)
+    }
+    
   }
 );
 

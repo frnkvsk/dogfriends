@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -51,15 +51,16 @@ function getSteps() {
   return ['Create a username and password (required)', 'Enter your contact info (required)', 'Further define your account (optional)', 'Review and confirm account creation'];
 }
 
-export default function SignupForm({handleSignup}) {
+export default function SignupForm({ handlePreSignup, handleSignup }) {
   const classes = useStyles();
   const auth = useContext(AuthContext);
   const token = auth.authState.token;
   console.log('SignupForm token',token)
   // Step 1 (required) make sure username and password are valid
   const [username, setUsername] = useState('');
-  const [usernameValid, setUsernameValid] = useState(true);
+  const [usernameValid, setUsernameValid] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordValid, setPasswordValid] = useState('');
 
   // Step 2 (required) make sure email is valid and complete registration process
   const [first_name, setFirstName] = useState('');
@@ -76,6 +77,38 @@ export default function SignupForm({handleSignup}) {
     photo_url: null
   });
 
+  useEffect(() => {
+    const checkUsername = async () => {
+      const res = await handlePreSignup({username});
+      console.log('SignupForm useEffect checkUsername res',res.payload.resp);
+      if(res.payload.resp) setUsernameValid('Username is already taken.');
+    }
+    console.log('SignupForm useEffect username',username)
+    if(username.length && username.length < 3) setUsernameValid('Username must be at least 3 characters.');
+    else if (username.length) {
+      setUsernameValid('');
+      checkUsername(); 
+    } else {
+      setUsernameValid('');
+    }
+  }, [username, handlePreSignup]);
+
+  // verify if username passes strength test
+  useEffect(() => {
+    
+    console.log('SignupForm useEffect password',password)
+    if(password.length && password.length < 8) setPasswordValid('Password must be at least 8 characters.');
+    else if (password.length >= 8) {
+      if(!/[a-zA-Z]/.test(password) || !/[\d]/.test(password)) {
+        setPasswordValid('Password must contain alphabetic letters and numbers.');  
+      } else {
+        setPasswordValid('');
+      }            
+    } else {
+      setPasswordValid('');
+    }
+  }, [password]);
+
   const handleSetUsername = e => {
     setUsername(e.target.value)
   }
@@ -84,35 +117,44 @@ export default function SignupForm({handleSignup}) {
   const steps = getSteps();
 
   const handleNext = async () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    if(activeStep === 1) {
-      console.log('activeStep === 1')
-      const resp = await handleSignup({
-        username,
-        password,
-        first_name,
-        last_name, 
-        email, 
-        photo_id: null,
-        city, 
-        state, 
-        country
-      });
-      console.log('SignupForm handleNext resp',resp)
-      setUsernameValid(resp)
+    if(!usernameValid.length && username.length && !passwordValid.length && password.length) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      console.log('activeStep1',activeStep)
+      if(activeStep === 0) {
+        console.log('activeStep',activeStep)
+        console.log('check if username is available username',username)
+        console.log('handlePreSignup',handlePreSignup)
+      }
+      if(activeStep === 1) {
+        console.log('activeStep === 1')
+        const resp = await handleSignup({
+          username,
+          password,
+          first_name,
+          last_name, 
+          email, 
+          photo_id: null,
+          city, 
+          state, 
+          country
+        });
+        console.log('SignupForm handleNext resp',resp)
+        setUsernameValid(resp)
+      }
+      if(activeStep === steps.length-1) {
+        console.log('activeStep === steps.length =>',activeStep,'  photo_details',photo_details)
+        // handleSubmit({
+        //   first_name,
+        //   last_name, 
+        //   email, 
+        //   photo_id: photo_details.photo_id,
+        //   city, 
+        //   state, 
+        //   country
+        // });
+      }
     }
-    if(activeStep === steps.length-1) {
-      console.log('activeStep === steps.length =>',activeStep,'  photo_details',photo_details)
-      // handleSubmit({
-      //   first_name,
-      //   last_name, 
-      //   email, 
-      //   photo_id: photo_details.photo_id,
-      //   city, 
-      //   state, 
-      //   country
-      // });
-    }
+    
   };
 
   const handleBack = () => {
@@ -149,15 +191,17 @@ export default function SignupForm({handleSignup}) {
                     label='Username: (required)' 
                     variant='outlined' 
                     value={username} 
-                    error={!usernameValid}
-                    helperText= {usernameValid ? '' : 'Username is already taken.'}
-                    onChange={handleSetUsername}/>
+                    error={usernameValid.length}
+                    helperText= {usernameValid.length ? usernameValid : ''}
+                    onChange={e => setUsername(e.target.value)}/>
                   <TextField 
                     className={classes.formElement} 
                     label='Password: (required)' 
                     type='password'
                     variant='outlined' 
                     value={password} 
+                    error={passwordValid.length}
+                    helperText= {passwordValid.length ? passwordValid : ''}
                     onChange={e => setPassword(e.target.value)}/>
                 </div>
               ) :
