@@ -19,7 +19,7 @@ export default createMuiTheme({
       yellowLight: dfYellowLight,
     },
     primary: {
-      main: dfBrown
+      main: dfBrown,
     },
     secondary: {
       main: dfYellow

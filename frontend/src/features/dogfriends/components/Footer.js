@@ -19,7 +19,7 @@ import footerAdornment from '../assets/footerLogo.png';
 
 const useStyles = makeStyles(theme => ({
   footer: {
-    backgroundColor: theme.palette.common.brown,
+    background: `linear-gradient(45deg, ${theme.palette.common.brown} 30%, ${theme.palette.common.brownLight} 90%)`,
     width: '100%',
     // zIndex: 1302,
     // position: 'relative',

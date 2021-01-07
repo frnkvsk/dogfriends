@@ -14,32 +14,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    border: '1px solid red'
   },
   backButton: {
     margin: '10px',
-  },
-  main: {
-    // display: 'flex',
-    // flexDirection: 'column',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // width: '100%',
-    // minWidth: '400px',
-    
-    // border: '1px solid #e0e0e0',
-    // [theme.breakpoints.down('md')]: {
-    //   width: '100%',
-    //   margin: '0px'
-    // },
-    // [theme.breakpoints.up('lg')]: {
-    //   width: '85%',
-    //   margin: '25px 0 25px 0',
-    // },
-    // [theme.breakpoints.up('xl')]: {
-    //   width: '75%',
-    //   margin: '25px 0 25px 0',
-    // },
   },
   formElement: {
     width: '95%',
@@ -48,7 +25,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['Create a username and password (required)', 'Enter your contact info (required)', 'Further define your account (optional)', 'Review and confirm account creation'];
+  return [
+    'Create a username and password (required)', 
+    'Enter your contact info (required)', 
+    'Further define your account (optional)', 
+    'Review and confirm account creation'
+  ];
 }
 
 export default function SignupForm({ handlePreSignup, handleSignup }) {
@@ -66,6 +48,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');  
   const [email, setEmail] = useState('');
+  const [emailValid, setEmailValid] = useState('');
   
   // Step 3 (optional) allow the option for new user to further define their account 
   const [city, setCity] = useState('');
@@ -76,44 +59,57 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
     photo_id: null,
     photo_url: null
   });
-
+  
+  // verify username is not already in use and is in valid form
   useEffect(() => {
     const checkUsername = async () => {
       const res = await handlePreSignup({username});
-      console.log('SignupForm useEffect checkUsername res',res.payload.resp);
-      if(res.payload.resp) setUsernameValid('Username is already taken.');
+      if(res.payload && res.payload.resp) 
+        setUsernameValid('Username is already taken.');
     }
-    console.log('SignupForm useEffect username',username)
-    if(username.length && username.length < 3) setUsernameValid('Username must be at least 3 characters.');
-    else if (username.length) {
-      setUsernameValid('');
-      checkUsername(); 
+    const validateUsername = (username) => {
+      const expression = /^\s*[a-zA-Z]\s*(?:\S[\t ]*){2,30}/;    
+      return expression.test(username);
+    }
+    if(username.length && !validateUsername(username)) {
+      setUsernameValid('Username must be between 3-30 characters and start with a letter [a-zA-Z].');
     } else {
       setUsernameValid('');
+      checkUsername();
     }
   }, [username, handlePreSignup]);
 
-  // verify if username passes strength test
-  useEffect(() => {
-    
-    console.log('SignupForm useEffect password',password)
-    if(password.length && password.length < 8) setPasswordValid('Password must be at least 8 characters.');
-    else if (password.length >= 8) {
-      if(!/[a-zA-Z]/.test(password) || !/[\d]/.test(password)) {
-        setPasswordValid('Password must contain alphabetic letters and numbers.');  
-      } else {
-        setPasswordValid('');
-      }            
+  // validate password strength
+  useEffect(() => {  
+    const validatePassword = (username) => {
+      return password.length && (
+        password.length < 8 || 
+        !/[a-z]/.test(password) || 
+        !/[A-Z]/.test(password) || 
+        !/[\d]/.test(password)
+      );
+    }
+    if(validatePassword(password)) {
+      setPasswordValid('Password must contain lowercase [a-z], uppercase [A-Z], numeric [0-9].');  
     } else {
       setPasswordValid('');
-    }
+    } 
   }, [password]);
 
-  const handleSetUsername = e => {
-    setUsername(e.target.value)
-  }
+  // validate email
+  useEffect(() => {  
+    const validateEmail = (email) => {
+      const expression = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+      return email.length && !expression.test(email);
+    }  
+    if(validateEmail(email)) {
+      setEmailValid('Email is not valid.');
+    } else {
+      setEmailValid('');
+    }   
+  }, [email]);
 
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
 
   const handleNext = async () => {
@@ -201,7 +197,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     variant='outlined' 
                     value={password} 
                     error={passwordValid.length}
-                    helperText= {passwordValid.length ? passwordValid : ''}
+                    helperText={passwordValid.length ? passwordValid : ''}
                     onChange={e => setPassword(e.target.value)}/>
                 </div>
               ) :
@@ -224,7 +220,10 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     className={classes.formElement} 
                     label='Email: (required)' 
                     variant='outlined' 
+                    type='email'
                     value={email} 
+                    error={emailValid.length}
+                    helperText={emailValid.length ? emailValid : ''}
                     onChange={e => setEmail(e.target.value)}/>
                 </div>
               ) :

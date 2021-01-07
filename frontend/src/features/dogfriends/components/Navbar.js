@@ -57,7 +57,8 @@ const useStyles = makeStyles(theme => ({
   tab: {
     ...theme.typography.tab,
     minWidth: 10,
-    marginLeft: '25px'
+    marginLeft: '25px',
+    
   },
   button: {
     ...theme.typography.button,
@@ -98,10 +99,12 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    
   },
   appBar: {
     zIndex: theme.zIndex.modal + 1,
-    position: 'fixed'
+    position: 'fixed',
+    background: `linear-gradient(45deg, ${theme.palette.common.brown} 30%, ${theme.palette.common.brownLight} 90%)`,
   }
 }));
 
@@ -184,8 +187,8 @@ export default function Header(props) {
     <>
     <Tabs 
       className={classes.tabContainer} 
-      value={value && !auth.authState.userInfo ? value -2 : value}               
-      indicatorColor='primary'>
+      value={value && !auth.authState.userInfo ? value -2 : value}              
+      indicatorColor='red'>
         {Object.entries(listItems).map(e => 
           e[0]==='/login' ? (
             <Tab 
@@ -193,16 +196,15 @@ export default function Header(props) {
               className={classes.button}
               component={Button}
               label={e[1].name}
-              to={e[0]}
               onClick={handleClick}
             />
           ) : (
             <Tab 
               key={e}
               className={classes.tab}
-              component={Link}
+              component={Button}
               label={e[1].name}
-              to={e[0]}
+              onClick={() => history.push(e[0])}             
             />
           )          
         )}      
