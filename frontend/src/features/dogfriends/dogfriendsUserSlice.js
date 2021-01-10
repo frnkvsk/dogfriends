@@ -20,15 +20,16 @@ export const loginSlice = createAsyncThunk(
   }
 );
 
-export const preSignupSlice = createAsyncThunk(
+// check if username is available
+export const checkUsernameSlice = createAsyncThunk(
   'preSignup',
   async (payload) => {
     try {
-      console.log('preSignupSlice payload',payload)
+      // console.log('preSignupSlice payload',payload)
       const response = await preSignupUsernameCheck({
         username: payload.username
       });
-      console.log('--preSignupSlice response',response)
+      // console.log('--preSignupSlice response',response)
       return response;
     } catch (error) {
       console.error('dogfriendsUserSlice preSignupSlice error',error)
@@ -47,10 +48,10 @@ export const signUpSlice = createAsyncThunk(
       first_name: payload.first_name, 
       last_name: payload.last_name, 
       email: payload.email, 
-      photo_id: payload.photo_id, 
-      city: payload.city, 
-      state: payload.state, 
-      country: payload.country
+      photo_id: '', 
+      city: '', 
+      state: '', 
+      country: ''
     });
     return response.data;
   }
@@ -59,9 +60,9 @@ export const signUpSlice = createAsyncThunk(
 export const getUserInfoSlice = createAsyncThunk(
   'getUserInfo',
   async (payload) => {
-    console.log('dogfriendsUserSlice getUserInfoSlice payload',payload)
+    // console.log('dogfriendsUserSlice getUserInfoSlice payload',payload)
     const response = await getUserInfo(payload);
-    console.log('dogfriendsUserSlice getUserInfoSlice response',response)
+    // console.log('dogfriendsUserSlice getUserInfoSlice response',response)
     return response.data;
   }
 );
@@ -69,7 +70,7 @@ export const getUserInfoSlice = createAsyncThunk(
 export const updateUserInfoSlice = createAsyncThunk(
   'patchUserInfo',
   async (payload) => {
-    console.log('updateUserInfoSlice payload',payload)
+    // console.log('updateUserInfoSlice payload',payload)
     const response = await patchUserInfo(payload);
     return response.data;
   }

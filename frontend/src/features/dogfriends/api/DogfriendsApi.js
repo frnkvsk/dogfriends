@@ -63,7 +63,7 @@ const deletePost = async (id, username, token) => {
 
 // login / signup
 const login = async (data) => {
-  console.log('DogfriendsApi login data',data)
+  // console.log('DogfriendsApi login data',data)
   try {
     return await request('login/', data, 'post');
   } catch (error) {
@@ -73,9 +73,9 @@ const login = async (data) => {
 
 const preSignupUsernameCheck = async ({username}) => {
   try {
-    console.log('DogfriendsApi preSignupUsernameCheck username',username)
+    // console.log('DogfriendsApi preSignupUsernameCheck username',username)
     const res = await request(`users/${username}`, {}, 'post');
-    console.log('--DogfriendsApi preSignupUsernameCheck res',res.data)
+    // console.log('--DogfriendsApi preSignupUsernameCheck res',res.data)
     return res.data;
   } catch (error) {
     console.error(error);
@@ -133,7 +133,7 @@ const getUserInfo = async (payload) => {
   }   
 }
 const patchUserInfo = async (userInfo) => {
-  console.log('DogfriendsApi patchUserInfo userInfo',userInfo)
+  // console.log('DogfriendsApi patchUserInfo userInfo',userInfo)
   // userInfo._token = token;
   // let photo_id = null;
   // if(userInfo.photo_url) {

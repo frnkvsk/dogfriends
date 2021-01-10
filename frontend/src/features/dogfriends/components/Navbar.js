@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
     padding: '0'
   },
   tabContainer: {
-    marginLeft: 'auto'
+    marginLeft: 'auto',
   },
   tab: {
     ...theme.typography.tab,
@@ -187,8 +187,9 @@ export default function Header(props) {
     <>
     <Tabs 
       className={classes.tabContainer} 
-      value={value && !auth.authState.userInfo ? value -2 : value}              
-      indicatorColor='red'>
+      value={value && !auth.authState.userInfo ? value -2 : value} 
+      TabIndicatorProps={{style: {backgroundColor: 'primary', opacity: 0}}}          
+      >
         {Object.entries(listItems).map(e => 
           e[0]==='/login' ? (
             <Tab 

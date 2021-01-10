@@ -37,7 +37,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
   const classes = useStyles();
   const auth = useContext(AuthContext);
   const token = auth.authState.token;
-  console.log('SignupForm token',token)
+  // console.log('SignupForm token',token)
   // Step 1 (required) make sure username and password are valid
   const [username, setUsername] = useState('');
   const [usernameValid, setUsernameValid] = useState('');
@@ -63,9 +63,11 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
   // verify username is not already in use and is in valid form
   useEffect(() => {
     const checkUsername = async () => {
-      const res = await handlePreSignup({username});
-      if(res.payload && res.payload.resp) 
-        setUsernameValid('Username is already taken.');
+      if(username.length) {
+        const res = await handlePreSignup({username});
+        if(res.payload && res.payload.resp) 
+          setUsernameValid('Username is already taken.');
+      }      
     }
     const validateUsername = (username) => {
       const expression = /^\s*[a-zA-Z]\s*(?:\S[\t ]*){2,30}/;    
@@ -113,32 +115,30 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
   const steps = getSteps();
 
   const handleNext = async () => {
+    console.log('SignupForm handleNext activeStep',activeStep)
     if(!usernameValid.length && username.length && !passwordValid.length && password.length) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      console.log('activeStep1',activeStep)
       if(activeStep === 0) {
         console.log('activeStep',activeStep)
-        console.log('check if username is available username',username)
-        console.log('handlePreSignup',handlePreSignup)
       }
       if(activeStep === 1) {
-        console.log('activeStep === 1')
-        const resp = await handleSignup({
-          username,
-          password,
-          first_name,
-          last_name, 
-          email, 
-          photo_id: null,
-          city, 
-          state, 
-          country
-        });
-        console.log('SignupForm handleNext resp',resp)
-        setUsernameValid(resp)
+        console.log('activeStep',activeStep)
+        // const resp = await handleSignup({
+        //   username,
+        //   password,
+        //   first_name,
+        //   last_name, 
+        //   email, 
+        //   photo_id: null,
+        //   city, 
+        //   state, 
+        //   country
+        // });
+        // console.log('SignupForm handleNext resp',resp)
+        // setUsernameValid(resp)
       }
       if(activeStep === steps.length-1) {
-        console.log('activeStep === steps.length =>',activeStep,'  photo_details',photo_details)
+        console.log('activeStep === steps.length-1',activeStep, photo_details)
         // handleSubmit({
         //   first_name,
         //   last_name, 
@@ -187,7 +187,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     label='Username: (required)' 
                     variant='outlined' 
                     value={username} 
-                    error={usernameValid.length}
+                    error={usernameValid.length ? true : false}
                     helperText= {usernameValid.length ? usernameValid : ''}
                     onChange={e => setUsername(e.target.value)}/>
                   <TextField 
@@ -196,7 +196,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     type='password'
                     variant='outlined' 
                     value={password} 
-                    error={passwordValid.length}
+                    error={passwordValid.length ? true : false}
                     helperText={passwordValid.length ? passwordValid : ''}
                     onChange={e => setPassword(e.target.value)}/>
                 </div>
@@ -222,7 +222,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     variant='outlined' 
                     type='email'
                     value={email} 
-                    error={emailValid.length}
+                    error={emailValid.length ? true : false}
                     helperText={emailValid.length ? emailValid : ''}
                     onChange={e => setEmail(e.target.value)}/>
                 </div>
@@ -265,14 +265,20 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                 </div>
               )}</div>
             <div>
+              
               <Button
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 className={classes.backButton}
               >
-                Back
+                { activeStep > 1 && 'Back' }
               </Button>
-              <Button variant="contained" color="primary" onClick={handleNext}>
+              
+              
+              <Button 
+                variant="contained" 
+                color="primary" 
+                onClick={handleNext}>
                 {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
               </Button>
             </div>

@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import SignupForm from '../components/SignupForm';
 import LoginForm from '../components/LoginForm';
 import { 
-  preSignupSlice,
+  checkUsernameSlice,
   signUpSlice, 
   loginSlice, 
   getUserInfoSlice 
@@ -115,20 +115,18 @@ export default function Login() {
     }
   }
 
-  const handlePreSignup = async ({username}) => {
-    return await dispatch(preSignupSlice({username}));
+  // check if username is available
+  const handleCheckUsernameAvailability = async ({username}) => {
+    // console.log('Login handlePreSignup username',username)
+    if(username.length) {
+      return await dispatch(checkUsernameSlice({username}));
+    }    
   }
 
+  
   const handleSignup = async ({
     username,
-    password,
-    first_name,
-    last_name, 
-    email, 
-    photo_id,
-    city, 
-    state, 
-    country 
+    password
     }) => {
     const userInfo = {
       username,
@@ -151,12 +149,6 @@ export default function Login() {
   return (
     
     <div className={classes.root}>
-      {/* <Box className={classes.err} 
-        component="span" 
-        display={errorMessage ? 'block' : 'none'}
-        >
-          Error: Invalid credentials
-      </Box> */}
       <AppBar position="static">
         <Tabs
           variant="fullWidth"
@@ -172,7 +164,7 @@ export default function Login() {
       { loginType === 'login' ? 
         <LoginForm handleLogin={handleLogin}/> : 
         <SignupForm 
-          handlePreSignup={handlePreSignup}
+          handlePreSignup={handleCheckUsernameAvailability}
           handleSubmit={handleSignup} 
         /> 
       }
