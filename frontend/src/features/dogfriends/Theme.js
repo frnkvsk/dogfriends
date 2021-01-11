@@ -31,7 +31,7 @@ export default createMuiTheme({
       textTransform: 'none',
       fontWeight: 700,
       fontSize: '1rem',
-      color: 'white',
+      color: 'white',      
     },
     button: {
       fontFamily: 'Pacifico',

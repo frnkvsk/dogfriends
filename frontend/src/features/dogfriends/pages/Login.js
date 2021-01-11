@@ -20,17 +20,17 @@ import {
   getUserInfoSlice 
 } from '../dogfriendsUserSlice';
 
-function LinkTab(props) {
-  return (
-    <Tab
-      component="a"
-      onClick={(event) => {
-        event.preventDefault();
-      }}
-      {...props}
-    />
-  );
-}
+// function LinkTab(props) {
+//   return (
+//     <Tab
+//       component="a"
+//       onClick={(event) => {
+//         event.preventDefault();
+//       }}
+//       {...props}
+//     />
+//   );
+// }
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,6 +65,9 @@ const useStyles = makeStyles((theme) => ({
   err: {
     color: '#ff1744',
     fontSize: '24px',
+  },
+  tab: {
+    ...theme.typography.tab,
   }
 
 }));
@@ -126,20 +129,19 @@ export default function Login() {
   
   const handleSignup = async ({
     username,
-    password
+    password, 
+    first_name,
+    last_name,
+    email
     }) => {
     const userInfo = {
       username,
       password,
       first_name,
       last_name, 
-      email, 
-      photo_id,
-      city, 
-      state, 
-      country 
+      email,
     }
-    userInfo._token = auth.authState.token;
+    // userInfo._token = auth.authState.token;
     // userInfo.username = auth.authState.userInfo.username;
     console.log('SignupForm userInfo',userInfo)
     return await dispatch(signUpSlice(userInfo));
@@ -151,13 +153,24 @@ export default function Login() {
     <div className={classes.root}>
       <AppBar position="static">
         <Tabs
+          // className={classes.tab}
           variant="fullWidth"
           value={loginType}
           onChange={handleChange}
           aria-label="nav tabs example"
+          TabIndicatorProps={
+            { 
+              style: {
+                backgroundColor: 'secondary', 
+                height: '3px',
+              }
+            }
+          }   
         >
-          <LinkTab label="Login" value="login" />
-          <LinkTab label="Sign up" value="signup" />
+          <Tab label="Login" value="login" />
+          <Tab label="Sign up" value="signup" />
+          {/* <LinkTab label="Login" value="login" />
+          <LinkTab label="Sign up" value="signup" /> */}
         </Tabs>
       </AppBar>
       

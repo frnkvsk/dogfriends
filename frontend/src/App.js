@@ -18,10 +18,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: '20px',
-    width: '100%',
+    width: '97%',
   },
   main: {
     display: 'flex',
@@ -37,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('xl')]: {
       width: '75%'
     },
-    border: 'none',
   },
 }));
 function App() {

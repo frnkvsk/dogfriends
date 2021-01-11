@@ -92,7 +92,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
       );
     }
     if(validatePassword(password)) {
-      setPasswordValid('Password must contain lowercase [a-z], uppercase [A-Z], numeric [0-9].');  
+      setPasswordValid('Password must be min 8 characters in length and contain lowercase [a-z], uppercase [A-Z], numeric [0-9].');  
     } else {
       setPasswordValid('');
     } 
