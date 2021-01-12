@@ -48,13 +48,13 @@ export default function PostPhoto({photo}) {
   return (  
     <div key={uuid()} className={classes.root} >
       <Box className={classes.box}>          
-        <div className={classes.labelTop} style={{color: photo.textColor}}>
+        {/* <div className={classes.labelTop} style={{color: photo.textColor}}>
           <label >{photo.top}</label>
-        </div>
+        </div> */}
         {/* <img className={classes.box} src={photo.url} alt='postphoto' /> */}
-        <div className={classes.labelBottom} style={{color: photo.textColor}} >
+        {/* <div className={classes.labelBottom} style={{color: photo.textColor}} >
           <label >{photo.bottom}</label>
-        </div>      
+        </div>       */}
       </Box>        
     </div>    
   );

@@ -48,7 +48,7 @@ export const signUpSlice = createAsyncThunk(
       first_name: payload.first_name, 
       last_name: payload.last_name, 
       email: payload.email, 
-      photo_id: '', 
+      photo_id: null, 
       city: '', 
       state: '', 
       country: ''

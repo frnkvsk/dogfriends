@@ -1,12 +1,17 @@
 /** Login and Signup */
 import React, { useState, useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+
+import {
+  makeStyles,
+  AppBar,
+  Tabs,
+  Tab,
+  // Icon,
+  // SvgIcon,
+} from '@material-ui/core';
 // import { Container, FormHelperText, Box, Button } from '@material-ui/core';
 // import OutlinedInput from '@material-ui/core/OutlinedInput';
-// import { useHistory } from "react-router-dom";
+// import { useHistory } from 'react-router-dom';
 // import { login, signup, getUserInfo } from '../api/DogfriendsApi';
 // import { useFormInput } from '../hooks/useFormInput';
 import { AuthContext } from '../context/AuthContext';
@@ -23,7 +28,7 @@ import {
 // function LinkTab(props) {
 //   return (
 //     <Tab
-//       component="a"
+//       component='a'
 //       onClick={(event) => {
 //         event.preventDefault();
 //       }}
@@ -39,9 +44,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
+    height: '100vh',
     maxWidth: '500px',
     paddingTop: '30px',
-    overflow: 'hidden'
+    // overflow: 'hidden'
   },
   form: {
     width: '100%',
@@ -66,24 +72,24 @@ const useStyles = makeStyles((theme) => ({
     color: '#ff1744',
     fontSize: '24px',
   },
-  tab: {
-    ...theme.typography.tab,
-  }
 
 }));
+
+// const TabDivider = () =>
+//   <SvgIcon 
+//     component={Icon} 
+//     style={{backgroundColor: 'white', width: '1px', height: '50px'}} />
 
 export default function Login() {
   const classes = useStyles();
   // const history = useHistory();
   const auth = useContext(AuthContext);
   const dispatch = useDispatch();
-  const [loginType, setValue] = useState("login");
+  const [loginType, setValue] = useState('login');
 
   const handleChange = (e, newValue) => {
     setValue(newValue);
   }
-
-  console.log('Login auth',auth)
 
   const handleLogin = async ({
     username,
@@ -141,36 +147,36 @@ export default function Login() {
       last_name, 
       email,
     }
-    // userInfo._token = auth.authState.token;
-    // userInfo.username = auth.authState.userInfo.username;
+    
     console.log('SignupForm userInfo',userInfo)
-    return await dispatch(signUpSlice(userInfo));
+    const resp = await dispatch(signUpSlice(userInfo));
+    auth.setAuthState({
+      userInfo: userInfo,
+      token: resp.payload.token,
+    });
   }
   
 
   return (
     
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position='static'>
         <Tabs
-          // className={classes.tab}
-          variant="fullWidth"
+          variant='fullWidth'
           value={loginType}
           onChange={handleChange}
-          aria-label="nav tabs example"
+          aria-label='nav tabs example'
           TabIndicatorProps={
             { 
               style: {
                 backgroundColor: 'secondary', 
-                height: '3px',
-              }
+                height: '5px',
+              },
             }
           }   
         >
-          <Tab label="Login" value="login" />
-          <Tab label="Sign up" value="signup" />
-          {/* <LinkTab label="Login" value="login" />
-          <LinkTab label="Sign up" value="signup" /> */}
+          <Tab label='Login' value='login' />
+          <Tab label='Sign up' value='signup' />
         </Tabs>
       </AppBar>
       
@@ -178,7 +184,7 @@ export default function Login() {
         <LoginForm handleLogin={handleLogin}/> : 
         <SignupForm 
           handlePreSignup={handleCheckUsernameAvailability}
-          handleSubmit={handleSignup} 
+          handleSignup={handleSignup} 
         /> 
       }
     </div>

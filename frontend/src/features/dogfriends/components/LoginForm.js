@@ -84,6 +84,7 @@ export default function LoginForm({handleLogin}) {
         label='Username: (required)' 
         variant='outlined' 
         value={username} 
+        autoFocus={true}
         onChange={e => setUsername(e.target.value)}/>
       <TextField 
         className={classes.formElement} 

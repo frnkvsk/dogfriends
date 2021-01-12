@@ -157,9 +157,9 @@ export default function Header(props) {
       '/': {name: 'Home', index: 0},
       '/new': {name: 'New Post', index: 1},
       '/profile': {name: 'Profile', index: 2},
-      '/about': {name: 'About Us', index: username !== undefined ? 3 : 1},
-      '/contact': {name: 'Contact Us', index: username ? 4 : 2},
-      '/login': {name: 'Logout', index: username ? 5 : 3},
+      '/about': {name: 'About Us', index: 3},
+      '/contact': {name: 'Contact Us', index: 4},
+      '/login': {name: 'Logout', index: 5},
     }) : setListItems({
       '/': {name: 'Home', index: 0},
       '/about': {name: 'About Us', index:1},
@@ -176,11 +176,12 @@ export default function Header(props) {
   }, [listItems, location.pathname]);
 
   const handleClick = async e => {
-    if(!auth.authState.userInfo.username) {
+    if(auth.authState.userInfo.username) {
+      await auth.setAuthState({token: "", userInfo: {}});      
       history.push('/login');
     } else {
-      await auth.setAuthState({token: "", userInfo: {}});
-    }    
+      history.push('/login');
+    }      
   }
 
   const tabs = (

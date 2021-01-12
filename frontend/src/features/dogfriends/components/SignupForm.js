@@ -14,9 +14,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+    // border: '2px solid blue',
   },
-  backButton: {
-    margin: '10px',
+  button: {
+    // margin: '10px',
   },
   formElement: {
     width: '95%',
@@ -32,6 +33,12 @@ function getSteps() {
     'Review and confirm account creation'
   ];
 }
+
+// const focusUsernameInputField = input => {
+//   if (input) {
+//     setTimeout(() => {input.focus()}, 100);
+//   }
+// };
 
 export default function SignupForm({ handlePreSignup, handleSignup }) {
   const classes = useStyles();
@@ -123,6 +130,8 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
       }
       if(activeStep === 1) {
         console.log('activeStep',activeStep)
+        console.log('username',username, password,first_name,last_name,email)
+        handleSignup({username, password,first_name,last_name,email})
         // const resp = await handleSignup({
         //   username,
         //   password,
@@ -153,9 +162,9 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
     
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+  // const handleBack = () => {
+  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  // };
 
   const handleReset = () => {
     setActiveStep(0);
@@ -187,6 +196,8 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     label='Username: (required)' 
                     variant='outlined' 
                     value={username} 
+                    // autoFocus={true}
+                    inputRef={input => !username.length && input && input.focus()}
                     error={usernameValid.length ? true : false}
                     helperText= {usernameValid.length ? usernameValid : ''}
                     onChange={e => setUsername(e.target.value)}/>
@@ -209,6 +220,10 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     label='First Name: (required)' 
                     variant='outlined' 
                     value={first_name} 
+                    // autoFocus={true}
+                    // ref={ focusUsernameInputField }
+                    // autoFocus={true}
+                    inputRef={input => !first_name.length && input && input.focus()}
                     onChange={e => setFirstName(e.target.value)}/>
                   <TextField 
                     className={classes.formElement} 
@@ -235,6 +250,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     label='City: (optional)' 
                     variant='outlined' 
                     value={city} 
+                    inputRef={input => !city.length && input && input.focus()}
                     onChange={e => setCity(e.target.value)}/>
                   <TextField 
                     className={classes.formElement} 
@@ -266,16 +282,17 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
               )}</div>
             <div>
               
-              <Button
+              {/* <Button
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 className={classes.backButton}
-              >
-                { activeStep > 1 && 'Back' }
-              </Button>
+              > */}
+                {/* { activeStep > 1 && 'Back' }
+              </Button> */}
               
               
               <Button 
+                className={classes.formElement}
                 variant="contained" 
                 color="primary" 
                 onClick={handleNext}>
