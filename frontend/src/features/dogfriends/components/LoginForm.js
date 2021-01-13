@@ -23,28 +23,30 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    maxWidth: '700px', 
+  
+    // maxWidth: '700px', 
     paddingTop: '20px',
     
   },
   formElement: {
     width: '95%',
-    marginTop: '20px',
-    marginBottom: '20px',
+    margin: '10px',
+    // marginTop: '20px',
+    // marginBottom: '20px',
   },
   button: {
-    display: 'flex',
-    width: '100%',
-    margin: '10px',
-    marginLeft: '40px',
+    // display: 'flex',
+    // width: '100%',
+    // margin: '10px',
+    // marginLeft: '40px',
   },
   err: {
     color: '#ff1744',
     fontSize: '24px',
   },  
-  completed: {
-    display: 'inline-block',
-  },
+  // completed: {
+  //   display: 'inline-block',
+  // },
 
 }));
 
@@ -93,9 +95,13 @@ export default function LoginForm({handleLogin}) {
         variant='outlined' 
         value={password} 
         onChange={e => setPassword(e.target.value)}/>
-      <div className={classes.button}>
-        <Button type="submit" variant="contained" color="primary" >Submit</Button>
-      </div>
+      <Button 
+        className={classes.formElement} 
+        type="submit" 
+        variant="contained" 
+        color="primary" >
+          Submit
+      </Button>
     </form>
   );
 }

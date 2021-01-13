@@ -44,9 +44,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
-    height: '100vh',
+    // height: '78vh',
     maxWidth: '500px',
     paddingTop: '30px',
+    paddingBottom: '100px',
     // overflow: 'hidden'
   },
   form: {

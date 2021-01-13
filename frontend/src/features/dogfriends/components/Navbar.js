@@ -170,9 +170,18 @@ export default function Header(props) {
    
 
   useEffect(() => {
+    console.log('Navbar useEffect listItems[location.pathname]',listItems[location.pathname])
+    console.log('0location.pathname',location.pathname, value)
     if(listItems[location.pathname]) {
-      setValue(listItems[location.pathname].index);   
-    }       
+      if(listItems[location.pathname].index === 5) {
+        setValue(0);
+        history.push('/');
+      } else {
+        setValue(listItems[location.pathname].index);  
+      }       
+    }  
+    console.log('1location.pathname',location.pathname, value)
+        
   }, [listItems, location.pathname]);
 
   const handleClick = async e => {

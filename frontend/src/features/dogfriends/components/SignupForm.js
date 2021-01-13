@@ -123,6 +123,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
 
   const handleNext = async () => {
     console.log('SignupForm handleNext activeStep',activeStep)
+    console.log(usernameValid , username , passwordValid , password)
     if(!usernameValid.length && username.length && !passwordValid.length && password.length) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
       if(activeStep === 0) {
@@ -131,22 +132,9 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
       if(activeStep === 1) {
         console.log('activeStep',activeStep)
         console.log('username',username, password,first_name,last_name,email)
-        handleSignup({username, password,first_name,last_name,email})
-        // const resp = await handleSignup({
-        //   username,
-        //   password,
-        //   first_name,
-        //   last_name, 
-        //   email, 
-        //   photo_id: null,
-        //   city, 
-        //   state, 
-        //   country
-        // });
-        // console.log('SignupForm handleNext resp',resp)
-        // setUsernameValid(resp)
+        handleSignup({username, password,first_name,last_name,email});
       }
-      if(activeStep === steps.length-1) {
+      if(activeStep === 2) {
         console.log('activeStep === steps.length-1',activeStep, photo_details)
         // handleSubmit({
         //   first_name,
