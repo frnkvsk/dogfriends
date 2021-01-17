@@ -170,17 +170,17 @@ export default function Header(props) {
    
 
   useEffect(() => {
-    console.log('Navbar useEffect listItems[location.pathname]',listItems[location.pathname])
-    console.log('0location.pathname',location.pathname, value)
+    // console.log('Navbar useEffect listItems[location.pathname]',listItems[location.pathname])
+    // console.log('0location.pathname',location.pathname, value)
     if(listItems[location.pathname]) {
       if(listItems[location.pathname].index === 5) {
         setValue(0);
-        history.push('/');
+        // history.push('/');
       } else {
         setValue(listItems[location.pathname].index);  
       }       
     }  
-    console.log('1location.pathname',location.pathname, value)
+    // console.log('1location.pathname',location.pathname, value)
         
   }, [listItems, location.pathname]);
 

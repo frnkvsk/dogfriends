@@ -1,11 +1,12 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import { Button, TextField } from '@material-ui/core';
-import UploadPhoto from './UploadPhoto';
-import { AuthContext } from '../context/AuthContext';
+import { 
+  Button, 
+  TextField,
+ } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,15 +15,30 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    // border: '2px solid blue',
-  },
-  button: {
-    // margin: '10px',
   },
   formElement: {
     width: '95%',
     margin: '10px'
   },
+  button: {
+    width: '100%',
+    minWidth: '435px',
+    marginTop: '15px',
+  },
+  table: {
+    border: '1px solid #EEF1F1',
+    width: '100%',
+    minWidth: '435px',
+  
+  },
+  tableRow: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    fontSize: '22px',
+    marginLeft: '5px',
+  }
+
 }));
 
 function getSteps() {
@@ -34,17 +50,8 @@ function getSteps() {
   ];
 }
 
-// const focusUsernameInputField = input => {
-//   if (input) {
-//     setTimeout(() => {input.focus()}, 100);
-//   }
-// };
-
 export default function SignupForm({ handlePreSignup, handleSignup }) {
   const classes = useStyles();
-  const auth = useContext(AuthContext);
-  const token = auth.authState.token;
-  // console.log('SignupForm token',token)
   // Step 1 (required) make sure username and password are valid
   const [username, setUsername] = useState('');
   const [usernameValid, setUsernameValid] = useState('');
@@ -62,11 +69,6 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
   const [state, setState] = useState('');
   const [country, setCountry] = useState('');
 
-  const [photo_details, setPhotoDetails] = useState({
-    photo_id: null,
-    photo_url: null
-  });
-  
   // verify username is not already in use and is in valid form
   useEffect(() => {
     const checkUsername = async () => {
@@ -122,37 +124,26 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
   const steps = getSteps();
 
   const handleNext = async () => {
-    console.log('SignupForm handleNext activeStep',activeStep)
-    console.log(usernameValid , username , passwordValid , password)
-    if(!usernameValid.length && username.length && !passwordValid.length && password.length) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      if(activeStep === 0) {
-        console.log('activeStep',activeStep)
-      }
-      if(activeStep === 1) {
-        console.log('activeStep',activeStep)
-        console.log('username',username, password,first_name,last_name,email)
+    switch(activeStep) {
+      case 0:
+        if(!usernameValid.length && username.length && !passwordValid.length && password.length) {
+          setActiveStep((activeStep) => activeStep + 1);
+        }          
+        break;
+      case 1:
+        if(first_name.length && last_name.length && !emailValid.length && email.length) {
+          setActiveStep((activeStep) => activeStep + 1);
+        }
+        break;
+      case 2:
+        setActiveStep((activeStep) => activeStep + 1);
+        break;
+      default:
+        setActiveStep((activeStep) => activeStep + 1);
         handleSignup({username, password,first_name,last_name,email});
-      }
-      if(activeStep === 2) {
-        console.log('activeStep === steps.length-1',activeStep, photo_details)
-        // handleSubmit({
-        //   first_name,
-        //   last_name, 
-        //   email, 
-        //   photo_id: photo_details.photo_id,
-        //   city, 
-        //   state, 
-        //   country
-        // });
-      }
     }
     
   };
-
-  // const handleBack = () => {
-  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  // };
 
   const handleReset = () => {
     setActiveStep(0);
@@ -167,14 +158,14 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
           </Step>
         ))}
       </Stepper>
-      <div>
+      <div className={classes.main}>
         {activeStep === steps.length ? (
           <div>
             <div component={'span'} className={classes.main}>All steps completed</div>
             <Button onClick={handleReset}>Reset</Button>
           </div>
         ) : (
-          <div>
+          <div >
             <div component={'span'}>
               {activeStep===0 ?
               (
@@ -184,7 +175,6 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     label='Username: (required)' 
                     variant='outlined' 
                     value={username} 
-                    // autoFocus={true}
                     inputRef={input => !username.length && input && input.focus()}
                     error={usernameValid.length ? true : false}
                     helperText= {usernameValid.length ? usernameValid : ''}
@@ -208,9 +198,6 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     label='First Name: (required)' 
                     variant='outlined' 
                     value={first_name} 
-                    // autoFocus={true}
-                    // ref={ focusUsernameInputField }
-                    // autoFocus={true}
                     inputRef={input => !first_name.length && input && input.focus()}
                     onChange={e => setFirstName(e.target.value)}/>
                   <TextField 
@@ -252,39 +239,45 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     variant='outlined' 
                     value={country} 
                     onChange={e => setCountry(e.target.value)}/>
-                  <UploadPhoto token={token} setPhotoDetails={setPhotoDetails} />
                 </div>
               ) :
               (
                 <div className={classes.main}>
-                  <div>
-                    <div>Username: {username}</div>
-                    <div>First Name: {first_name}</div>
-                    <div>Last Name: {last_name}</div>
-                    <div>Email: {email}</div>
-                    <div>City: {city}</div>
-                    <div>State: {state}</div>
-                    <div>Country: {country}</div>
-                  </div>
+                  <table className={classes.table}>
+                    <tbody>
+                      <tr className={classes.tableRow}>
+                        <td style={{paddingLeft: '8px'}}>Username: {username}</td>
+                      </tr>
+                      <tr className={classes.tableRow}>
+                      <td style={{paddingLeft: '8px'}}>First Name: {first_name}</td>
+                      </tr>
+                      <tr className={classes.tableRow}>
+                      <td style={{paddingLeft: '8px'}}>Last Name: {last_name}</td>
+                      </tr>
+                      <tr className={classes.tableRow}>
+                      <td style={{paddingLeft: '8px'}}>Email: {email}</td>
+                      </tr>
+                      <tr className={classes.tableRow}>
+                      <td style={{paddingLeft: '8px'}}>City: {city}</td>
+                      </tr>
+                      <tr className={classes.tableRow}>
+                      <td style={{paddingLeft: '8px'}}>State: {state}</td>
+                      </tr>
+                      <tr className={classes.tableRow}>
+                      <td style={{paddingLeft: '8px'}}>Country: {country}</td>
+                      </tr>
+                    </tbody>
+                    
+                  </table>
                 </div>
               )}</div>
             <div>
-              
-              {/* <Button
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                className={classes.backButton}
-              > */}
-                {/* { activeStep > 1 && 'Back' }
-              </Button> */}
-              
-              
               <Button 
-                className={classes.formElement}
+                className={classes.button}
                 variant="contained" 
                 color="primary" 
                 onClick={handleNext}>
-                {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
+                {activeStep === steps.length - 1 ? 'Complete Signup' : 'Next'}
               </Button>
             </div>
           </div>
