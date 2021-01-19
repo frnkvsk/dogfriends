@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import NewPostForm from './../components/NewPostForm';
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -25,6 +26,7 @@ export default function NewPost() {
 
   return (
     <div className={classes.root}>
+      {/* New Post Page */}
       <NewPostForm data={{}}/>
     </div>
   );

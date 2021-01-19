@@ -80,7 +80,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
     }
     const validateUsername = (username) => {
       const expression = /^\s*[a-zA-Z]\s*(?:\S[\t ]*){2,30}/;    
-      return expression.test(username);
+      return expression.test(username) && username.length < 31;
     }
     if(username.length && !validateUsername(username)) {
       setUsernameValid('Username must be between 3-30 characters and start with a letter [a-zA-Z].');
@@ -92,16 +92,17 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
 
   // validate password strength
   useEffect(() => {  
-    const validatePassword = (username) => {
+    const validatePassword = (password) => {
       return password.length && (
         password.length < 8 || 
+        password.length > 30 ||
         !/[a-z]/.test(password) || 
         !/[A-Z]/.test(password) || 
         !/[\d]/.test(password)
       );
     }
     if(validatePassword(password)) {
-      setPasswordValid('Password must be min 8 characters in length and contain lowercase [a-z], uppercase [A-Z], numeric [0-9].');  
+      setPasswordValid('Password must be 8-30 characters in length and contain lowercase [a-z], uppercase [A-Z], numeric [0-9].');  
     } else {
       setPasswordValid('');
     } 

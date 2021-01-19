@@ -79,16 +79,23 @@ export default function Login() {
       }));
       console.log('LoginForm handleSubmitForm resp',resp)
       // if logged in, use resp.token to get user information
-      const userInfo = await dispatch(getUserInfoSlice({
-        token: resp.payload.token, 
-        username: username
-      }));
-
-      auth.setAuthState({
-        userInfo: userInfo.payload.user,
-        token: resp.payload.token,
-      });
-      return false;
+      if(resp && resp.payload.token.length) {
+        console.log('if resp && resp.token.length',resp , resp.payload.token.length)
+        const userInfo = await dispatch(getUserInfoSlice({
+          token: resp.payload.token, 
+          username: username
+        }));
+  
+        auth.setAuthState({
+          userInfo: userInfo.payload.user,
+          token: resp.payload.token,
+        });
+        return true;
+      } else {
+        console.log('else resp && resp.token.length',resp , resp.payload.token.length)
+        return false;
+      }      
+      
     } catch (error) {
       console.log(error)
       return false;

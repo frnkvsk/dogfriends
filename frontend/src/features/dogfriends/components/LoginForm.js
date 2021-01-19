@@ -1,20 +1,11 @@
-/** Login and Signup */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-// import { useDispatch } from 'react-redux';
-
 import { makeStyles } from '@material-ui/core/styles';
 import { 
   Box, 
   Button, 
   TextField, 
-   } from '@material-ui/core';
-
-// import { useFormInput } from '../hooks/useFormInput';
-// import { AuthContext } from '../context/AuthContext';
-// import FormInputOutlined from './FormInputOutlined';
-// import { loginSlice, getUserInfoSlice } from '../dogfriendsUserSlice';
-
+} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,31 +14,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-  
-    // maxWidth: '700px', 
-    paddingTop: '20px',
-    
+    paddingTop: '20px',    
   },
   formElement: {
     width: '95%',
     margin: '10px',
-    // marginTop: '20px',
-    // marginBottom: '20px',
-  },
-  button: {
-    // display: 'flex',
-    // width: '100%',
-    // margin: '10px',
-    // marginLeft: '40px',
   },
   err: {
     color: '#ff1744',
     fontSize: '24px',
-  },  
-  // completed: {
-  //   display: 'inline-block',
-  // },
-
+  },
 }));
 
 
@@ -56,30 +32,22 @@ export default function LoginForm({handleLogin}) {
   const history = useHistory();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  // const auth = useContext(AuthContext);
-  // const dispatch = useDispatch();
-  const [errorMessage, setErrorMessage] = useState(false);
-  
-  useEffect(() => {
-    setErrorMessage(false);
-  }, [username, password])
+  const [errorMessage, setErrorMessage] = useState(true);
 
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
-    console.log('LoginForm handleSubmitForm ',username,password)
-    const valid = handleLogin({username, password});
+    const valid = await handleLogin({username, password});
     setErrorMessage(valid);
     if(valid) history.push('/'); 
   }
   
   return (
     <form className={classes.root} onSubmit={handleSubmitLogin}>
-      {/* {console.log(errorMessage)} */}
-       <Box className={classes.err} 
+      <Box className={classes.err} 
         component="span" 
-        display={errorMessage ? 'block' : 'none'}
+        display={!errorMessage ? 'block' : 'none'}
         >
-          Error: Invalid credentials
+          Error: Invalid Login Credentials
       </Box>
       <TextField 
         className={classes.formElement} 
