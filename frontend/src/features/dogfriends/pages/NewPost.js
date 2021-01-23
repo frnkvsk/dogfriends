@@ -27,7 +27,7 @@ export default function NewPost() {
   return (
     <div className={classes.root}>
       {/* New Post Page */}
-      <NewPostForm data={{}}/>
+      <NewPostForm />
     </div>
   );
 }

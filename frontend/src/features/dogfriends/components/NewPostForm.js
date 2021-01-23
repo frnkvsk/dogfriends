@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const NewPostForm = ({data}) => {
+const NewPostForm = () => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
   const dispatch = useDispatch();
