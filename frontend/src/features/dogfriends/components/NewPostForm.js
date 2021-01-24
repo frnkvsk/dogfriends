@@ -139,7 +139,7 @@ const NewPostForm = () => {
   // const body = useFormInput('');
 
   const [url, setUrl] = useState('');
-  const [formInputState, setFormInputState] = useState('none');
+  const [formInputState, setFormInputState] = useState('inline');
   const [photoShowState, setPhotoShowState] = useState('none');
   const [photo, setPhoto] = useState({
     url: '',
@@ -176,8 +176,9 @@ const NewPostForm = () => {
   }, [url, topText.value, bottomText.value, textColor]);
 
   const handleCheckBox = () => {
-    if(formInputState === 'none') setFormInputState('inline')
-    else setFormInputState('none')
+    // if(formInputState === 'none') setFormInputState('inline')
+    // else setFormInputState('none')
+    setFormInputState('inline')
   }
   
   return (
@@ -196,9 +197,9 @@ const NewPostForm = () => {
           error={titleValid.length ? true : false}
           helperText={titleValid.length ? titleValid : ''}
           onChange={e => setTitle(e.target.value)} />
-        <FormControlLabel
+        {/* <FormControlLabel
           control={<Checkbox onChange={handleCheckBox} />}
-          label="Add a photo."/>
+          label="Add a photo."/> */}
         <div style={{display: formInputState}}>
           {/* <NewPhotoForm url={url} handleSetUrl={handleSetUrl} /> */}
           <UploadPhoto token={auth.authState.token} setUrl={setUrl}/>
@@ -223,7 +224,7 @@ const NewPostForm = () => {
             onChange={e => setBottomText(e.target.value)} />
             
         </div>
-        <TextField 
+        {/* <TextField 
           multiline
           rows={3}
           label="Body" 
@@ -231,7 +232,7 @@ const NewPostForm = () => {
           value={body}
           error={bodyValid.length ? true : false}
           helperText={bodyValid.length ? bodyValid : ''}
-          onChange={e => setBody(e.target.value)} />
+          onChange={e => setBody(e.target.value)} /> */}
         
         <div className={classes.buttons}>
           <Button variant="contained" color="primary" onClick={handleSubmit} >
