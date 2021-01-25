@@ -23,9 +23,9 @@ function NewPhotoForm(props) {
         singleImage='true'
         withPreview='true'
         label='Maximum size file: 5MB'
-        buttonText='Choose and image'
+        buttonText='Choose an image'
         onChange={props.handleSetUrl}
-        imgExtension={['.jpg', '.png', '.jpeg']}
+        imgExtension={['.jpg', '.png', '.gif']}
         maxFileSize={5242880}></ImageUploader>
     </form>
   );
