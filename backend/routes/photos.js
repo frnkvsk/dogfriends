@@ -6,6 +6,9 @@ const { v4: uuid } = require('uuid');
 const router = express.Router({ mergeParams: true });
 const { ensureCorrectUser, authRequired } = require("../middleware/auth");
 
+
+///home/fv/js/capstone2/dogfriends/backend/test-images
+///home/fv/js/capstone2/dogfriends/backend/routes
 /** GET /        get photo by id for post or comment
  *
  * => { id, text }
@@ -36,6 +39,7 @@ router.get("/:id", async function (req, res, next) {
  */
 
 router.post("/", authRequired, async function (req, res, next) {
+  
   try {
     const newId = uuid();
     const result = await db.query(
