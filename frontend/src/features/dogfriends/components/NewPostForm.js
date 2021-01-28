@@ -5,8 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { 
   Button, 
   TextField,
-  Checkbox,
-  FormControlLabel,
+  // Checkbox,
+  // FormControlLabel,
   Box,
 } from '@material-ui/core';
 import { 
@@ -17,7 +17,8 @@ import { AuthContext } from '../context/AuthContext';
 // import FormInputOutlined from './FormInputOutlined';
 import PostPhoto from './PostPhoto';
 // import NewPhotoForm from './NewPhotoForm';
-import UploadPhoto from './UploadPhoto';
+// import UploadPhoto from './UploadPhoto';
+import {UploadImage} from './UploadImage';
 
 import { v4 as uuid } from 'uuid';
 
@@ -66,12 +67,12 @@ const NewPostForm = () => {
   const [title, setTitle] = useState('');
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
-  const [body, setBody] = useState('');
+  // const [body, setBody] = useState('');
   // const [color, setColor] = useState('');
   const [titleValid, setTitleValid] = useState('');
   const [topTextValid, setTopTextValid] = useState('');
   const [bottomTextValid, setBottomTextValid] = useState('');
-  const [bodyValid, setBodyValid] = useState('');
+  // const [bodyValid, setBodyValid] = useState('');
   // const [colorValid, setColorValid] = useState(true);
 
   // validate title
@@ -99,13 +100,13 @@ const NewPostForm = () => {
     }
   }, [bottomText]);
   // validate body
-  useEffect(() => {
-    if([...body].filter(e => e!==' ').length > 200) {
-      setBodyValid('Body text must be betwen 1 and 200 characters in length.');
-    } else {
-      setBodyValid('');
-    }
-  }, [body]);
+  // useEffect(() => {
+  //   if([...body].filter(e => e!==' ').length > 200) {
+  //     setBodyValid('Body text must be betwen 1 and 200 characters in length.');
+  //   } else {
+  //     setBodyValid('');
+  //   }
+  // }, [body]);
 
   const handleSubmit = e => {   
     e.preventDefault();
@@ -126,7 +127,7 @@ const NewPostForm = () => {
       photo_id: uuid(),
       title: title, 
       // description: 'description', 
-      body: uuid(),
+      // body: uuid(),
       // username: auth.authState.userInfo.username,
       token: auth.authState.token
     }
@@ -139,7 +140,7 @@ const NewPostForm = () => {
   // const body = useFormInput('');
 
   const [url, setUrl] = useState('');
-  const [formInputState, setFormInputState] = useState('inline');
+  // const [formInputState, setFormInputState] = useState('inline');
   const [photoShowState, setPhotoShowState] = useState('none');
   const [photo, setPhoto] = useState({
     url: '',
@@ -175,11 +176,11 @@ const NewPostForm = () => {
     // eslint-disable-next-line
   }, [url, topText.value, bottomText.value, textColor]);
 
-  const handleCheckBox = () => {
+  // const handleCheckBox = () => {
     // if(formInputState === 'none') setFormInputState('inline')
     // else setFormInputState('none')
-    setFormInputState('inline')
-  }
+  //   setFormInputState('inline')
+  // }
   
   return (
     <div className={classes.root}>    
@@ -200,9 +201,10 @@ const NewPostForm = () => {
         {/* <FormControlLabel
           control={<Checkbox onChange={handleCheckBox} />}
           label="Add a photo."/> */}
-        <div style={{display: formInputState}}>
+        <div style={{display: 'inline'}}>
           {/* <NewPhotoForm url={url} handleSetUrl={handleSetUrl} /> */}
-          <UploadPhoto token={auth.authState.token} setUrl={setUrl}/>
+          {/* <UploadPhoto token={auth.authState.token} setUrl={setUrl}/> */}
+          <UploadImage />
           Text Color&nbsp;  
           <input           
             type="color" 
