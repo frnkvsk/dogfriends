@@ -5,7 +5,7 @@ import { selectUser } from '../dogfriendsUserSlice';
 import { useSelector } from 'react-redux';
 import UserAvatar from '../components/UserAvatar';
 import { Button, TextField } from '@material-ui/core';
-import UploadPhoto from './UploadPhoto';
+// import UploadPhoto from './UploadPhoto';
 import { useHistory } from 'react-router-dom';
 
 
@@ -76,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
 const UserInfoForm = ({title, handleSubmit}) => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
+  console.log('UserInfoForm auth',auth)
   const userList = useSelector(selectUser);
   const [username, setUsername] = useState('');
   const [first_name, setFirstName] = useState('');
@@ -140,7 +141,7 @@ const UserInfoForm = ({title, handleSubmit}) => {
         </Button>
       </div>
       <div style={{display: photoDropVisibility}}>
-        <UploadPhoto token={auth.authState.token} setPhotoDetails={setPhotoDetails}/>
+        {/* <UploadPhoto token={auth.authState.token} setPhotoDetails={setPhotoDetails}/> */}
       </div>
       <div className={classes.form}>
         <div className={classes.formAvatar} >          

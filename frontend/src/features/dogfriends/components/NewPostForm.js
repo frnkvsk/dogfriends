@@ -7,7 +7,7 @@ import {
   TextField,
   // Checkbox,
   // FormControlLabel,
-  Box,
+  // Box,
 } from '@material-ui/core';
 import { 
   addNewPost,
@@ -15,7 +15,7 @@ import {
 // import { useFormInput } from '../hooks/useFormInput';
 import { AuthContext } from '../context/AuthContext';
 // import FormInputOutlined from './FormInputOutlined';
-import PostPhoto from './PostPhoto';
+// import PostPhoto from './PostPhoto';
 // import NewPhotoForm from './NewPhotoForm';
 // import UploadPhoto from './UploadPhoto';
 import {UploadImage} from './UploadImage';
@@ -139,55 +139,58 @@ const NewPostForm = () => {
   // const bottom = useFormInput('');
   // const body = useFormInput('');
 
-  const [url, setUrl] = useState('');
+  // const [url, setUrl] = useState('');
   // const [formInputState, setFormInputState] = useState('inline');
-  const [photoShowState, setPhotoShowState] = useState('none');
-  const [photo, setPhoto] = useState({
-    url: '',
-    topText: '',
-    bottom: '',
-    textColor: '#000000'
-  });
+  // const [photoShowState, setPhotoShowState] = useState('none');
+  // const [photo, setPhoto] = useState({
+  //   url: '',
+  //   topText: '',
+  //   bottom: '',
+  //   textColor: '#000000'
+  // });
   const [textColor, setTextColor] = useState('#000000');  
   const handleTextColor = (e) => {
     e.preventDefault();
     setTextColor(e.target.value);
   }
-  useEffect(() => {
-    // console.log('useEffect photoShowState',photoShowState)
-    // console.log('useEffect url', url)
-    if(url !== '') {
-      setPhotoShowState('flex');
-      setPhoto({
-        url: url,
-        top: topText,
-        bottom: bottomText,
-        textcolor: textColor
-      });
-    } else {
-      setPhotoShowState('none');
-      setPhoto({
-        url: '',
-        top: '',
-        bottom: '',
-        textcolor: textColor
-      });
-    }
-    // eslint-disable-next-line
-  }, [url, topText.value, bottomText.value, textColor]);
+  // useEffect(() => {
+  //   // console.log('useEffect photoShowState',photoShowState)
+  //   // console.log('useEffect url', url)
+  //   if(url !== '') {
+  //     setPhotoShowState('flex');
+  //     setPhoto({
+  //       url: url,
+  //       top: topText,
+  //       bottom: bottomText,
+  //       textcolor: textColor
+  //     });
+  //   } else {
+  //     setPhotoShowState('none');
+  //     setPhoto({
+  //       url: '',
+  //       top: '',
+  //       bottom: '',
+  //       textcolor: textColor
+  //     });
+  //   }
+  //   // eslint-disable-next-line
+  // }, [url, topText.value, bottomText.value, textColor]);
 
   // const handleCheckBox = () => {
     // if(formInputState === 'none') setFormInputState('inline')
     // else setFormInputState('none')
   //   setFormInputState('inline')
   // }
-  
+  const handleUploadImage = (data) => {
+    console.log('NewPostForm handleUploadImage data',data)
+  }
+
   return (
     <div className={classes.root}>    
-      <Box className={classes.imagePreview} style={{display: photoShowState}}>
+      {/* <Box className={classes.imagePreview} style={{display: photoShowState}}>
         <PostPhoto photo={photo}/>
         
-      </Box>
+      </Box> */}
       <form className={classes.form} >   
 
         <TextField 
@@ -204,7 +207,7 @@ const NewPostForm = () => {
         <div style={{display: 'inline'}}>
           {/* <NewPhotoForm url={url} handleSetUrl={handleSetUrl} /> */}
           {/* <UploadPhoto token={auth.authState.token} setUrl={setUrl}/> */}
-          <UploadImage />
+          <UploadImage handleUploadImage={handleUploadImage}/>
           Text Color&nbsp;  
           <input           
             type="color" 
