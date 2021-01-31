@@ -43,8 +43,6 @@ CREATE TABLE votes (
 CREATE TABLE photos (
   id uuid DEFAULT uuid_generate_v4 (), 
   url TEXT NOT NULL,
-  public_id TEXT NOT NULL,
-  signature TEXT NOT NULL,
   created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
