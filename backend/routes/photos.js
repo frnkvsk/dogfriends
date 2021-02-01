@@ -63,7 +63,7 @@ router.post("/", authRequired, async function (req, res, next) {
   try {
     const url = await upload(req.image);
     console.log('photos router.post url',url)
-    const newId = uuid();
+    const newId = req.photo_id;
     const result = await db.query(
       `INSERT INTO photos (id, url) 
        VALUES ($1, $2) 

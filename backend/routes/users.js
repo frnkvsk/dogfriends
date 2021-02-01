@@ -39,9 +39,9 @@ router.get("/:username", authRequired, async function(req, res, next) {
  */
 
 router.post("/:username", async function(req, res, next) {
-  console.log('------users User.usernameCheck',req.params.username)
+  // console.log('------users User.usernameCheck',req.params.username)
   let resp = await User.usernameCheck(req.params.username);
-  console.log('------users User.usernameCheck res', resp)
+  // console.log('------users User.usernameCheck res', resp)
   return res.status(201).json({resp});
 });
 
@@ -50,6 +50,7 @@ router.post("/:username", async function(req, res, next) {
  * POST / {userdata}  => {token: token} */
 
 router.post("/", async function(req, res, next) {
+  // console.log('users router.post req.body',req.body)
   try {
     delete req.body._token;
     const validation = validate(req.body, userNewSchema);
