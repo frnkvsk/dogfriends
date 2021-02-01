@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 
-const BASE_URL = process.env.REACT_APP_EXPRESS_BASE_URL;//'http://localhost:5000/api/';
+const BASE_URL = 'http://localhost:5000/api/';
 
 const request = async (endpoint, paramsOrData = {}, verb = "get") => {  
   
-  console.debug("API Call:", endpoint, paramsOrData, verb);
+  console.log("API Call:", endpoint, paramsOrData, verb, BASE_URL);
   try {
     const res = await axios({
       method: verb,
@@ -82,29 +82,44 @@ const preSignupUsernameCheck = async ({username}) => {
   }
 }
 
-const signup = async ({username, 
-                      password, 
-                      first_name, 
-                      last_name, 
-                      email, 
-                      photo_id, 
-                      city, 
-                      state, 
-                      country}) => {
-                        
+const signup = async (
+  // {username, 
+  //                     password, 
+  //                     first_name, 
+  //                     last_name, 
+  //                     email, 
+  //                     photo_id, 
+  //                     city, 
+  //                     state, 
+  //                     country}
+                      
+                      data) => {
+       console.log('DogfriendsApi signup',data)
+      //  username, 
+      //  password, 
+      //  first_name, 
+      //  last_name, 
+      //  email, 
+      //  photo_id, 
+      //  city, 
+      //  state, 
+      //  country)                 
   try {
-    const res = await request('users/', {
-      username: username, 
-      password: password, 
-      first_name: first_name, 
-      last_name: last_name, 
-      email: email,
-      photo_id: photo_id,
-      admin: false, 
-      city: city, 
-      state: state, 
-      country: country, 
-      }, 'post');
+    const res = await request('users/', 
+    // {
+    //   username: username, 
+    //   password: password, 
+    //   first_name: first_name, 
+    //   last_name: last_name, 
+    //   email: email,
+    //   photo_id: photo_id,
+    //   admin: false, 
+    //   city: city, 
+    //   state: state, 
+    //   country: country, 
+    //   }, 
+      data,'post');
+      console.log('DogfriendsApi signup res',res)
     return res;    
   } catch (error) {
     console.error(error);

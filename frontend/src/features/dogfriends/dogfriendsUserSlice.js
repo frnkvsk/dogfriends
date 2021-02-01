@@ -11,7 +11,7 @@ import {
 export const loginSlice = createAsyncThunk(
   'login',
   async (payload) => {
-    // console.log('dogfriendsUserSlice payload',payload)
+    console.log('dogfriendsUserSlice payload',payload)
     const response = await login({
       username: payload.username,
       password: payload.password
@@ -41,7 +41,7 @@ export const checkUsernameSlice = createAsyncThunk(
 export const signUpSlice = createAsyncThunk(
   'signup',
   async (payload) => {
-    // console.log('dogfriendsUserSlice payload',payload)
+    console.log('dogfriendsUserSlice payload',payload)
     const response = await signup({
       username: payload.username, 
       password: payload.password, 
@@ -49,10 +49,12 @@ export const signUpSlice = createAsyncThunk(
       last_name: payload.last_name, 
       email: payload.email, 
       photo_id: null, 
-      city: '', 
-      state: '', 
-      country: ''
+      admin: false,
+      city: payload.city ? payload.city : '', 
+      state: payload.state ? payload.state : '', 
+      country: payload.country ? payload.country : ''
     });
+    console.log('dogfriendsUserSlice response',response)
     return response.data;
   }
 );

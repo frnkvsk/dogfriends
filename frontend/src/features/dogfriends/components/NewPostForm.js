@@ -18,6 +18,7 @@ import { AuthContext } from '../context/AuthContext';
 // import PostPhoto from './PostPhoto';
 // import NewPhotoForm from './NewPhotoForm';
 // import UploadPhoto from './UploadPhoto';
+
 import {UploadImage} from './UploadImage';
 
 import { v4 as uuid } from 'uuid';
@@ -133,64 +134,17 @@ const NewPostForm = () => {
     }
     dispatch(addNewPost(payload));    
   }
-  
-  // const title = useFormInput('');  
-  // const top = useFormInput('');
-  // const bottom = useFormInput('');
-  // const body = useFormInput('');
-
-  // const [url, setUrl] = useState('');
-  // const [formInputState, setFormInputState] = useState('inline');
-  // const [photoShowState, setPhotoShowState] = useState('none');
-  // const [photo, setPhoto] = useState({
-  //   url: '',
-  //   topText: '',
-  //   bottom: '',
-  //   textColor: '#000000'
-  // });
   const [textColor, setTextColor] = useState('#000000');  
   const handleTextColor = (e) => {
     e.preventDefault();
     setTextColor(e.target.value);
   }
-  // useEffect(() => {
-  //   // console.log('useEffect photoShowState',photoShowState)
-  //   // console.log('useEffect url', url)
-  //   if(url !== '') {
-  //     setPhotoShowState('flex');
-  //     setPhoto({
-  //       url: url,
-  //       top: topText,
-  //       bottom: bottomText,
-  //       textcolor: textColor
-  //     });
-  //   } else {
-  //     setPhotoShowState('none');
-  //     setPhoto({
-  //       url: '',
-  //       top: '',
-  //       bottom: '',
-  //       textcolor: textColor
-  //     });
-  //   }
-  //   // eslint-disable-next-line
-  // }, [url, topText.value, bottomText.value, textColor]);
-
-  // const handleCheckBox = () => {
-    // if(formInputState === 'none') setFormInputState('inline')
-    // else setFormInputState('none')
-  //   setFormInputState('inline')
-  // }
   const handleUploadImage = (data) => {
     console.log('NewPostForm handleUploadImage data',data)
   }
 
   return (
-    <div className={classes.root}>    
-      {/* <Box className={classes.imagePreview} style={{display: photoShowState}}>
-        <PostPhoto photo={photo}/>
-        
-      </Box> */}
+    <div className={classes.root}> 
       <form className={classes.form} >   
 
         <TextField 
@@ -201,13 +155,10 @@ const NewPostForm = () => {
           error={titleValid.length ? true : false}
           helperText={titleValid.length ? titleValid : ''}
           onChange={e => setTitle(e.target.value)} />
-        {/* <FormControlLabel
-          control={<Checkbox onChange={handleCheckBox} />}
-          label="Add a photo."/> */}
         <div style={{display: 'inline'}}>
-          {/* <NewPhotoForm url={url} handleSetUrl={handleSetUrl} /> */}
+          {/* <NewPhotoForm handleUploadImage={handleUploadImage} /> */}
           {/* <UploadPhoto token={auth.authState.token} setUrl={setUrl}/> */}
-          <UploadImage handleUploadImage={handleUploadImage}/>
+          <UploadImage handleUploadImage={handleUploadImage} width={400} height={400} />
           Text Color&nbsp;  
           <input           
             type="color" 
@@ -229,15 +180,6 @@ const NewPostForm = () => {
             onChange={e => setBottomText(e.target.value)} />
             
         </div>
-        {/* <TextField 
-          multiline
-          rows={3}
-          label="Body" 
-          variant='outlined' 
-          value={body}
-          error={bodyValid.length ? true : false}
-          helperText={bodyValid.length ? bodyValid : ''}
-          onChange={e => setBody(e.target.value)} /> */}
         
         <div className={classes.buttons}>
           <Button variant="contained" color="primary" onClick={handleSubmit} >

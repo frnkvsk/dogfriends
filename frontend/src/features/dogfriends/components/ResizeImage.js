@@ -48,30 +48,36 @@ let img = new Image();
   
 const ResizeImage = async (file, width, height) => {
   let fileReader = new FileReader();
-  const resize = async () =>{
-    let canvas=document.createElement("canvas");
-    let context=canvas.getContext("2d");
+  let canvas=document.createElement("canvas");
+  let context=canvas.getContext("2d");
+  img.onload=function(){ 
+    
+    
     canvas.width=width;
     canvas.height=height;
+    // console.log('ResizeImage img',img)    
     context.drawImage(img,
-        0,
-        0,
-        width,
-        height,
-        0,
-        0,
-        width,
-        height
+      0,
+      0,
+      width,
+      height,
+      0,
+      0,
+      width,
+      height
     );
     // console.log('canvas',canvas.toDataURL())
-    return canvas.toDataURL();
-    
+    // return canvas.toDataURL();
   }
   
   let blob = new Blob(Buffer.from(file[0].data_url));
   fileReader.readAsArrayBuffer(blob);
   img.src = file[0].data_url;
-  return await resize();
+
+  img.onresize=function(){
+    return canvas.toDataURL();
+  }
+  // return await resize();
   // const res = resized;//await resizeFile(file, width, height);
   // console.log('res',res)
   // return res

@@ -141,7 +141,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
         break;
       default:
         setActiveStep((activeStep) => activeStep + 1);
-        handleSignup({username, password,first_name,last_name,email});
+        handleSignup({username, password,first_name,last_name,email,admin:false});
     }
     
   };

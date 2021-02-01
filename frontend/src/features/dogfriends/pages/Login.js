@@ -109,27 +109,29 @@ export default function Login() {
     }    
   }
   
-  const handleSignup = async ({
-    username,
-    password, 
-    first_name,
-    last_name,
-    email
-    }) => {
-    const userInfo = {
-      username,
-      password,
-      first_name,
-      last_name, 
-      email,
-    }
+  const handleSignup = async (
+    // {
+    // username,
+    // password, 
+    // first_name,
+    // last_name,
+    // email
+    // }
+    data) => {
+    // const userInfo = {
+    //   username,
+    //   password,
+    //   first_name,
+    //   last_name, 
+    //   email,
+    // }
     
-    console.log('SignupForm userInfo',userInfo)
-    const resp = await dispatch(signUpSlice(userInfo));
+    console.log('SignupForm userInfo',data)
+    const resp = await dispatch(signUpSlice(data));
     console.log('Login handleSignup resp',resp)
     if(resp.payload.token) {
       auth.setAuthState({
-        userInfo: userInfo,
+        userInfo: data,
         token: resp.payload.token,
       });
       history.push('/');
