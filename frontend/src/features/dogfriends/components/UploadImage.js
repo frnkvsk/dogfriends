@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-// import ImageUploading from 'react-images-uploading';
 import photo_drop_zone from '../assets/photo_drop_zone.jpg';
-// import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
-// import ResizeImage from './ResizeImage';
-
 const useStyles = makeStyles((theme) => ({
+  form: {
+    margin: '20px 0 20px 7px',
+    // border: '1px solid red',
+  },
   photoDrop: {
     backgroundImage: `url(${photo_drop_zone})`,
     backgroundSize: 'cover',
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     width: '400px',
     height: '370px',
     border: '2px dotted salmon',
-    margin: '100px',
+    marginLeft: '7px',
     cursor: 'pointer',    
   }
     
@@ -27,8 +27,8 @@ export function UploadImage({handleUploadImage, width, height}) {
   const [origImage, setOrigImage] = useState('');
   const [newImage, setNewImage] = useState('');
 
-  fileReader.onload = function (event) {    
-    var image = new Image();
+  fileReader.onload = function (event) {  
+    let image = new Image();
     image.onload = async function(){
         if(image.width > image.height) {      
           if(width < image.width) {
@@ -45,8 +45,8 @@ export function UploadImage({handleUploadImage, width, height}) {
             height = image.height;
           } 
         }
-        var canvas=document.createElement("canvas");
-        var context=canvas.getContext("2d");
+        let canvas=document.createElement("canvas");
+        let context=canvas.getContext("2d");
         canvas.width=width;
         canvas.height=height;
         context.drawImage(image,
@@ -86,27 +86,29 @@ export function UploadImage({handleUploadImage, width, height}) {
   }, [fileReader, origImage]);
   
   return (
-    <>
-      <table>
-        <tbody>
-          <tr>
-            <td>
-              <input 
-                className={newImage.length ? '' : classes.photoDrop}
-                id="upload-Image" 
-                type="file"
-                onChange={(e) => setOrigImage(e.target.value)}/>
-            </td>
-          </tr>
-          {newImage.length ?
-            <tr>
-              <td><img id="upload-Preview" src={newImage} alt='resized limage'/></td>
-            </tr>
-            :
-            <tr></tr>
-          }      
-        </tbody>
-      </table>
-    </>
+    <div className={classes.form}>
+      <input 
+        className={newImage.length ? '' : classes.photoDrop}
+        id="upload-Image" 
+        type="file"
+        onChange={(e) => setOrigImage(e.target.value)}/>
+    </div>
   )
+  // return (
+  //   <>
+  //     <table>
+  //       <tbody>
+  //         <tr>
+  //           <td>
+  //             <input 
+  //               className={newImage.length ? '' : classes.photoDrop}
+  //               id="upload-Image" 
+  //               type="file"
+  //               onChange={(e) => setOrigImage(e.target.value)}/>
+  //           </td>
+  //         </tr>
+  //       </tbody>
+  //     </table>
+  //   </>
+  // )
 }

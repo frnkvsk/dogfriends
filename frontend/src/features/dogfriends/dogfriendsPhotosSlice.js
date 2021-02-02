@@ -1,4 +1,4 @@
-/*
+
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   postNewPhoto,
@@ -44,21 +44,21 @@ export const dogfriendsPhotosSlice = createSlice({
   // },
   extraReducers: {
     // post a new photo
-    [postPhotoNew.pending]: (state, action) => {
+    [postNewPhoto.pending]: (state, action) => {
       state.photoList = {
         status: 'pending',
         data: {},
         error: {}
       };
     },
-    [postPhotoNew.fulfilled]: (state, action) => {
+    [postNewPhoto.fulfilled]: (state, action) => {
       state.photoList = {
         status: 'fulfilled',
         data: action.payload,
         error: {}
       };
     },
-    [postPhotoNew.rejected]: (state, action) => {
+    [postNewPhoto.rejected]: (state, action) => {
       state.photoList = {
         status: 'rejected',
         data: {},
@@ -97,4 +97,3 @@ export const dogfriendsPhotosSlice = createSlice({
 export const selectPosts = state => state.photoList.photoList;
 
 export default dogfriendsPhotosSlice.reducer;
-*/
