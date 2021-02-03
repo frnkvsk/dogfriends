@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   form: {
-    margin: '20px 0 20px 7px',
+    margin: '20px 0 20px 0',
     // border: '1px solid red',
   },
   photoDrop: {
@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
     width: '400px',
     height: '370px',
     border: '2px dotted salmon',
-    marginLeft: '7px',
     cursor: 'pointer',    
   }
     

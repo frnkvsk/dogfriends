@@ -21,30 +21,28 @@ const useStyles = makeStyles(theme => ({
   footer: {
     background: `linear-gradient(45deg, ${theme.palette.common.brown} 30%, ${theme.palette.common.brownLight} 90%)`,
     width: '100%',
-    // zIndex: 1302,
-    // position: 'relative',
-    // left: 0,
-    // bottom: 0,
-    // marginTop: '10px',
-    position: 'fixed',
-    top: 'auto',
+    position: 'sticky',
+    // top: 'auto',
     bottom: 0,
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
+    },
   },
   adornment: {
-    width: '11em',
+    width: '10.2em',
     verticalAlign: 'bottom',
     [theme.breakpoints.down('md')]: {
       width: '5em',
     },
-    [theme.breakpoints.down('xs')]: {
-      width: '1em',
-    }
+    // [theme.breakpoints.down('xs')]: {
+    //   width: '1em',
+    // },
+    height: '2.5rem',
   },
   mainContainer: {
     width: '100%',
     position: 'absolute',
-    justifyContent: 'center',
-    
+    justifyContent: 'center',    
   },
   link: {
     color: 'white',
@@ -62,10 +60,10 @@ const useStyles = makeStyles(theme => ({
     fontFamily: 'Arial',
     fontSize: '0.75rem',
     fontWeight: 'bold',
-    height: '2rem',
+    height: '1rem',
   },
   gridItem: {
-    margin: '2em',
+    margin: '1em',
   },
 
 }));
@@ -73,7 +71,7 @@ const useStyles = makeStyles(theme => ({
 function HideOnScroll(props) {
   const { children } = props;
   const trigger = useScrollTrigger({ 
-    threshold: 250
+    threshold: 25
   });
   return (
     <Slide appear={false} direction="up" in={!trigger}>

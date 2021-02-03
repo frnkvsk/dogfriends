@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     padding: '20px',
     width: '97%',
+    minHeight: '80vh',
   },
   main: {
     display: 'flex',
