@@ -13,7 +13,7 @@ import { AuthContext } from '../context/AuthContext';
 
 import {UploadImage} from './UploadImage';
 
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 import { FillTextImage } from './FillTextImage';
 
 const useStyles = makeStyles((theme) => ({
@@ -124,13 +124,13 @@ const NewPostForm = () => {
   const handleSubmit = e => {   
     e.preventDefault();
     const payload = {
-      parent_id: uuid(),
-      photo_id: uuid(),
-      title: title, 
-      image: image,
-      // description: 'description', 
-      // body: uuid(),
-      // username: auth.authState.userInfo.username,
+      parent_id: null,
+      title, 
+      image,
+      topText,
+      bottomText,
+      body,
+      username: auth.authState.userInfo.username,
       token: auth.authState.token
     }
     dispatch(addNewPost(payload));    
@@ -187,7 +187,7 @@ const NewPostForm = () => {
             onChange={e => setBottomText(e.target.value)} />            
           <TextField 
             className={classes.formItem}
-            multiline='true'
+            multiline={true}
             rows='4'
             label='Body (optional)' 
             variant='outlined' 

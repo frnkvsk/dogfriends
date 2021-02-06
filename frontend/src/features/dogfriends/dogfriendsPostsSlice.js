@@ -34,15 +34,17 @@ export const dogfriendsPostsSlice = createSlice({
   },
   reducers: {
     addNewPost: (state, action) => {
-      const {title, parent_id, photo_id, body, token} = action.payload;
-      postPostNew(title, parent_id, photo_id, body, token);
+      // const {title, parent_id, photo_id, body, token} = action.payload;
+      // console.log('dogfriendsPostsSlice action.payload',action.payload.image)
+      action.payload['_token'] = action.payload.token; 
+      postPostNew(action.payload);
     },
     editPost: (state, action) => {
-      const {id, title, body, username, token} = action.payload;
-      putPostUpdate(id, title, body, username, token);
+      // const {id, title, body, username, token} = action.payload;
+      putPostUpdate(action.payload);
     },
     removePost: (state, action) => {
-      deletePost(action.payload.id, action.payload.username, action.payload.token);
+      deletePost(action.payload);
     },
   },
   extraReducers: {

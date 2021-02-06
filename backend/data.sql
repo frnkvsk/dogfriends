@@ -23,13 +23,12 @@ CREATE TABLE users (
 
 CREATE TABLE posts (
   id uuid DEFAULT uuid_generate_v4 (), 
-  title TEXT NOT NULL, 
-  body TEXT NOT NULL,  
-  created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-  username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
+  title TEXT, 
+  body TEXT,  
   parent_id uuid DEFAULT null,
   photo_id uuid DEFAULT null,
+  created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
   PRIMARY KEY (id)
 );
 
@@ -44,6 +43,5 @@ CREATE TABLE photos (
   id uuid DEFAULT uuid_generate_v4 (), 
   url TEXT NOT NULL,
   created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );                  

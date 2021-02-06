@@ -32,14 +32,15 @@ const getPostById = async (id) => {
 const postPostVote = async (id, direction, token) => {
   return await request(`posts/${id}/vote/${direction}`, {_token: token}, 'post');
 }
-const postPostNew = async (title, parent_id, photo_id, body, token) => {
-  const data = {
-    title: title,
-    parent_id: parent_id, 
-    photo_id: photo_id, 
-    body: body, 
-    _token: token   
-  }
+const postPostNew = async (data) => {
+  console.log('DogfriendApi postPostNew data',data.title)
+  // const data = {
+  //   title: title,
+  //   parent_id: parent_id, 
+  //   photo_id: photo_id, 
+  //   body: body, 
+  //   _token: token   
+  // }
   return await request('posts/', data, 'post');
 }
 const putPostUpdate = async (id, title, body, username, token) => {
