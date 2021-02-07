@@ -6,11 +6,7 @@ const { v4: uuid } = require('uuid');
 const router = new express.Router();
 const { ensureCorrectUser, authRequired } = require("../middleware/auth");
 
-/**
- * AWS
- */
-const AWS_UPLOAD_ENDPOINT = process.env.AWS_UPLOAD_IMAGE_LAMBDA_URL;
-const AWS_BUCKET_ENDPOINT = process.env.AWS_IMAGE_BUCKET_URL_BASE;
+
 
 
 /** GET /   get overview of posts
@@ -122,14 +118,19 @@ router.post("/:id/vote/:direction", authRequired, async function (req, res, next
 
 router.post("/", authRequired, async function (req, res, next) {
   try {
-    const newId = req.photo_id;
-    const result = await db.query(
+    const {parent_id, title, body, photo_id, photo_url, username} = req.body;
+    await db.query(
       `INSERT INTO photos (id, url) 
        VALUES ($1, $2) 
        RETURNING id, url`,
-       [newId, url]);
-      
-    return res.json(result.rows[0]);
+       [photo_id, photo_url]);
+
+    await db.query(
+      `INSERT INTO posts (title, body, username, parent_id, photo_id) 
+        VALUES ($1, $2, $3, $4, $5) 
+        RETURNING id, title, body, username, parent_id, photo_id`,
+      [title, body, username, parent_id, photo_id]);
+    
   } catch (err) {
     return next(err);
   }

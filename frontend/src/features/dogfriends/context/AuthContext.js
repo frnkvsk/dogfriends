@@ -17,7 +17,6 @@ const AuthProvider = ({ children }) => {
   const setAuthInfo = ({ token, userInfo }) => {
     try {
       setTokenStorage(token);
-      // console.log('AuthContext setAuthInfo ',{username: userInfo.username}, userInfo)
       setUserInfoStorage({username: userInfo.username});
       setAuthState({
         token,

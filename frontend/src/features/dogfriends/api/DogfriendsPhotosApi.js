@@ -1,15 +1,14 @@
 import axios from 'axios';
 
 
-const BASE_URL = 'http://localhost:5000/api/';
+// const BASE_BUCKET_URL = initInfo.bucketInfo;
 
-const request = async (endpoint, paramsOrData = {}, verb = "get") => {  
+const request = async (endpoint, paramsOrData = {}, verb = "get") => {    
   
-  console.log("API Call:", endpoint, paramsOrData, verb, BASE_URL);
   try {
     const res = await axios({
       method: verb,
-      url: `${BASE_URL}${endpoint}`,
+      url: endpoint,
       [verb === "get" ? "params" : "data"]: paramsOrData});
     
     return res;
@@ -21,7 +20,8 @@ const request = async (endpoint, paramsOrData = {}, verb = "get") => {
     throw Array.isArray(message) ? message : [message];
   }
 }
-// posts
+
+// photos
 const getPhotos = async () => {
   let res = await request('posts');
   return res;
@@ -29,16 +29,23 @@ const getPhotos = async () => {
 const getPhotoById = async (id) => {
   return await request(`posts/${id}`);
 }
-const postNewPhoto = async (title, parent_id, photo_id, body, token) => {
-  const data = {
-    title: title,
-    parent_id: parent_id, 
-    photo_id: photo_id, 
-    body: body, 
-    _token: token   
+const putNewPhoto = async (image, photo_id, upload_base) => {
+  const body = {
+    "image": image,
+    "imageName": photo_id
   }
-  return await request('posts/', data, 'post');
+  return await request(upload_base, body, 'put');
 }
+// const postNewPhoto = async (title, parent_id, photo_id, body, token) => {
+//   const data = {
+//     title: title,
+//     parent_id: parent_id, 
+//     photo_id: photo_id, 
+//     body: body, 
+//     _token: token   
+//   }
+//   return await request('posts/', data, 'post');
+// }
 const deletePhoto = async (id, username, token) => {
   const data = {
     id: id,
@@ -51,6 +58,6 @@ const deletePhoto = async (id, username, token) => {
 export {
   getPhotos,
   getPhotoById,
-  postNewPhoto,
   deletePhoto,
+  putNewPhoto
 };

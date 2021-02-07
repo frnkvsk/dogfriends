@@ -6,6 +6,9 @@ import {
   Button, 
   TextField,
 } from '@material-ui/core';
+import {
+  postInitInfoData
+} from '../dogfriendsInitSlice';
 import { 
   addNewPost,
  } from '../dogfriendsPostsSlice';
@@ -13,8 +16,9 @@ import { AuthContext } from '../context/AuthContext';
 
 import {UploadImage} from './UploadImage';
 
-// import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from 'uuid';
 import { FillTextImage } from './FillTextImage';
+import { putNewPhoto } from '../api/DogfriendsPhotosApi';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +61,11 @@ const useStyles = makeStyles((theme) => ({
 const NewPostForm = () => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
+  
+  
   const dispatch = useDispatch();
+  let initInfo;// = dispatch(postInitInfoData({_token: auth.authState.token}));
+  console.log('NewPostForm initInfo',initInfo)
   const history = useHistory();
   // console.log('NewPostForm auth',auth)
   const [title, setTitle] = useState('');
@@ -72,6 +80,13 @@ const NewPostForm = () => {
   const [bottomTextValid, setBottomTextValid] = useState('');
   const [bodyValid, setBodyValid] = useState('');
   // const [colorValid, setColorValid] = useState(true);
+  const loadInitInfo = async () => {
+    initInfo = await dispatch(postInitInfoData(auth.authState.token));
+  }
+  useEffect(() => {
+    loadInitInfo();
+    console.log('loadInitInfo()')
+  });
 
   // validate title
   useEffect(() => {
@@ -123,16 +138,26 @@ const NewPostForm = () => {
 
   const handleSubmit = e => {   
     e.preventDefault();
+    
+    const photo_id = uuid();
+    const { bucket_base, upload_base } = initInfo.payload;
+    
+    // put photo in AWS S3 bucket with lambda function
+    putNewPhoto(image, photo_id, upload_base);
+
+    const photo_url = `${bucket_base}/${photo_id}`;
     const payload = {
       parent_id: null,
-      title, 
-      image,
+      title,
       topText,
       bottomText,
       body,
+      photo_id,
+      photo_url,
       username: auth.authState.userInfo.username,
-      token: auth.authState.token
+      _token: auth.authState.token
     }
+    // commit post details to database
     dispatch(addNewPost(payload));    
   }
   

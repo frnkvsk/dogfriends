@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './features/dogfriends/Theme';
-
 import Navbar from './features/dogfriends/components/Navbar'; 
 import Home from './features/dogfriends/pages/Home';
 import NewPost from './features/dogfriends/pages/NewPost';
@@ -53,8 +52,8 @@ function App() {
             <Route exact path="/">
               <Home />        
             </Route>
-            <Route exact path="/new">
-              <NewPost/>        
+            <Route exact path="/new">              
+              <NewPost/>            
             </Route>
             <Route exact path="/profile">
               <Profile/>        
@@ -78,7 +77,6 @@ function App() {
         <Footer />       
       </BrowserRouter>
     </ThemeProvider>
-    
   );
 }
 

@@ -36,7 +36,7 @@ export const dogfriendsPostsSlice = createSlice({
     addNewPost: (state, action) => {
       // const {title, parent_id, photo_id, body, token} = action.payload;
       // console.log('dogfriendsPostsSlice action.payload',action.payload.image)
-      action.payload['_token'] = action.payload.token; 
+      // action.payload['_token'] = action.payload.token; 
       postPostNew(action.payload);
     },
     editPost: (state, action) => {

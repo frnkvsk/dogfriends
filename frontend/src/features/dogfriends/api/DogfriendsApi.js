@@ -21,6 +21,17 @@ const request = async (endpoint, paramsOrData = {}, verb = "get") => {
     throw Array.isArray(message) ? message : [message];
   }
 }
+// init 
+const getInitInfo = async () => {
+  const res = await request('initinfo');
+  console.log('DogfriendsApi getInitInfo res',res)
+  return res;
+}
+const postInitInfo = async (token) => {
+  const res = await request('initinfo', {_token: token}, 'post');
+  console.log('DogfriendsApi postInitInfo res',res)
+  return res;
+}
 // posts
 const getPosts = async () => {
   let res = await request('posts');
@@ -165,6 +176,8 @@ const patchUserInfo = async (userInfo) => {
 }
 
 export {
+  getInitInfo,
+  postInitInfo,
   getPosts,
   getPostById,
   postPostVote,
