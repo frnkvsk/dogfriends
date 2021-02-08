@@ -1,8 +1,6 @@
 import axios from 'axios';
 
 
-// const BASE_BUCKET_URL = initInfo.bucketInfo;
-
 const request = async (endpoint, paramsOrData = {}, verb = "get") => {    
   
   try {
@@ -29,9 +27,16 @@ const getPhotos = async () => {
 const getPhotoById = async (id) => {
   return await request(`posts/${id}`);
 }
-const putNewPhoto = async (image, photo_id, upload_base) => {
+const putNewPhoto = async (blob, photo_id, upload_base) => {
+  let fileReader = new FileReader();
+  let image;
+  fileReader.readAsArrayBuffer(blob);
+
+  fileReader.onload = function(event) {
+    image = fileReader.result;
+  };
   const body = {
-    "image": image,
+    "image": JSON.stringify(image),
     "imageName": photo_id
   }
   return await request(upload_base, body, 'put');

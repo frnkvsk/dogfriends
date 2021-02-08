@@ -24,11 +24,12 @@ CREATE TABLE users (
 CREATE TABLE posts (
   id uuid DEFAULT uuid_generate_v4 (), 
   title TEXT, 
-  body TEXT,  
-  parent_id uuid DEFAULT null,
-  photo_id uuid DEFAULT null,
+  body TEXT,
+  replies INT,
+  votes INT,  
   created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
+  photo_id uuid DEFAULT null,  
   PRIMARY KEY (id)
 );
 
@@ -37,6 +38,15 @@ CREATE TABLE votes (
   username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
   direction INT,
   PRIMARY KEY (post_id, username)
+);
+
+CREATE TABLE replies (
+  id uuid DEFAULT uuid_generate_v4 (),
+  parent_id uuid DEFAULT uuid_generate_v4 () REFERENCES posts ON DELETE CASCADE,
+  username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
+  body TEXT,
+  created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE photos (

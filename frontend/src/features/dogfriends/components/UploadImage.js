@@ -59,7 +59,7 @@ export function UploadImage({handleUploadImage, width, height}) {
             canvas.height
         );
         setNewImage(canvas.toDataURL());
-        handleUploadImage(canvas.toDataURL());
+        handleUploadImage(canvas, canvas.toDataURL("image/jpeg"));
     }
     image.src=event.target.result;
   };
@@ -92,22 +92,5 @@ export function UploadImage({handleUploadImage, width, height}) {
         type="file"
         onChange={(e) => setOrigImage(e.target.value)}/>
     </div>
-  )
-  // return (
-  //   <>
-  //     <table>
-  //       <tbody>
-  //         <tr>
-  //           <td>
-  //             <input 
-  //               className={newImage.length ? '' : classes.photoDrop}
-  //               id="upload-Image" 
-  //               type="file"
-  //               onChange={(e) => setOrigImage(e.target.value)}/>
-  //           </td>
-  //         </tr>
-  //       </tbody>
-  //     </table>
-  //   </>
-  // )
+  );
 }

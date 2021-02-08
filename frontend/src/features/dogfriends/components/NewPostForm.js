@@ -6,9 +6,9 @@ import {
   Button, 
   TextField,
 } from '@material-ui/core';
-import {
-  postInitInfoData
-} from '../dogfriendsInitSlice';
+// import {
+//   postInitInfoData
+// } from '../dogfriendsInitSlice';
 import { 
   addNewPost,
  } from '../dogfriendsPostsSlice';
@@ -19,6 +19,7 @@ import {UploadImage} from './UploadImage';
 import { v4 as uuid } from 'uuid';
 import { FillTextImage } from './FillTextImage';
 import { putNewPhoto } from '../api/DogfriendsPhotosApi';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,10 +63,12 @@ const NewPostForm = () => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
   
-  
+  const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://dv3rw90xic.execute-api.us-west-2.amazonaws.com/dev1/addnewimage';
+  const AWS_IMAGE_BUCKET_URL_BASE='https://dogfriends.s3-us-west-2.amazonaws.com';
+
   const dispatch = useDispatch();
-  let initInfo;// = dispatch(postInitInfoData({_token: auth.authState.token}));
-  console.log('NewPostForm initInfo',initInfo)
+  // let initInfo;// = dispatch(postInitInfoData({_token: auth.authState.token}));
+  // console.log('NewPostForm initInfo',initInfo)
   const history = useHistory();
   // console.log('NewPostForm auth',auth)
   const [title, setTitle] = useState('');
@@ -74,19 +77,24 @@ const NewPostForm = () => {
   const [body, setBody] = useState('');
   const [image, setImage] = useState(null);
   const [imageBase, setImageBase] = useState(null);
+  const [imageBlob, setImageBlob] = useState(null);
   const [color, setColor] = useState('#000000');
   const [titleValid, setTitleValid] = useState('');
   const [topTextValid, setTopTextValid] = useState('');
   const [bottomTextValid, setBottomTextValid] = useState('');
   const [bodyValid, setBodyValid] = useState('');
   // const [colorValid, setColorValid] = useState(true);
-  const loadInitInfo = async () => {
-    initInfo = await dispatch(postInitInfoData(auth.authState.token));
-  }
-  useEffect(() => {
-    loadInitInfo();
-    console.log('loadInitInfo()')
-  });
+  // const loadInitInfo = async () => {
+  //   initInfo = await dispatch(postInitInfoData(auth.authState.token));
+  // }
+  // useEffect(() => {
+  //   if(!initInfo) {
+  //     loadInitInfo();
+  //   }
+    
+  //   // console.log('loadInitInfo()')
+  //   // eslint-disable-next-line
+  // });
 
   // validate title
   useEffect(() => {
@@ -135,40 +143,74 @@ const NewPostForm = () => {
       setBodyValid('');
     }
   }, [body]);
-
+  const getBlob = async ({
+    canvas,
+    width,
+    height,
+    mime = 'image/jpeg',
+    quality = 0.8,
+  }) => {
+    return new Promise(resolve => {
+      const tmpCanvas = document.createElement('canvas');
+      tmpCanvas.width = width;
+      tmpCanvas.height = height;
+  
+      const ctx = tmpCanvas.getContext('2d');
+      ctx.drawImage(
+        canvas,
+        0,
+        0,
+        canvas.width,
+        canvas.height,
+        0,
+        0,
+        width,
+        height,
+      );
+  
+      tmpCanvas.toBlob(resolve, mime, quality);
+    });
+  }
   const handleSubmit = e => {   
     e.preventDefault();
-    
-    const photo_id = uuid();
-    const { bucket_base, upload_base } = initInfo.payload;
-    
-    // put photo in AWS S3 bucket with lambda function
-    putNewPhoto(image, photo_id, upload_base);
+    // console.log('NewPostForm initInfo',initInfo)
+    if(image) {
+      const photo_id = uuid();
+      
+      // const { bucket_base, upload_base } = initInfo.payload;
+      console.log('NewPostForm handleSubmit image',imageBlob)
 
-    const photo_url = `${bucket_base}/${photo_id}`;
-    const payload = {
-      parent_id: null,
-      title,
-      topText,
-      bottomText,
-      body,
-      photo_id,
-      photo_url,
-      username: auth.authState.userInfo.username,
-      _token: auth.authState.token
+      // put photo in AWS S3 bucket with lambda function
+      putNewPhoto(imageBlob, photo_id, AWS_UPLOAD_IMAGE_LAMBDA_URL);
+  
+      const photo_url = `${AWS_IMAGE_BUCKET_URL_BASE}/${photo_id}`;
+      const payload = {
+        title,
+        topText,
+        bottomText,
+        body,
+        photo_id,
+        photo_url,
+        username: auth.authState.userInfo.username,
+        _token: auth.authState.token
+      }
+      // commit post details to database
+      dispatch(addNewPost(payload));  
+      history.push('/');
     }
-    // commit post details to database
-    dispatch(addNewPost(payload));    
+      
   }
   
-  const handleUploadImage = (data) => {
-    setImage(data);
-    setImageBase(data);
+  const handleUploadImage = async (canvas, imageUrl) => {
+    setImage(imageUrl);
+    setImageBase(imageUrl);
+    const blob = await getBlob({canvas, width: 400, height: 400}); 
+    setImageBlob(blob);
   }
 
   return (
     <div className={classes.root}> 
-      <form className={classes.form} >   
+      <form method='post' className={classes.form} id='imageUploadForm'>   
 
         <TextField 
           className={classes.formItem}
@@ -184,7 +226,7 @@ const NewPostForm = () => {
           {/* <UploadPhoto token={auth.authState.token} setUrl={setUrl}/> */}
           <UploadImage handleUploadImage={handleUploadImage} width={400} height={400} />
           <div className={classes.imagePreview} >
-            <img src={image} alt='text on lmage'/>
+            <img id='uploadIMG' name='uploadImage' src={image} alt='text on lmage'/>
           </div>
           
           <div className={classes.formItem}>
@@ -226,7 +268,8 @@ const NewPostForm = () => {
             className={classes.formItem} 
             variant='contained' 
             color='primary' 
-            onClick={handleSubmit} >
+            onClick={handleSubmit} 
+            >
             Save
           </Button>
           <Button 

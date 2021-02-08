@@ -7,6 +7,10 @@ import {
   deletePost,
 } from './api/DogfriendsApi';
 
+/**
+ * GET array of posts
+ * returns { }
+ */
 export const getPostsData = createAsyncThunk(
   'getPosts',
   async () => {
@@ -34,13 +38,9 @@ export const dogfriendsPostsSlice = createSlice({
   },
   reducers: {
     addNewPost: (state, action) => {
-      // const {title, parent_id, photo_id, body, token} = action.payload;
-      // console.log('dogfriendsPostsSlice action.payload',action.payload.image)
-      // action.payload['_token'] = action.payload.token; 
       postPostNew(action.payload);
     },
     editPost: (state, action) => {
-      // const {id, title, body, username, token} = action.payload;
       putPostUpdate(action.payload);
     },
     removePost: (state, action) => {

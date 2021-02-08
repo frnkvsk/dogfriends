@@ -15,7 +15,7 @@ export const getInitInfoData = createAsyncThunk(
 export const postInitInfoData = createAsyncThunk(
   'postInitInfo',
   async (token) => {
-    console.log('dogfriendsInitSlice token',token)
+    // console.log('dogfriendsInitSlice token',token)
     const response = await postInitInfo(token);
     return response.data;
   }

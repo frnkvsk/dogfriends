@@ -13,9 +13,7 @@ const { ensureCorrectUser, authRequired } = require("../middleware/auth");
  *
  * Returns:
  *
- * => [ { id,
- *        title,
- *        votes,
+ * => [ { id
  *      },
  *      ...
  *    ]
@@ -25,20 +23,31 @@ const { ensureCorrectUser, authRequired } = require("../middleware/auth");
 router.get("/", async function (req, res, next) {
   try {
     const result = await db.query(
-      `SELECT p.id,
-              p.title,
-              COALESCE(SUM(v.direction),0) votes
-       FROM posts p
-       LEFT JOIN votes v ON p.id = v.post_id
-       GROUP BY p.id
-       ORDER BY p.id
-      `
+      `SELECT * FROM posts ORDER BY created_on`
     );
+    console.log('get posts ',result.rows)
     return res.json(result.rows);
   } catch (err) {
     return next(err);
   }
 });
+// router.get("/", async function (req, res, next) {
+//   try {
+//     const result = await db.query(
+//       `SELECT p.id,
+//               p.title,
+//               COALESCE(SUM(v.direction),0) votes
+//        FROM posts p
+//        LEFT JOIN votes v ON p.id = v.post_id
+//        GROUP BY p.id
+//        ORDER BY p.id
+//       `
+//     );
+//     return res.json(result.rows);
+//   } catch (err) {
+//     return next(err);
+//   }
+// });
 
 /** GET /[id]  get detail on post
  *
@@ -58,15 +67,9 @@ router.get("/", async function (req, res, next) {
 router.get("/:id", async function (req, res, next) {
   try {
     const result = await db.query(
-      `SELECT id,
-              title,
-              body,
-              created_on,
-              username,
-              parent_id,
-              photo_id
+      `SELECT *
        FROM posts
-       WHERE id=$1 OR parent_id=$1
+       WHERE id=$1
        ORDER BY created_on
       `, [req.params.id]      
     );
@@ -118,7 +121,7 @@ router.post("/:id/vote/:direction", authRequired, async function (req, res, next
 
 router.post("/", authRequired, async function (req, res, next) {
   try {
-    const {parent_id, title, body, photo_id, photo_url, username} = req.body;
+    const {title, body, photo_id, photo_url, username} = req.body;
     await db.query(
       `INSERT INTO photos (id, url) 
        VALUES ($1, $2) 
@@ -126,10 +129,10 @@ router.post("/", authRequired, async function (req, res, next) {
        [photo_id, photo_url]);
 
     await db.query(
-      `INSERT INTO posts (title, body, username, parent_id, photo_id) 
-        VALUES ($1, $2, $3, $4, $5) 
-        RETURNING id, title, body, username, parent_id, photo_id`,
-      [title, body, username, parent_id, photo_id]);
+      `INSERT INTO posts (title, body, username, photo_id) 
+        VALUES ($1, $2, $3, $4) 
+        RETURNING id, title, body, username, photo_id`,
+      [title, body, username, photo_id]);
     
   } catch (err) {
     return next(err);

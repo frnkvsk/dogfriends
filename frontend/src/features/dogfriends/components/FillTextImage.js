@@ -21,6 +21,6 @@ export function FillTextImage({imageBase, topText, bottomText, color}) {
     ctx.textAlign = 'center';
     ctx.fillText(topText, canvas.width/2, 40);
     ctx.fillText(bottomText, canvas.width/2, canvas.height-40);
-    return canvas.toDataURL();
+    return canvas.toDataURL("image/jpeg");
   }   
 }

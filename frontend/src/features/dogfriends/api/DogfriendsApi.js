@@ -24,12 +24,12 @@ const request = async (endpoint, paramsOrData = {}, verb = "get") => {
 // init 
 const getInitInfo = async () => {
   const res = await request('initinfo');
-  console.log('DogfriendsApi getInitInfo res',res)
+  // console.log('DogfriendsApi getInitInfo res',res)
   return res;
 }
 const postInitInfo = async (token) => {
   const res = await request('initinfo', {_token: token}, 'post');
-  console.log('DogfriendsApi postInitInfo res',res)
+  // console.log('DogfriendsApi postInitInfo res',res)
   return res;
 }
 // posts
@@ -44,7 +44,7 @@ const postPostVote = async (id, direction, token) => {
   return await request(`posts/${id}/vote/${direction}`, {_token: token}, 'post');
 }
 const postPostNew = async (data) => {
-  console.log('DogfriendApi postPostNew data',data.title)
+  // console.log('DogfriendApi postPostNew data',data.title)
   // const data = {
   //   title: title,
   //   parent_id: parent_id, 
@@ -94,44 +94,10 @@ const preSignupUsernameCheck = async ({username}) => {
   }
 }
 
-const signup = async (
-  // {username, 
-  //                     password, 
-  //                     first_name, 
-  //                     last_name, 
-  //                     email, 
-  //                     photo_id, 
-  //                     city, 
-  //                     state, 
-  //                     country}
-                      
-                      data) => {
-       console.log('DogfriendsApi signup',data)
-      //  username, 
-      //  password, 
-      //  first_name, 
-      //  last_name, 
-      //  email, 
-      //  photo_id, 
-      //  city, 
-      //  state, 
-      //  country)                 
+const signup = async (data) => {   
   try {
-    const res = await request('users/', 
-    // {
-    //   username: username, 
-    //   password: password, 
-    //   first_name: first_name, 
-    //   last_name: last_name, 
-    //   email: email,
-    //   photo_id: photo_id,
-    //   admin: false, 
-    //   city: city, 
-    //   state: state, 
-    //   country: country, 
-    //   }, 
-      data,'post');
-      console.log('DogfriendsApi signup res',res)
+    const res = await request('users/', data,'post');
+      // console.log('DogfriendsApi signup res',res)
     return res;    
   } catch (error) {
     console.error(error);
