@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { 
   Grid,
@@ -10,6 +10,12 @@ import {
 import ButtonArrow from '../components/ButtonArrow';
 import CardImageList from '../components/CardImageList';
 import { AuthContext } from '../context/AuthContext';
+// import temp from '../../../temp';
+// import byteText from URL('https://dogfriends.s3-us-west-2.amazonaws.com/ad437f7b-c0e9-40df-8ca2-0af2056f967b.txt');
+// import imgTemp = from URL('https://dogfriends.s3-us-west-2.amazonaws.com/905a85a5-9586-4db5-b5ef-f238c20fa87e.txt');
+// import {
+//   getPhotoById
+// } from '../api/DogfriendsPhotosApi';
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -30,12 +36,34 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '25px',
     // border: '1px solid red',
   }
-}))
+}));
+
+
 const Home = () => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
   const username = auth.authState.userInfo.username;
-  return (
+  const [urlImage, setUrlImage] = useState(null);
+  const getUrl = async () => {
+    const res = null// await getPhotoById();
+    if(res && res.data) {
+      setUrlImage(res.data)
+    }
+    
+    console.log('getUrl url',urlImage)
+  }
+  useEffect(() => {
+    if(!urlImage || !urlImage.startsWith('data:image/jpeg')) {
+      getUrl();
+    }
+    console.log('Home useEffect urlImage', urlImage)
+    // eslint-disable-next-line
+  }, []) 
+  
+  return (   
+    <>
+    <img src={urlImage} alt="a" />
+    {/* <div>{byteText}</div>  */}
     <Grid container direction='column'>
       <Grid sm item>
         <Grid container justify='center' alignItems='center' direction='row'>
@@ -69,6 +97,7 @@ const Home = () => {
         </Grid>        
       </Grid>
     </Grid>
+    </>
   );
 }
 

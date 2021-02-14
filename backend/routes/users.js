@@ -50,7 +50,7 @@ router.post("/:username", async function(req, res, next) {
  * POST / {userdata}  => {token: token} */
 
 router.post("/", async function(req, res, next) {
-  // console.log('users router.post req.body',req.body)
+  console.log('users router.post req.body',req.body)
   try {
     delete req.body._token;
     const validation = validate(req.body, userNewSchema);

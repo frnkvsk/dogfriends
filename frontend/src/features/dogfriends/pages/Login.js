@@ -129,7 +129,7 @@ export default function Login() {
     console.log('SignupForm userInfo',data)
     const resp = await dispatch(signUpSlice(data));
     console.log('Login handleSignup resp',resp)
-    if(resp.payload.token) {
+    if(await resp.payload.token) {
       auth.setAuthState({
         userInfo: data,
         token: resp.payload.token,

@@ -44,7 +44,7 @@ const postPostVote = async (id, direction, token) => {
   return await request(`posts/${id}/vote/${direction}`, {_token: token}, 'post');
 }
 const postPostNew = async (data) => {
-  // console.log('DogfriendApi postPostNew data',data.title)
+  console.log('DogfriendApi postPostNew data',data.title)
   // const data = {
   //   title: title,
   //   parent_id: parent_id, 
@@ -96,8 +96,8 @@ const preSignupUsernameCheck = async ({username}) => {
 
 const signup = async (data) => {   
   try {
-    const res = await request('users/', data,'post');
-      // console.log('DogfriendsApi signup res',res)
+    const res = await request('users/', data, 'post');
+      console.log('DogfriendsApi signup res',res)
     return res;    
   } catch (error) {
     console.error(error);

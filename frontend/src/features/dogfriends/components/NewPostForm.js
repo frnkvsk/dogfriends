@@ -63,8 +63,11 @@ const NewPostForm = () => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
   
-  const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://dv3rw90xic.execute-api.us-west-2.amazonaws.com/dev1/addnewimage';
-  const AWS_IMAGE_BUCKET_URL_BASE='https://dogfriends.s3-us-west-2.amazonaws.com';
+  const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://3ynkxwkjf5.execute-api.us-west-2.amazonaws.com/dev/upload';
+  // const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://3ynkxwkjf5.execute-api.us-west-2.amazonaws.com/dev/uploadimage';
+  // const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://ptzw7zhach.execute-api.us-west-2.amazonaws.com/dev1/putimage';
+  // const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://dv3rw90xic.execute-api.us-west-2.amazonaws.com/dev1/addnewimage';
+  
 
   const dispatch = useDispatch();
   // let initInfo;// = dispatch(postInitInfoData({_token: auth.authState.token}));
@@ -77,7 +80,7 @@ const NewPostForm = () => {
   const [body, setBody] = useState('');
   const [image, setImage] = useState(null);
   const [imageBase, setImageBase] = useState(null);
-  const [imageBlob, setImageBlob] = useState(null);
+  // const [imageBlob, setImageBlob] = useState(null);
   const [color, setColor] = useState('#000000');
   const [titleValid, setTitleValid] = useState('');
   const [topTextValid, setTopTextValid] = useState('');
@@ -143,54 +146,56 @@ const NewPostForm = () => {
       setBodyValid('');
     }
   }, [body]);
-  const getBlob = async ({
-    canvas,
-    width,
-    height,
-    mime = 'image/jpeg',
-    quality = 0.8,
-  }) => {
-    return new Promise(resolve => {
-      const tmpCanvas = document.createElement('canvas');
-      tmpCanvas.width = width;
-      tmpCanvas.height = height;
+  // const getBlob = async ({
+  //   canvas,
+  //   width,
+  //   height,
+  //   mime = 'image/jpeg',
+  //   quality = 0.8,
+  // }) => {
+  //   return new Promise(resolve => {
+  //     const tmpCanvas = document.createElement('canvas');
+  //     tmpCanvas.width = width;
+  //     tmpCanvas.height = height;
   
-      const ctx = tmpCanvas.getContext('2d');
-      ctx.drawImage(
-        canvas,
-        0,
-        0,
-        canvas.width,
-        canvas.height,
-        0,
-        0,
-        width,
-        height,
-      );
+  //     const ctx = tmpCanvas.getContext('2d');
+  //     ctx.drawImage(
+  //       canvas,
+  //       0,
+  //       0,
+  //       canvas.width,
+  //       canvas.height,
+  //       0,
+  //       0,
+  //       width,
+  //       height,
+  //     );
   
-      tmpCanvas.toBlob(resolve, mime, quality);
-    });
-  }
+  //     tmpCanvas.toBlob(resolve, mime, quality);
+  //   });
+  // }
   const handleSubmit = e => {   
     e.preventDefault();
     // console.log('NewPostForm initInfo',initInfo)
     if(image) {
-      const photo_id = uuid();
+      const photo_id = 'lg-' + uuid();
       
       // const { bucket_base, upload_base } = initInfo.payload;
-      console.log('NewPostForm handleSubmit image',imageBlob)
+      // console.log('NewPostForm handleSubmit image',imageBlob)
 
       // put photo in AWS S3 bucket with lambda function
-      putNewPhoto(imageBlob, photo_id, AWS_UPLOAD_IMAGE_LAMBDA_URL);
+      // post photo to db photos table
+      putNewPhoto(image, photo_id, AWS_UPLOAD_IMAGE_LAMBDA_URL, auth.authState.token);
   
-      const photo_url = `${AWS_IMAGE_BUCKET_URL_BASE}/${photo_id}`;
+      // const photo_url = `${AWS_IMAGE_BUCKET_URL_BASE}/${photo_id}`;
       const payload = {
+        id: uuid(),
         title,
-        topText,
-        bottomText,
         body,
         photo_id,
-        photo_url,
+        votes: 0,
+        replies: 0,
+        // photo_url,
         username: auth.authState.userInfo.username,
         _token: auth.authState.token
       }
@@ -204,8 +209,8 @@ const NewPostForm = () => {
   const handleUploadImage = async (canvas, imageUrl) => {
     setImage(imageUrl);
     setImageBase(imageUrl);
-    const blob = await getBlob({canvas, width: 400, height: 400}); 
-    setImageBlob(blob);
+    // const blob = await getBlob({canvas, width: 400, height: 400}); 
+    // setImageBlob(blob);
   }
 
   return (

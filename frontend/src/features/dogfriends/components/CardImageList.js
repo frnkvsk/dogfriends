@@ -27,6 +27,7 @@ const CardImageList = ({imageCount}) => {
   return (
     // <div style={{display: 'flex', alignContent: 'center', justifyContent: 'center', width: '100%', marginBottom: '80px'}}>
     <>
+    {/* <CardImageDisplay src={'https://dogfriends.s3-us-west-2.amazonaws.com/ad437f7b-c0e9-40df-8ca2-0af2056f967b.txt'} title="dog"/> */}
     {imagesList.map(e => (
       <FadeInUpAnimation key={uuid()}>
         <CardImageDisplay src={e.src} title={e.title} body={e.body} />

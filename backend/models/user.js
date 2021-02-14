@@ -114,7 +114,7 @@ class User {
     //       [data.username, id]
     //   );
     // }
-
+    console.log('----user model',result)
     return result.rows[0];
   }
 

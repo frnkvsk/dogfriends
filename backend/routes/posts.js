@@ -121,43 +121,16 @@ router.post("/:id/vote/:direction", authRequired, async function (req, res, next
 
 router.post("/", authRequired, async function (req, res, next) {
   try {
-    const {title, body, photo_id, photo_url, username} = req.body;
-    await db.query(
-      `INSERT INTO photos (id, url) 
-       VALUES ($1, $2) 
-       RETURNING id, url`,
-       [photo_id, photo_url]);
+    const {title, body, photo_id, username} = req.body;
 
     await db.query(
       `INSERT INTO posts (title, body, username, photo_id) 
-        VALUES ($1, $2, $3, $4) 
-        RETURNING id, title, body, username, photo_id`,
+        VALUES ($1, $2, $3, $4)`,
       [title, body, username, photo_id]);
     
   } catch (err) {
     return next(err);
   }
-//   try {
-//     // const newId = uuid();
-//     console.log('router.post(/ req.body', req.body._token)
-//     const {title, body, parent_id, photo_id} = req.body;
-//     const username = req.username;
-    
-//     const result = await db.query(
-//       `INSERT INTO posts (title, body, username, parent_id, photo_id) 
-//         VALUES ($1, $2, $3, $4, $5) 
-//         RETURNING id, title, body, username, parent_id, photo_id`,
-//       [title, body, username, parent_id, photo_id]);
-
-//     if(photo_id && photo_id.length) {
-//       await db.query(`INSERT INTO photos (photo_id, username) 
-//       VALUES ($1, $2)`,
-//       [photo_id, username]);
-//     }    
-//     return res.status(201).json(result.rows[0]);
-//   } catch (err) {
-//     return next(err);
-//   }
 });
 
 
