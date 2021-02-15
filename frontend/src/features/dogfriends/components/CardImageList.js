@@ -1,41 +1,71 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
 import fadeInUp from 'react-animations/lib/fade-in-up';
 import CardImageDisplay from './CardImageDisplay';
 import { v4 as uuid } from 'uuid';
-import {getPostsData} from '../dogfriendsPostsSlice';
-// in development we are using fake data so we don't make too many calls to the server
-import imagesList from '../assets/testImageList';
-import { useDispatch } from 'react-redux';
+import {
+  getPostsData,
+  selectPosts
+} from '../dogfriendsPostsSlice';
+import { makeStyles } from '@material-ui/core/styles';
+
+
+// import {ReactCSSTransitionGroup} from 'react-transition-group'; 
 
 const fadeInUpAnimation = keyframes`${fadeInUp}`;
 const FadeInUpAnimation = styled.div`
   animation: 3s ${fadeInUpAnimation};
 `;
 
+const AWS_IMAGE_BUCKET_URL_BASE='https://dogfriends.s3-us-west-2.amazonaws.com/';
+
+const useStyles = makeStyles({
+  root: {
+    maxWidth: '250px',
+    padding: '15px',
+    margin: '15px',
+  },
+  fadeinContainer: {
+    display: 'flex',
+    border: '2px solid #fafafa',
+    padding: '40px',
+  },
+});
+
 const CardImageList = ({imageCount}) => {
+  const classes = useStyles();
   const dispatch = useDispatch();
-  let postList;
-  const getPosts = async () => {
-    postList = await dispatch(getPostsData());
-  }
+  const [postList, setPostList] = useState([]);
+  const selectList = useSelector(selectPosts);
+  
   useEffect(() => {
-    getPosts();
+    if(selectList.status !== 'fulfilled' && !postList.length) {
+      dispatch(getPostsData());
+    } else if(selectList.status === 'fulfilled') {
+      setPostList(
+        selectList.data.map(e => (
+          <div key={uuid()}>
+            <CardImageDisplay 
+              src={`${AWS_IMAGE_BUCKET_URL_BASE}${e.photo_id}.txt`} 
+              title={e.title} body={e.body} />
+          </div>
+      )));
+    }
     console.log('CardImageList useEffect getPosts()',postList)
-  });
-  console.log('CardImageList postList',postList);
-  return (
-    // <div style={{display: 'flex', alignContent: 'center', justifyContent: 'center', width: '100%', marginBottom: '80px'}}>
-    <>
-    {/* <CardImageDisplay src={'https://dogfriends.s3-us-west-2.amazonaws.com/ad437f7b-c0e9-40df-8ca2-0af2056f967b.txt'} title="dog"/> */}
-    {imagesList.map(e => (
-      <FadeInUpAnimation key={uuid()}>
-        <CardImageDisplay src={e.src} title={e.title} body={e.body} />
-      </FadeInUpAnimation>      
-    ))}
-    <div style={{marginBottom: '20px'}} />
+    console.log('CardImageList useEffect selectList',selectList)
+    // eslint-disable-next-line
+  },[selectList.status]);
+  
+  return (    
+    <>   
+      <FadeInUpAnimation className={classes.fadeinContainer}>
+        {postList}
+      </FadeInUpAnimation>
+      <div style={{marginBottom: '20px'}} />
     </>
-    )
+  )
 }
 
-export default CardImageList
+export default CardImageList;

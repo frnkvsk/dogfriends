@@ -5,7 +5,7 @@ const BASE_URL = 'http://localhost:5000/api/';
 
 const request = async (endpoint, paramsOrData = {}, verb = "get") => {  
   
-  console.log("API Call:", endpoint, paramsOrData, verb, BASE_URL);
+  console.debug("API Call:", endpoint, paramsOrData, verb, BASE_URL);
   try {
     const res = await axios({
       method: verb,
@@ -35,6 +35,7 @@ const postInitInfo = async (token) => {
 // posts
 const getPosts = async () => {
   let res = await request('posts');
+  console.log('DogfriendApi getPosts res',res)
   return res;
 }
 const getPostById = async (id) => {
@@ -44,18 +45,9 @@ const postPostVote = async (id, direction, token) => {
   return await request(`posts/${id}/vote/${direction}`, {_token: token}, 'post');
 }
 const postPostNew = async (data) => {
-  console.log('DogfriendApi postPostNew data',data.title)
-  // const data = {
-  //   title: title,
-  //   parent_id: parent_id, 
-  //   photo_id: photo_id, 
-  //   body: body, 
-  //   _token: token   
-  // }
   return await request('posts/', data, 'post');
 }
-const putPostUpdate = async (id, title, body, username, token) => {
-  
+const putPostUpdate = async (id, title, body, username, token) => {  
   const data = {
     title: title,
     body: body,  
@@ -126,14 +118,6 @@ const getUserInfo = async (payload) => {
   }   
 }
 const patchUserInfo = async (userInfo) => {
-  // console.log('DogfriendsApi patchUserInfo userInfo',userInfo)
-  // userInfo._token = token;
-  // let photo_id = null;
-  // if(userInfo.photo_url) {
-  //   photo_id = await postPhotoNew(token, userInfo.photo_url, userInfo.username);
-  // }
-  // delete userInfo.photo_url;
-  // userInfo.photo_id = photo_id.data.id;
   try {
     return await request(`users/${userInfo.username}`, userInfo, 'patch');
   } catch (error) {
