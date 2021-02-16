@@ -101,7 +101,9 @@ export default function Footer(props) {
       '/profile': {name: 'Profile', index: 4},
       '/new': {name: 'New', index: 5}    
     }
-    setValue(listItems[location.pathname].index);
+    if(!location.pathname.startsWith('/post')) {
+      setValue(listItems[location.pathname].index);
+    }    
   }, [location.pathname]);
 
   const handleClick = async e => {

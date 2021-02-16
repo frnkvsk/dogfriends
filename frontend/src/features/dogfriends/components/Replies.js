@@ -21,27 +21,9 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     width: '100%',
   },
-  labelTop: {
-    position: 'relative',
-    width: '100%',
-    top: '80px',
-    fontSize: '26px',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    zIndex: 2,
-  },
-  labelBottom: {
-    position: 'relative',
-    width: '100%',
-    bottom: '80px',
-    fontSize: '26px',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    zIndex: 2,
-  },
 }));
 
-export default function PostPhoto({photo}) {
+export default function Replies() {
   const classes = useStyles();
   
   // console.log('PostPhoto photo',photo)

@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -12,46 +13,49 @@ import {getPhotoBySrc} from '../api/DogfriendsPhotosApi';
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: '250px',
+    maxWidth: '400px',
     padding: '15px',
     margin: '15px',
   },
   media: {
-    maxWidth: '250px',
-    width: '18em',
-    height: '18em'
+    width: '400px',
+    height: '400px',
+    border: '1px solid red',
     // height: 140,
   },
 });
 
 
-export default function CardImageDisplay({src, title, body}) {
+export default function PostSourceDisplay({post}) {
   const classes = useStyles();
-  // console.log('CardImageDisplay src',src)
-  // console.log('CardImageDisplay title',title)
-  // console.log('CardImageDisplay body',body)
-  const [urlImage, setUrlImage] = useState(src);
+  const {
+    body, created_on, id, photo_id, replies, title, username, votes, base_url 
+  } = post;
+  const src = `${base_url}/${photo_id}.txt`;
+  // console.log('PostSourceDisplay title',title)
+  // console.log('PostSourceDisplay body',body, created_on, id, photo_id, replies, title, username, votes, base_url)
+  const [urlImage, setUrlImage] = useState(null);
 
   // useEffect(() => {
   //   setUrlImage(src);
-  //   console.log('CardImageDisplay useEffect setUrlImage',src)
+  //   console.log('PostSourceDisplay useEffect setUrlImage',src)
   //   // eslint-disable-next-line
   // }, [src]);
 
   const getUrl = async () => {
-    console.log('CardImageDisplay src ',src)
+    // console.log('PostSourceDisplay src ',src)
     const res = await getPhotoBySrc(src);
     if(res && res.data) {
       setUrlImage(res.data);
     }
     
-    console.log('getUrl url',urlImage)
+    // console.log('PostSourceDisplay getUrl url',urlImage)
   }
   useEffect(() => {
     if(!urlImage || !urlImage.startsWith('data:image/jpeg')) {
       getUrl();
     }
-    console.log('Home useEffect urlImage', urlImage)
+    console.log('PostSourceDisplay useEffect urlImage')
     // eslint-disable-next-line
   }, []) 
 
@@ -66,6 +70,9 @@ export default function CardImageDisplay({src, title, body}) {
         <CardContent>
           <Typography gutterBottom variant="h5">
             {title}
+          </Typography>
+          <Typography gutterBottom variant="subtitle1">
+            By {username}
           </Typography>
         </CardContent>
       </CardActionArea>

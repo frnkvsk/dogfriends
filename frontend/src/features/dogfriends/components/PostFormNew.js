@@ -6,9 +6,7 @@ import {
   Button, 
   TextField,
 } from '@material-ui/core';
-// import {
-//   postInitInfoData
-// } from '../dogfriendsInitSlice';
+
 import { 
   addNewPost,
  } from '../dogfriendsPostsSlice';
@@ -56,24 +54,19 @@ const useStyles = makeStyles((theme) => ({
   }
 
 }));
-// const SetImageText = (image, topText, bottomText, color) => {
-//   return useDrawImageText(image, topText, bottomText, color);
-// }
-const NewPostForm = () => {
+
+const PostFormNew = () => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
   
   const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://3ynkxwkjf5.execute-api.us-west-2.amazonaws.com/dev/upload';
-  // const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://3ynkxwkjf5.execute-api.us-west-2.amazonaws.com/dev/uploadimage';
-  // const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://ptzw7zhach.execute-api.us-west-2.amazonaws.com/dev1/putimage';
-  // const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://dv3rw90xic.execute-api.us-west-2.amazonaws.com/dev1/addnewimage';
   
 
   const dispatch = useDispatch();
   // let initInfo;// = dispatch(postInitInfoData({_token: auth.authState.token}));
-  // console.log('NewPostForm initInfo',initInfo)
+  // console.log('PostFormNew initInfo',initInfo)
   const history = useHistory();
-  // console.log('NewPostForm auth',auth)
+  // console.log('PostFormNew auth',auth)
   const [title, setTitle] = useState('');
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
@@ -86,18 +79,6 @@ const NewPostForm = () => {
   const [topTextValid, setTopTextValid] = useState('');
   const [bottomTextValid, setBottomTextValid] = useState('');
   const [bodyValid, setBodyValid] = useState('');
-  // const [colorValid, setColorValid] = useState(true);
-  // const loadInitInfo = async () => {
-  //   initInfo = await dispatch(postInitInfoData(auth.authState.token));
-  // }
-  // useEffect(() => {
-  //   if(!initInfo) {
-  //     loadInitInfo();
-  //   }
-    
-  //   // console.log('loadInitInfo()')
-  //   // eslint-disable-next-line
-  // });
 
   // validate title
   useEffect(() => {
@@ -176,12 +157,12 @@ const NewPostForm = () => {
   // }
   const handleSubmit = e => {   
     e.preventDefault();
-    // console.log('NewPostForm initInfo',initInfo)
+    // console.log('PostFormNew initInfo',initInfo)
     if(image) {
       const photo_id = 'lg-' + uuid();
       
       // const { bucket_base, upload_base } = initInfo.payload;
-      // console.log('NewPostForm handleSubmit image',imageBlob)
+      // console.log('PostFormNew handleSubmit image',imageBlob)
 
       // put photo in AWS S3 bucket with lambda function
       // post photo to db photos table
@@ -227,8 +208,6 @@ const NewPostForm = () => {
           helperText={titleValid.length ? titleValid : ''}
           onChange={e => setTitle(e.target.value)} />
         <div className={classes.control}>
-          {/* <NewPhotoForm handleUploadImage={handleUploadImage} /> */}
-          {/* <UploadPhoto token={auth.authState.token} setUrl={setUrl}/> */}
           <UploadImage handleUploadImage={handleUploadImage} width={400} height={400} />
           <div className={classes.imagePreview} >
             <img id='uploadIMG' name='uploadImage' src={image} alt='text on lmage'/>
@@ -291,4 +270,4 @@ const NewPostForm = () => {
   );
 }
 
-export default NewPostForm;
+export default PostFormNew;

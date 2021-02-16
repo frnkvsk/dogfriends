@@ -44,8 +44,8 @@ export function UploadImage({handleUploadImage, width, height}) {
             height = image.height;
           } 
         }
-        let canvas=document.createElement("canvas");
-        let context=canvas.getContext("2d");
+        let canvas=document.createElement('canvas');
+        let context=canvas.getContext('2d');
         canvas.width=width;
         canvas.height=height;
         context.drawImage(image,
@@ -59,24 +59,18 @@ export function UploadImage({handleUploadImage, width, height}) {
             canvas.height
         );
         setNewImage(canvas.toDataURL());
-        handleUploadImage(canvas, canvas.toDataURL("image/jpeg"));
+        handleUploadImage(canvas, canvas.toDataURL('image/jpeg', 0.8));
     }
     image.src=event.target.result;
   };
 
   useEffect(() => {
     const filterTypes = new RegExp('image/gif|image/jpeg|image/jpg|image/png|webp', 'i');
-    const uploadImage = document.getElementById("upload-Image");
+        
+    const uploadFile = document.getElementById('uploadImage').files[0];
     
-    //check and retuns the length of uploded file.
-    if (uploadImage.files.length === 0) { 
-      return; 
-    }
-    
-    //Is Used for validate a valid file.
-    const uploadFile = document.getElementById("upload-Image").files[0];
     if (!filterTypes.test(uploadFile.type)) {
-      alert("Please select a valid image."); 
+      alert('Please select a valid image.'); 
       return;
     }
     
@@ -88,8 +82,8 @@ export function UploadImage({handleUploadImage, width, height}) {
     <div className={classes.form}>
       <input 
         className={newImage.length ? '' : classes.photoDrop}
-        id="upload-Image" 
-        type="file"
+        id='uploadImage' 
+        type='file'
         onChange={(e) => setOrigImage(e.target.value)}/>
     </div>
   );

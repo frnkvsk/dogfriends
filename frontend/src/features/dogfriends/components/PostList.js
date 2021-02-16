@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import fadeInUp from 'react-animations/lib/fade-in-up';
-import CardImageDisplay from './CardImageDisplay';
+import PostImageDisplay from './PostImageDisplay';
 import { v4 as uuid } from 'uuid';
 import {
   getPostsData,
@@ -19,7 +20,7 @@ const FadeInUpAnimation = styled.div`
   animation: 3s ${fadeInUpAnimation};
 `;
 
-const AWS_IMAGE_BUCKET_URL_BASE='https://dogfriends.s3-us-west-2.amazonaws.com/';
+// const AWS_IMAGE_BUCKET_URL_BASE='https://dogfriends.s3-us-west-2.amazonaws.com/';
 
 const useStyles = makeStyles({
   root: {
@@ -29,43 +30,51 @@ const useStyles = makeStyles({
   },
   fadeinContainer: {
     display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
     border: '2px solid #fafafa',
     padding: '40px',
   },
 });
 
-const CardImageList = ({imageCount}) => {
+const PostList = ({imageCount}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [postList, setPostList] = useState([]);
+  const history = useHistory();
+  const [posts, setPosts] = useState([]);
   const selectList = useSelector(selectPosts);
   
   useEffect(() => {
-    if(selectList.status !== 'fulfilled' && !postList.length) {
+    if(selectList.status !== 'fulfilled' && !posts.length) {
       dispatch(getPostsData());
     } else if(selectList.status === 'fulfilled') {
-      setPostList(
+      setPosts(
         selectList.data.map(e => (
-          <div key={uuid()}>
-            <CardImageDisplay 
-              src={`${AWS_IMAGE_BUCKET_URL_BASE}${e.photo_id}.txt`} 
-              title={e.title} body={e.body} />
+          <div 
+            key={uuid()}
+            onClick={() => history.push(`/post/${e.id}`)} >
+            <PostImageDisplay 
+              src={`${e.base_url}/${e.photo_id}.txt`} 
+              title={e.title} 
+              username={e.username} 
+              />
           </div>
       )));
     }
-    console.log('CardImageList useEffect getPosts()',postList)
-    console.log('CardImageList useEffect selectList',selectList)
+    console.log('PostList useEffect getPosts()',posts)
+    console.log('PostList useEffect selectList',selectList)
     // eslint-disable-next-line
   },[selectList.status]);
   
   return (    
     <>   
       <FadeInUpAnimation className={classes.fadeinContainer}>
-        {postList}
+        {posts}
       </FadeInUpAnimation>
       <div style={{marginBottom: '20px'}} />
     </>
   )
 }
 
-export default CardImageList;
+export default PostList;

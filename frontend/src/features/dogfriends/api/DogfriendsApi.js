@@ -77,9 +77,7 @@ const login = async (data) => {
 
 const preSignupUsernameCheck = async ({username}) => {
   try {
-    // console.log('DogfriendsApi preSignupUsernameCheck username',username)
     const res = await request(`users/${username}`, {}, 'post');
-    // console.log('--DogfriendsApi preSignupUsernameCheck res',res.data)
     return res.data;
   } catch (error) {
     console.error(error);

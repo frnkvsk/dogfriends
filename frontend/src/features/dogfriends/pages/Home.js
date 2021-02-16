@@ -8,7 +8,7 @@ import {
  } from '@material-ui/core';
  
 import ButtonArrow from '../components/ButtonArrow';
-import CardImageList from '../components/CardImageList';
+import PostList from '../components/PostList';
 import { AuthContext } from '../context/AuthContext';
 // import temp from '../../../temp';
 // import byteText from URL('https://dogfriends.s3-us-west-2.amazonaws.com/ad437f7b-c0e9-40df-8ca2-0af2056f967b.txt');
@@ -47,8 +47,6 @@ const Home = () => {
   
   return (   
     <>
-    {/* <img src={urlImage} alt="a" /> */}
-    {/* <div>{byteText}</div>  */}
     <Grid container direction='column'>
       <Grid sm item>
         <Grid container justify='center' alignItems='center' direction='row'>
@@ -78,7 +76,7 @@ const Home = () => {
       </Grid>
       <Grid sm item>
         <Grid container className={classes.cardImageList}>
-          <CardImageList imageCount={10} />
+          <PostList imageCount={10} />
         </Grid>        
       </Grid>
     </Grid>

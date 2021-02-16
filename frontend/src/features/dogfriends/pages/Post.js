@@ -1,19 +1,20 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import { makeStyles, Tooltip } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import EditIcon from '@material-ui/icons/Edit';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+// import { useHistory } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core';
+// import CloseIcon from '@material-ui/icons/Close';
+// import EditIcon from '@material-ui/icons/Edit';
 
-import { useSelector, useDispatch } from 'react-redux';
+// import { useSelector, useDispatch } from 'react-redux';
+import PostSourceDisplay from '../components/PostSourceDisplay';
 import { 
-  getPostDataById,
-  removePost, 
-  selectPosts, 
   getPostsData,
+  selectPosts, 
 } from '../dogfriendsPostsSlice';
-import NewPostForm from './../components/NewPostForm';
-import BlogComments from '../components/BlogComments';
-import { AuthContext } from '../context/AuthContext';
+
+// import { AuthContext } from '../context/AuthContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {    
@@ -25,111 +26,32 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid blue', 
     // border: '1px solid #e0e0e0', 
   },
-  titleWrapper: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    fontSize: '32px',
-    fontWeight: '500',
-    marginBottom: '0px',
-  },
-  title: {
-    fontSize: '56px',
-  },
-  closeIcon: {
-    color: 'red',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    marginRight: '10px',
-  },
-  editIcon: {
-    color: '#2196f3',
-    cursor: 'pointer',
-    marginRight: '10px',
-  },
-  hr: {
-    width: '100%',
-    border: '1px solid #9e9e9e',
-  },
-  button: {
-    width: '80px',
-  },
-  description: {
-    fontSize: '22px',
-    fontStyle: 'italic',
-    margin: '12px 0 5px 0',
-    
-  },
-  body: {
-    fontSize: '22px',
-
-    margin: '25px 0 5px 0',
-  },
   
 }));
 
 export default function Post() {
   const classes = useStyles();
-  const auth = useContext(AuthContext);
-  const history = useHistory();
-  const [state, setState] = useState('display');
+  const { id } = useParams();
+  const selectList = useSelector(selectPosts);
   const dispatch = useDispatch();
-  const postList = useSelector(selectPosts);
-  const {id} = useParams();
-  const rootRef = React.useRef(null);
-
+  const [post, setPost] = useState(null)
+  console.log('id',id)
+  // const auth = useContext(AuthContext);
+  // const history = useHistory();
   useEffect(() => {
-    dispatch(getPostDataById(id));
-  }, [dispatch, id]);
-  
-  const handleEdit = () => {
-    setState('edit');
-  }
-
-  const handleDelete = () => {
-    dispatch(removePost({
-      id: id, 
-      username: auth.authState.userInfo.username,
-      token: auth.authState.token
-    }));
-    setTimeout(() => {
+    if(selectList.status !== 'fulfilled' && !post) {
       dispatch(getPostsData());
-    }, 100);
-    history.push('/');
-  }
+    } else if(!post) {
+      setPost( selectList.data.find(e => e.id === id) );
+    }
+    console.log('Post useEffect post',post)
+  }, [selectList.status, selectList.data, post, dispatch, id]);
+
+  
 
   return (
     <div className={classes.root}>
-      <h1>POST.JS POST.JS</h1>
-      {state === 'display' ? (
-        postList && postList.data && (
-          <>
-            <div className={classes.titleWrapper}>
-              <div className={classes.title}>{postList.data.title}</div>
-              <div className={classes.iconWrapper} >
-                {postList.data.username === auth.authState.userInfo.username &&
-                  <>
-                  <Tooltip title="Edit Post" ref={() => rootRef.current}>
-                    <EditIcon className={classes.editIcon} onClick={handleEdit}/>
-                  </Tooltip>
-                  <Tooltip title="Delete Post" ref={() => rootRef.current}>
-                    <CloseIcon className={classes.closeIcon} onClick={handleDelete}/>
-                  </Tooltip> 
-                  </> 
-                }
-                                
-              </div>
-            </div>          
-            <div className={classes.description}>{postList.data.description}</div>
-            <div className={classes.body}>{postList.data.body}</div>
-            <hr className={classes.hr}/>
-            <div className={classes.titleWrapper}>Comments</div>
-            {/* <BlogComments id={id}/> */}
-          </>
-      )) : (
-        <NewPostForm data={postList.data}/>
-      )}      
+      {post && <PostSourceDisplay post={post} />}
     </div>
   );
 }

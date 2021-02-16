@@ -7,7 +7,7 @@ import Navbar from './features/dogfriends/components/Navbar';
 import Home from './features/dogfriends/pages/Home';
 import NewPost from './features/dogfriends/pages/NewPost';
 import Login from './features/dogfriends/pages/Login';
-import PostList from './features/dogfriends/pages/PostList';
+import Post from './features/dogfriends/pages/Post';
 import Profile from './features/dogfriends/pages/Profile';
 import About from './features/dogfriends/pages/About';
 import Contact from './features/dogfriends/pages/Contact';
@@ -67,8 +67,8 @@ function App() {
             <Route exact path="/login">
               <Login/>        
             </Route>           
-            <Route exact path="/:id">
-              <PostList/>        
+            <Route path="/post/:id">
+              <Post />        
             </Route>                 
                               
           </Switch> 
