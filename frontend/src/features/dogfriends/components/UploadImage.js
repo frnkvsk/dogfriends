@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import photo_drop_zone from '../assets/photo_drop_zone.jpg';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
     height: '370px',
     border: '2px dotted salmon',
     cursor: 'pointer',    
+  },
+  errorMsg: {
+    color: 'red',
   }
     
 }));
@@ -23,8 +26,8 @@ const fileReader = new FileReader();
 
 export function UploadImage({handleUploadImage, width, height}) {
   const classes = useStyles();
-  const [origImage, setOrigImage] = useState('');
   const [newImage, setNewImage] = useState('');
+  const [fileUploadError, setFileUploadError] = useState('');
 
   fileReader.onload = function (event) {  
     let image = new Image();
@@ -64,27 +67,31 @@ export function UploadImage({handleUploadImage, width, height}) {
     image.src=event.target.result;
   };
 
-  useEffect(() => {
+  const loadFile = () => {
+    setFileUploadError('');
     const filterTypes = new RegExp('image/gif|image/jpeg|image/jpg|image/png|webp', 'i');
-        
+    if(!document.getElementById('uploadImage').files.length) {
+      setFileUploadError('Error loading file.');
+      return;
+    } 
     const uploadFile = document.getElementById('uploadImage').files[0];
     
     if (!filterTypes.test(uploadFile.type)) {
-      alert('Please select a valid image.'); 
+      setFileUploadError('Incorrect file type. File types include gif, jpeg, jpg, png.');
       return;
-    }
-    
+    }    
     fileReader.readAsDataURL(uploadFile);
     // eslint-disable-next-line
-  }, [fileReader, origImage]);
+  }
   
   return (
     <div className={classes.form}>
+      {fileUploadError.length ? <p className={classes.errorMsg}>{fileUploadError}</p> : ''}
       <input 
         className={newImage.length ? '' : classes.photoDrop}
         id='uploadImage' 
         type='file'
-        onChange={(e) => setOrigImage(e.target.value)}/>
+        onChange={loadFile}/>
     </div>
   );
 }
