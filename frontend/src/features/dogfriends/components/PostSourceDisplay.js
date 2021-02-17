@@ -3,27 +3,36 @@ import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
+// import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import {getPhotoBySrc} from '../api/DogfriendsPhotosApi';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: '400px',
     padding: '15px',
     margin: '15px',
   },
   media: {
-    width: '400px',
+    
     height: '400px',
     border: '1px solid red',
-    // height: 140,
+    minWidth: '400px',
+    width: '400px',
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+      minWidth: '300px',
+    }, 
+    // [theme.breakpoints.down('sm')]: {
+    //   width: '100%',
+    //   minWidth: '300px',
+    // },
   },
-});
+}));
 
 
 export default function PostSourceDisplay({post}) {
@@ -68,19 +77,17 @@ export default function PostSourceDisplay({post}) {
           title={title}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5">
+          <Typography gutterBottom variant="h6">
             {title}
           </Typography>
           <Typography gutterBottom variant="subtitle1">
             By {username}
           </Typography>
+          <Typography gutterBottom variant="subtitle2">
+            {body}
+          </Typography>
         </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button size="small" color="primary">
-          Explore Post
-        </Button>
-      </CardActions>
+      </CardActionArea>      
     </Card>
   );  
 }

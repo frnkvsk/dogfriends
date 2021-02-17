@@ -13,19 +13,46 @@ import {
   getPostsData,
   selectPosts, 
 } from '../dogfriendsPostsSlice';
+import RepliesList from '../components/RepliesList';
 
 // import { AuthContext } from '../context/AuthContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {    
     display: 'flex',
-    flexDirection: 'column',
-    width: '100%', 
+    alignItems: 'flex-start',
+    
+    // width: '100%', 
     fontSize: '22px',
     padding: '7px',
-    border: '1px solid blue', 
-    // border: '1px solid #e0e0e0', 
+    
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      width: '85%',
+      border: '1px solid blue', 
+    }, 
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '100%',
+      
+      border: '1px solid green', 
+    },
   },
+  replies: {
+    // [theme.breakpoints.down('md')]: {
+    //   width: '100%'
+    // },
+    // [theme.breakpoints.up('lg')]: {
+    //   width: '85%'
+    // },
+    // [theme.breakpoints.up('xl')]: {
+    //   width: '75%'
+    // },
+    border: '1px solid orange',
+  }
   
 }));
 
@@ -52,6 +79,9 @@ export default function Post() {
   return (
     <div className={classes.root}>
       {post && <PostSourceDisplay post={post} />}
+      <div className={classes.replies}>
+        <RepliesList />
+      </div>
     </div>
   );
 }

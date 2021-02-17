@@ -10,12 +10,6 @@ import {
 import ButtonArrow from '../components/ButtonArrow';
 import PostList from '../components/PostList';
 import { AuthContext } from '../context/AuthContext';
-// import temp from '../../../temp';
-// import byteText from URL('https://dogfriends.s3-us-west-2.amazonaws.com/ad437f7b-c0e9-40df-8ca2-0af2056f967b.txt');
-// import imgTemp = from URL('https://dogfriends.s3-us-west-2.amazonaws.com/905a85a5-9586-4db5-b5ef-f238c20fa87e.txt');
-// import {
-//   getPhotoById
-// } from '../api/DogfriendsPhotosApi';
 
 const useStyles = makeStyles((theme) => ({
   heading: {
