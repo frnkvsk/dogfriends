@@ -4,7 +4,7 @@ const AWS_IMAGE_BUCKET_URL_BASE='https://dogfriends.s3-us-west-2.amazonaws.com/'
 const BASE_URL = 'http://localhost:5000/api/';
 
 const request = async (endpoint, paramsOrData = {}, verb = "get") => {    
-  console.debug("API Call:", endpoint, paramsOrData, verb);
+  console.log("API Call:", endpoint, paramsOrData, verb);
   let headers = new Headers();
 
   headers.append('Content-Type', 'application/json');//multipart/form-data
@@ -41,9 +41,12 @@ const getPhotoById = async () => {
 }
 
 // gets Base 64 image/jpeg string from AWS S3 bucket
-const getPhotoBySrc = async (source) => {
-  const key = source.split('/').pop();
-  return await request(AWS_IMAGE_BUCKET_URL_BASE + key)
+const getPhotoBySrc = async (key) => {
+  const data = {
+    key
+  }
+  const lambdaSRC = 'https://qljffa4b43.execute-api.us-west-2.amazonaws.com/dev1/images';
+  return await request(lambdaSRC, data, 'post');
 }
 
 // puts Base 64 image/jpeg string into AWS S3 bucket

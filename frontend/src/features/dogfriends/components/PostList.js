@@ -55,7 +55,7 @@ const PostList = ({imageCount}) => {
             key={uuid()}
             onClick={() => history.push(`/post/${e.id}`)} >
             <PostImageDisplay 
-              src={`${e.base_url}/${e.photo_id}.txt`} 
+              key={e.id+'.txt'}
               title={e.title} 
               username={e.username} 
               />
