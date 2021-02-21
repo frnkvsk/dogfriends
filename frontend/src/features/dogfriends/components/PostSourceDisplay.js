@@ -8,9 +8,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 // import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-
-// import {getPhotoBySrc} from '../api/DogfriendsPhotosApi';
-import ImageComp from './ImageComp';
+import useImageUrl from '../hooks/useImageUrl';
+import useDate from '../hooks/useDate';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,8 +17,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '15px',
     margin: '15px',
   },
-  media: {
-    
+  media: {    
     height: '400px',
     border: '1px solid red',
     minWidth: '400px',
@@ -27,58 +25,33 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       width: '100%',
       minWidth: '300px',
-    }, 
-    // [theme.breakpoints.down('sm')]: {
-    //   width: '100%',
-    //   minWidth: '300px',
-    // },
+    },     
   },
+  cardContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    width: '100%',
+  }
 }));
 
 
 export default function PostSourceDisplay({post}) {
   const classes = useStyles();
   const {
-    body, created_on, id, photo_id, replies, title, username, votes, base_url 
+    body, photo_id, title, username, created_on 
   } = post;
-  // const src = `${base_url}/${photo_id}.txt`;
-  // console.log('PostSourceDisplay title',title)
-  console.log('PostSourceDisplay body',body, created_on, id, photo_id, replies, title, username, votes, base_url)
-  // const [urlImage, setUrlImage] = useState(null);
-
-  // useEffect(() => {
-  //   setUrlImage(src);
-  //   console.log('PostSourceDisplay useEffect setUrlImage',src)
-  //   // eslint-disable-next-line
-  // }, [src]);
-
-  // const getUrl = async () => {
-  //   // console.log('PostSourceDisplay src ',src)
-  //   const res = await getPhotoBySrc(src);
-  //   if(res && res.data.Body.data) {
-  //     const base64 = String.fromCharCode(...res.data.Body.data).toString('base64');
-  //     setUrlImage(base64);
-  //   }
-    
-  //   console.log('PostSourceDisplay getUrl url',res.data.Body)
-  // }
-  // useEffect(() => {
-  //   if(!urlImage || !urlImage.startsWith('data:image/jpeg')) {
-  //     getUrl();
-  //   }
-  //   console.log('PostSourceDisplay useEffect urlImage')
-  //   // eslint-disable-next-line
-  // }, []) 
-
   return (
     <Card className={classes.root}>
+      <p>Post Source Display</p>
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image={useImageUrl(id)}
+          image={useImageUrl(photo_id+'.txt')}
           title={title}
         />
-        <CardContent>
+        <CardContent className={classes.cardContent}>
           <Typography gutterBottom variant="h6">
             {title}
           </Typography>
@@ -87,6 +60,9 @@ export default function PostSourceDisplay({post}) {
           </Typography>
           <Typography gutterBottom variant="subtitle2">
             {body}
+          </Typography>
+          <Typography gutterBottom variant='subtitle2'>
+            {useDate(created_on)}
           </Typography>
         </CardContent>
       </CardActionArea>      

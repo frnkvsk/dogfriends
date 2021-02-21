@@ -1,18 +1,26 @@
-import React, { useEffect, useState }  from 'react';
+import React, { useEffect, useState } from 'react';
+import { 
+  useSelector,
+  useDispatch 
+} from 'react-redux';
 import { useParams } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
+// import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { v4 as uuid } from 'uuid';
 
 import { 
-  getPostsData,
-  selectPosts, 
-} from '../dogfriendsPostsSlice';
+  getRepliesDataById,
+  // addNewReply,
+  selectReplies
+} from '../dogfriendsRepliesSlice';
+import ReplyDisplay from './ReplyDisplay';
+import ReplyFormNew from './ReplyFormNew';
 
 const useStyles = makeStyles((theme) => ({  
   root: {
     display: 'flex',
-    alignItems: 'center',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
     justifyContent: 'center',
     
     margin: '0 20px',
@@ -33,24 +41,40 @@ const useStyles = makeStyles((theme) => ({
 export default function RepliesList() {
   const classes = useStyles();
   const { id } = useParams();
-  const selectList = useSelector(selectPosts);
   const dispatch = useDispatch();
-  const [post, setPost] = useState(null)
-  console.log('id',id)
-  // const auth = useContext(AuthContext);
-  // const history = useHistory();
+  const [replies, setReplies] = useState([]);
+  const selectList = useSelector(selectReplies);
+
   useEffect(() => {
-    if(selectList.status !== 'fulfilled' && !post) {
-      dispatch(getPostsData());
-    } else if(!post) {
-      setPost( selectList.data.find(e => e.id === id) );
+    if(selectList.status !== 'fulfilled' && !replies.length) {
+      dispatch(getRepliesDataById(id));
+    } else if(selectList.status === 'fulfilled') {   
+      // setReplies([]);   
+      setReplies(
+        selectList.data.map(e => (
+          <div key={uuid()}>
+            <ReplyDisplay 
+              username={e.username}
+              body={e.body} 
+              created_on={e.created_on} 
+              />
+          </div>
+      )));
+      console.log('RepliesList useEffect selectList',selectList)
     }
-    console.log('RepliesList useEffect post',post)
-  }, [selectList.status, selectList.data, post, dispatch, id]);
-  console.log('RepliesList post',post)
+    // console.log('RepliesList useEffect getPosts()',replies)
+    // console.log('RepliesList useEffect selectList',selectList)
+    // eslint-disable-next-line
+  },[selectList.status]);
+  
+  console.log('RepliesList replies',replies, selectList.status)
   return (  
     <div key={uuid()} className={classes.root} >
-      <h1>Replies</h1>        
+      <div>
+      {replies}
+      </div>
+      <ReplyFormNew parent_id={id}/>
+             
     </div>    
   );
 }

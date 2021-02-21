@@ -7,6 +7,7 @@ const postsRoutes = require("./routes/posts");
 const authRoutes = require("./routes/auth");
 const usersRoutes = require("./routes/users");
 const photosRoutes = require("./routes/photos");
+const repliesRoutes = require("./routes/replies");
 
 const cors = require("cors");
 
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/initinfo", initInfoRoutes);
+app.use("/api/replies", repliesRoutes);
 app.use("/api/posts", postsRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/photos", photosRoutes);

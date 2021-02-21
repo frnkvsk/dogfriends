@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 // import {getPhotoBySrc} from '../api/DogfriendsPhotosApi';
 // import ImageComp from './ImageComp';
 import useImageUrl from '../hooks/useImageUrl';
+import useDate from '../hooks/useDate';
 
 const useStyles = makeStyles({
   root: {
@@ -28,10 +29,10 @@ const useStyles = makeStyles({
 });
 
 
-export default function PostImageDisplay({key, title, username}) {
+export default function PostImageDisplay({id, title, username, created_on}) {
   const classes = useStyles();
   
-  console.log('PostImageDisplay src',key)
+  // console.log('PostImageDisplay src',id)
   // console.log('PostImageDisplay title',title)
   // console.log('PostImageDisplay body',body)
   // const [urlImage, setUrlImage] = useState(src);
@@ -61,24 +62,27 @@ export default function PostImageDisplay({key, title, username}) {
 
   return (
     <Card className={classes.root}>
+
       <CardActionArea>
-      <ImageComp key={key}/>
         <CardMedia
           className={classes.media}
-          image={useImageUrl(key)}
+          image={useImageUrl(id)}
           title={title}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5">
+          <Typography gutterBottom variant='h5'>
             {title}
           </Typography>
-          <Typography gutterBottom variant="subtitle1">
+          <Typography gutterBottom variant='subtitle1'>
             By {username}
+          </Typography>
+          <Typography gutterBottom variant='subtitle2'>
+            {useDate(created_on)}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size='small' color='primary'>
           Explore Post
         </Button>
       </CardActions>

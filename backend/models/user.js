@@ -93,28 +93,6 @@ class User {
           data.country
         ]
     );
-    // /**
-    //  * If new user uploads a photo_url
-    //  *    -Create photo id with uuid()
-    //  *    -Insert into photos (id, url)
-    //  *    -Insert into user_photo (username, photo_id)
-    //  */
-    // if(data.photo_url && data.photo_url.length) {
-    //   const id = uuid();
-    //   await db.query(
-    //     `INSERT INTO photos
-    //         (id, url)
-    //       VALUES ($1, $2)`,
-    //       [id, data.photo_url]
-    //   );
-    //   await db.query(
-    //     `INSERT INTO user_photo
-    //         (username, photo_id)
-    //       VALUES ($1, $2)`,
-    //       [data.username, id]
-    //   );
-    // }
-    console.log('----user model',result)
     return result.rows[0];
   }
 

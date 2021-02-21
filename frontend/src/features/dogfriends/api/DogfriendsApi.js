@@ -21,21 +21,11 @@ const request = async (endpoint, paramsOrData = {}, verb = "get") => {
     throw Array.isArray(message) ? message : [message];
   }
 }
-// init 
-const getInitInfo = async () => {
-  const res = await request('initinfo');
-  // console.log('DogfriendsApi getInitInfo res',res)
-  return res;
-}
-const postInitInfo = async (token) => {
-  const res = await request('initinfo', {_token: token}, 'post');
-  // console.log('DogfriendsApi postInitInfo res',res)
-  return res;
-}
+
 // posts
 const getPosts = async () => {
   let res = await request('posts');
-  console.log('DogfriendApi getPosts res',res)
+  // console.log('DogfriendApi getPosts res',res)
   return res;
 }
 const getPostById = async (id) => {
@@ -49,20 +39,31 @@ const postPostNew = async (data) => {
 }
 const putPostUpdate = async (id, title, body, username, token) => {  
   const data = {
-    title: title,
-    body: body,  
-    username: username,
+    title,
+    body,  
+    username,
     _token: token  
   }
   return await request(`posts/${id}`, data, 'put');
 }
 const deletePost = async (id, username, token) => {
   const data = {
-    id: id,
-    username: username,
+    id,
+    username,
     _token: token  
   }
   return await request(`posts/${id}`, data, 'delete');
+}
+
+// replies
+const getRepliesById = async (id) => {
+  const res = await request(`replies/${id}`);
+  console.log('DogfriendsApi getRepliesById res',res)
+  return res;
+}
+const postReplyNew = async (data) => {
+  console.log('DogfriendsApi data',data)
+  return await request('replies/', data, 'post');
 }
 
 // login / signup
@@ -87,7 +88,7 @@ const preSignupUsernameCheck = async ({username}) => {
 const signup = async (data) => {   
   try {
     const res = await request('users/', data, 'post');
-      console.log('DogfriendsApi signup res',res)
+      // console.log('DogfriendsApi signup res',res)
     return res;    
   } catch (error) {
     console.error(error);
@@ -124,8 +125,6 @@ const patchUserInfo = async (userInfo) => {
 }
 
 export {
-  getInitInfo,
-  postInitInfo,
   getPosts,
   getPostById,
   postPostVote,
@@ -137,4 +136,6 @@ export {
   signup,
   getUserInfo,
   patchUserInfo,
+  getRepliesById,
+  postReplyNew
 };

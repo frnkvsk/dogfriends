@@ -62,7 +62,7 @@ export default function Post() {
   const selectList = useSelector(selectPosts);
   const dispatch = useDispatch();
   const [post, setPost] = useState(null)
-  console.log('id',id)
+  // console.log('id',id)
   // const auth = useContext(AuthContext);
   // const history = useHistory();
   useEffect(() => {
@@ -80,7 +80,7 @@ export default function Post() {
     <div className={classes.root}>
       {post && <PostSourceDisplay post={post} />}
       <div className={classes.replies}>
-        <RepliesList />
+        <RepliesList post={post}/>
       </div>
     </div>
   );

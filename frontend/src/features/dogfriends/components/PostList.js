@@ -48,22 +48,24 @@ const PostList = ({imageCount}) => {
   useEffect(() => {
     if(selectList.status !== 'fulfilled' && !posts.length) {
       dispatch(getPostsData());
-    } else if(selectList.status === 'fulfilled') {
+    } else if(selectList.status === 'fulfilled') {      
       setPosts(
         selectList.data.map(e => (
           <div 
             key={uuid()}
             onClick={() => history.push(`/post/${e.id}`)} >
             <PostImageDisplay 
-              key={e.id+'.txt'}
+              id={e.photo_id+'.txt'}
               title={e.title} 
               username={e.username} 
+              created_on={e.created_on}
               />
           </div>
       )));
+      console.log('PostList useEffect selectList',selectList)
     }
-    console.log('PostList useEffect getPosts()',posts)
-    console.log('PostList useEffect selectList',selectList)
+    // console.log('PostList useEffect getPosts()',posts)
+    // console.log('PostList useEffect selectList',selectList)
     // eslint-disable-next-line
   },[selectList.status]);
   
