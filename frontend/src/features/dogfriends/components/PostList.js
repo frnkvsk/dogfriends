@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import fadeInUp from 'react-animations/lib/fade-in-up';
-import PostImageDisplay from './PostImageDisplay';
+import Post from './Post';
 import { v4 as uuid } from 'uuid';
 import {
   getPostsData,
@@ -33,7 +33,7 @@ const useStyles = makeStyles({
     alignItems: 'center',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    border: '2px solid #fafafa',
+    // border: '2px solid #fafafa',
     padding: '40px',
   },
 });
@@ -54,7 +54,7 @@ const PostList = ({imageCount}) => {
           <div 
             key={uuid()}
             onClick={() => history.push(`/post/${e.id}`)} >
-            <PostImageDisplay 
+            <Post 
               id={e.photo_id+'.txt'}
               title={e.title} 
               username={e.username} 

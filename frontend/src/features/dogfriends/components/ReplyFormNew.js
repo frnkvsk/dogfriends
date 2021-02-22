@@ -14,17 +14,20 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     width: '100%',
-    height: '100vh',
+    padding: '0',
+    margin: '0',
+    // height: '100vh',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
+    
     width: '400px',
-    margin: '30px 0 20px 0',
-    padding: '15px',
+    margin: '3px 0 2px 0',
+    padding: '8px',
     border: '2px solid #eceff1',
   },
   control: {
@@ -58,8 +61,7 @@ const ReplyFormNew = ({parent_id}) => {
   const handleSubmit = e => {   
     e.preventDefault();
     console.log('ReplyFormNew parent_id',parent_id)
-    if(body) {
-      
+    if(body) {      
       const payload = {
         parent_id,
         body,
@@ -79,7 +81,7 @@ const ReplyFormNew = ({parent_id}) => {
           <TextField 
             className={classes.formItem}
             multiline={true}
-            rows='4'
+            rows='2'
             label='Reply' 
             variant='outlined' 
             value={body}

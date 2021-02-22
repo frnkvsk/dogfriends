@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core';
 // import EditIcon from '@material-ui/icons/Edit';
 
 // import { useSelector, useDispatch } from 'react-redux';
-import PostSourceDisplay from '../components/PostSourceDisplay';
+import PostDisplay from '../components/PostDisplay';
 import { 
   getPostsData,
   selectPosts, 
@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     // [theme.breakpoints.up('xl')]: {
     //   width: '75%'
     // },
-    border: '1px solid orange',
+    // border: '1px solid orange',
   }
   
 }));
@@ -78,7 +78,7 @@ export default function Post() {
 
   return (
     <div className={classes.root}>
-      {post && <PostSourceDisplay post={post} />}
+      {post && <PostDisplay post={post} />}
       <div className={classes.replies}>
         <RepliesList post={post}/>
       </div>

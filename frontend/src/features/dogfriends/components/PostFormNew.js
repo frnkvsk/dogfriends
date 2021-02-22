@@ -86,7 +86,7 @@ const PostFormNew = () => {
       setTitleValid('Title must be betwen 1 and 30 characters in length.');
     } else {
       setTitleValid('');
-    }
+    }    
   }, [title]);
   // validate topText
   useEffect(() => {
@@ -127,42 +127,13 @@ const PostFormNew = () => {
       setBodyValid('');
     }
   }, [body]);
-  // const getBlob = async ({
-  //   canvas,
-  //   width,
-  //   height,
-  //   mime = 'image/jpeg',
-  //   quality = 0.8,
-  // }) => {
-  //   return new Promise(resolve => {
-  //     const tmpCanvas = document.createElement('canvas');
-  //     tmpCanvas.width = width;
-  //     tmpCanvas.height = height;
+ 
   
-  //     const ctx = tmpCanvas.getContext('2d');
-  //     ctx.drawImage(
-  //       canvas,
-  //       0,
-  //       0,
-  //       canvas.width,
-  //       canvas.height,
-  //       0,
-  //       0,
-  //       width,
-  //       height,
-  //     );
-  
-  //     tmpCanvas.toBlob(resolve, mime, quality);
-  //   });
-  // }
   const handleSubmit = e => {   
     e.preventDefault();
     // console.log('PostFormNew initInfo',initInfo)
     if(image) {
       const photo_id = 'lg-' + uuid();
-      
-      // const { bucket_base, upload_base } = initInfo.payload;
-      // console.log('PostFormNew handleSubmit image',imageBlob)
 
       // put photo in AWS S3 bucket with lambda function
       // post photo to db photos table
@@ -190,8 +161,6 @@ const PostFormNew = () => {
   const handleUploadImage = async (canvas, imageUrl) => {
     setImage(imageUrl);
     setImageBase(imageUrl);
-    // const blob = await getBlob({canvas, width: 400, height: 400}); 
-    // setImageBlob(blob);
   }
 
   return (
@@ -210,7 +179,7 @@ const PostFormNew = () => {
         <div className={classes.control}>
           <UploadImage handleUploadImage={handleUploadImage} width={400} height={400} />
           <div className={classes.imagePreview} >
-            <img id='uploadIMG' name='uploadImage' src={image} alt='text on lmage'/>
+            <img id='uploadIMG' name='uploadImage' src={image} alt=''/>
           </div>
           
           <div className={classes.formItem}>
