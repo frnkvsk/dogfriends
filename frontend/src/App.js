@@ -67,7 +67,7 @@ function App() {
             <Route exact path="/login">
               <Login/>        
             </Route>           
-            <Route path="/post/:id">
+            <Route path="/post/:parent_id">
               <Post />        
             </Route>                 
                               

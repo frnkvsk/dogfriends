@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { 
   useSelector,
   useDispatch 
@@ -11,14 +11,15 @@ import { v4 as uuid } from 'uuid';
 
 import { 
   getRepliesDataById,
-  // addNewReply,
+  addNewReply,
   selectReplies
 } from '../dogfriendsRepliesSlice';
 import ReplyDisplay from './ReplyDisplay';
 import ReplyFormNew from './ReplyFormNew';
 import { 
-  GridList,
-  GridListTile } from '@material-ui/core';
+  Grid, } from '@material-ui/core';
+
+  import { AuthContext } from '../context/AuthContext';
 
 const useStyles = makeStyles((theme) => ({  
   root: {
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 20px',
     cursor: 'pointer',
     width: '100%',
-    minWidth: '400px',
+    minWidth: '350px',
     [theme.breakpoints.down('md')]: {
       width: '100%',
       minWidth: '300px',
@@ -43,69 +44,82 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
       minWidth: '300px',
     },
-    border: '1px solid green',
+    
+    // border: '1px solid green',
   },
   gridList: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    justifyContent: 'center',
-    width: '100%',
-    // height: 450,
-    
-    border: '1px solid red',
+    // justifyContent: 'center',
+    // width: '100%',
+    height: 450,
+    overflow: 'auto',
+    padding: '3px',
+    border: '1px solid #eeeeee',
   },
   gridItem: {
-    width: '100%',
+    // width: '50%',
     margin: '2px 0 2px 0',
+    padding: '0 5px 0 5px',
+    // border: '1px solid orange',
   }
 }));
 
 export default function RepliesList() {
   const classes = useStyles();
-  const { id } = useParams();
+  const auth = useContext(AuthContext);
+  const { parent_id } = useParams();
   const dispatch = useDispatch();
-  const [replies, setReplies] = useState([]);
+  
   const selectList = useSelector(selectReplies);
+  // const [replies, setReplies] = useState(selectList);
   /**
    * TODO:
    * refreshing this page and home page causes the useEffect on getting images to go on unstopped till it crashes. Need to fix.
    */
 
-  const getReplies = async () => {
-    const res = await dispatch(getRepliesDataById(id));
-    console.log('RepliesList getReplies res',res)
-    setReplies(
-      res.payload.map(e => (
-        <div key={uuid()}>
-          <GridListTile component='div' className={classes.gridItem}>
-            <ReplyDisplay 
-              username={e.username}
-              body={e.body} 
-              created_on={e.created_on} />
-          </GridListTile>
-          
-        </div>
-    )));
-  }
-
   useEffect(() => {
-    if(!replies.length) {
-      getReplies();
-    } 
-    console.log('RepliesList useEffect getReplies()')
-    // console.log('RepliesList useEffect selectList',selectList)
+    dispatch(getRepliesDataById(parent_id));    
+    console.log('---RepliesList useEffect getReplies() selectList.status',selectList.status)
     // eslint-disable-next-line
-  }, [id]);
+  }, [dispatch, parent_id]);
   
-  console.log('RepliesList replies',replies, selectList.status)
+  const handleSubmit = async (body) => {
+    if(body) {      
+      const payload = {
+        parent_id,
+        body,
+        username: auth.authState.userInfo.username,
+        _token: auth.authState.token
+      }
+      // commit reply details to database
+      await dispatch(addNewReply(payload)); 
+      console.log('-RepliesList handleSubmit dispatch')
+      // update replies list
+      dispatch(getRepliesDataById(parent_id));
+    }
+    
+  };
+
+  console.log('RepliesList replies', selectList.status, selectList)
   return (  
     
     <div key={uuid()} className={classes.root} >
-      <GridList cellHeight={60} className={classes.gridList}>
-        {replies}
-      </GridList>
-      <ReplyFormNew parent_id={id}/>             
+      <div className={classes.gridList} >
+        {selectList.data.length && selectList.data.map(e => (
+          <div key={uuid()}>
+            <Grid item className={classes.gridItem}>
+              <ReplyDisplay 
+                username={e.username}
+                body={e.body} 
+                created_on={e.created_on} />
+            </Grid>
+            
+          </div>
+      ))}
+      </div>
+      <ReplyFormNew handleSubmit={handleSubmit}/>             
     </div>    
   );
 }

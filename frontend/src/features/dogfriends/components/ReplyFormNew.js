@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+// import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
   Button, 
   TextField,
 } from '@material-ui/core';
 
-import { AuthContext } from '../context/AuthContext';
-import { addNewReply } from '../dogfriendsRepliesSlice';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -41,10 +40,10 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const ReplyFormNew = ({parent_id}) => {
+const ReplyFormNew = ({handleSubmit}) => {
   const classes = useStyles();
-  const auth = useContext(AuthContext);
-  const dispatch = useDispatch();  
+  // const auth = useContext(AuthContext);
+  // const dispatch = useDispatch();  
   const [body, setBody] = useState('');
   const [bodyValid, setBodyValid] = useState('');
 
@@ -58,22 +57,43 @@ const ReplyFormNew = ({parent_id}) => {
     }
   }, [body]);
 
-  const handleSubmit = e => {   
-    e.preventDefault();
-    console.log('ReplyFormNew parent_id',parent_id)
-    if(body) {      
-      const payload = {
-        parent_id,
-        body,
-        username: auth.authState.userInfo.username,
-        _token: auth.authState.token
-      }
-      // commit reply details to database
-      dispatch(addNewReply(payload)); 
+  // const handleSubmit = useCallback((e) => {
+  //   // e.preventDefault();
+  //   console.log('ReplyFormNew parent_id',parent_id)
+  //   if(body) {      
+  //     const payload = {
+  //       parent_id,
+  //       body,
+  //       username: auth.authState.userInfo.username,
+  //       _token: auth.authState.token
+  //     }
+  //     // commit reply details to database
+  //     dispatch(addNewReply(payload)); 
+  //     setBody('');
+  //   }
+  //   // eslint-disable-next-line
+  // }, [body]) 
+  // e => {   
+  //   e.preventDefault();
+  //   console.log('ReplyFormNew parent_id',parent_id)
+  //   if(body) {      
+  //     const payload = {
+  //       parent_id,
+  //       body,
+  //       username: auth.authState.userInfo.username,
+  //       _token: auth.authState.token
+  //     }
+  //     // commit reply details to database
+  //     dispatch(addNewReply(payload)); 
+  //     setBody('');
+  //   }      
+  // }
+  const handleButtonClick = () => {
+    if(body) {
+      handleSubmit(body);
+      setBody('');
     }
-      
   }
-  
   return (
     <div className={classes.root}> 
       <form method='post' className={classes.form}>          
@@ -94,8 +114,7 @@ const ReplyFormNew = ({parent_id}) => {
             className={classes.formItem} 
             variant='contained' 
             color='primary' 
-            onClick={handleSubmit} 
-            >
+            onClick={handleButtonClick} >
             Send
           </Button>
         </div>      

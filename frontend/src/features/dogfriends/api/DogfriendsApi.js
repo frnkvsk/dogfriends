@@ -63,7 +63,8 @@ const getRepliesById = async (id) => {
 }
 const postReplyNew = async (data) => {
   console.log('DogfriendsApi data',data)
-  return await request('replies/', data, 'post');
+  // return await request('replies/', data, 'post');
+  request('replies/', data, 'post');
 }
 
 // login / signup

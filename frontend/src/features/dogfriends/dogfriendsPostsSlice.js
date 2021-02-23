@@ -3,8 +3,8 @@ import {
   getPosts,
   getPostById,
   postPostNew,
-  putPostUpdate,
-  deletePost,
+  // putPostUpdate,
+  // deletePost,
 } from './api/DogfriendsApi';
 
 /**
@@ -40,12 +40,13 @@ export const dogfriendsPostsSlice = createSlice({
     addNewPost: (state, action) => {
       postPostNew(action.payload);
     },
-    editPost: (state, action) => {
-      putPostUpdate(action.payload);
-    },
-    removePost: (state, action) => {
-      deletePost(action.payload);
-    },
+    
+    // editPost: (state, action) => {
+    //   putPostUpdate(action.payload);
+    // },
+    // removePost: (state, action) => {
+    //   deletePost(action.payload);
+    // },
   },
   extraReducers: {
     // get all posts
@@ -97,6 +98,7 @@ export const dogfriendsPostsSlice = createSlice({
 
 export const {
   addNewPost,
+  addPostUrl,
   editPost,
   removePost,
 } = dogfriendsPostsSlice.actions;

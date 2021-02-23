@@ -12,7 +12,18 @@ export const getRepliesDataById = createAsyncThunk(
     return res.data;
   }
 );
-
+// export const addNewReply = createAsyncThunk(
+//   'addNewReply',
+//   async (data) => {
+//     const res = await getRepliesById(data);
+//     console.log('dogfriendsRepliesSlice res',res)
+//     return res.data;
+//   }
+// );
+// const addNewReplyHelper = data => {
+//   postReplyNew(data);
+//   console.log('dogfriendsRepliesSlice reducers addNewReply')
+// }
 export const dogfriendsRepliesSlice = createSlice({
   name: 'replyList',
   initialState: {
@@ -25,7 +36,10 @@ export const dogfriendsRepliesSlice = createSlice({
   reducers: {
     addNewReply: (state, action) => {
       postReplyNew(action.payload);
+      // addNewReplyHelper(action.payload);
+      // state.replyList.data.push(action.payload);
     },
+    
   },
   extraReducers: {
     // get all replies by parent_id

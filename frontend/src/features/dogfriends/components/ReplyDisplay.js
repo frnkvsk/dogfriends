@@ -10,25 +10,28 @@ import useDate from '../hooks/useDate';
 
 const useStyles = makeStyles({
   root: {
-    width: '100%',
-    minWidth: '400px',
+    width: 'auto',
+    // minWidth: '400px',
     margin: '1px 0 1px 0',
     // border: '1px solid red',
   },
   media: {
-    width: '100%',
-    padding: '3px 10px 3px 10px',
+    width: '93%',
+    minWidth: '380px',
+    padding: '5px 10px 3px 10px',
+    margin: '3px 0 3px 0',
+    border: '1px solid #eeeeee',
   },
   mediaBody: {
-    maxWidth: '400px',
+    maxWidth: '350px',
     wordWrap: 'break-word',
     // overflow: 'hidden',
   },
-  mediaItem: {
+  mediaInfo: {
     display: 'flex',
     justifyContent: 'space-between',
     fontSize: '11px',
-    width: '100%',    
+    // width: '100%',    
   }
 });
 
@@ -36,12 +39,12 @@ export default function ReplyDisplay({username, body, created_on}) {
   const classes = useStyles();
   
   return ( 
-    <div className={classes.root}>      
+    <div className={classes.root}> 
       <Paper elevation={1} className={classes.media}>
         <Typography className={classes.mediaBody}>
           {body}
         </Typography>
-        <Typography className={classes.mediaItem} variant="subtitle2">
+        <Typography className={classes.mediaInfo} variant="subtitle2">
           <div>By {username}</div>
           <div>{useDate(created_on)}</div>
         </Typography>

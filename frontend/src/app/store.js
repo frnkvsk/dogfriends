@@ -13,6 +13,6 @@ export default configureStore({
     votesList: dogfriendsVotesSlice,
     pageCount: dogfriendsPageCountSlice,
     userList: dogfriendsUserSlice,
-    photosList: dogfriendsPhotosSlice,
+    photoList: dogfriendsPhotosSlice,
   },
 });

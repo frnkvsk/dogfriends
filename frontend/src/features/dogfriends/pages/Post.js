@@ -21,25 +21,27 @@ const useStyles = makeStyles((theme) => ({
   root: {    
     display: 'flex',
     alignItems: 'flex-start',
+    justifyContent: 'center',
     
-    // width: '100%', 
+    width: '70%', 
     fontSize: '22px',
     padding: '7px',
     
     [theme.breakpoints.down('md')]: {
       flexDirection: 'row',
-      justifyContent: 'flex-start',
+      // justifyContent: 'flex-start',
       width: '85%',
-      border: '1px solid blue', 
+      // border: '1px solid blue', 
     }, 
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center',
+      // justifyContent: 'center',
       width: '100%',
       
-      border: '1px solid green', 
+      // border: '1px solid green', 
     },
+    // border: '1px solid red', 
   },
   replies: {
     // [theme.breakpoints.down('md')]: {
@@ -58,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Post() {
   const classes = useStyles();
-  const { id } = useParams();
+  const { parent_id } = useParams();
   const selectList = useSelector(selectPosts);
   const dispatch = useDispatch();
   const [post, setPost] = useState(null)
@@ -69,10 +71,10 @@ export default function Post() {
     if(selectList.status !== 'fulfilled' && !post) {
       dispatch(getPostsData());
     } else if(!post) {
-      setPost( selectList.data.find(e => e.id === id) );
+      setPost( selectList.data.find(e => e.id === parent_id) );
     }
     console.log('Post useEffect post',post)
-  }, [selectList.status, selectList.data, post, dispatch, id]);
+  }, [selectList.status, selectList.data, post, dispatch, parent_id]);
 
   
 

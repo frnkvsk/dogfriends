@@ -42,6 +42,7 @@ const getPhotoById = async () => {
 
 // gets Base 64 image/jpeg string from AWS S3 bucket
 const getPhotoBySrc = async (key) => {
+  console.log('--DogfriendsPhotosApi getPhotoBySrc key',key)
   const data = {
     key
   }

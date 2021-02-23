@@ -17,11 +17,11 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '400px',
     padding: '15px',
     // margin: '15px',
-    // border: '1px solid green',
+    // border: '2px solid pink',
   },
   media: {    
     height: '400px',
-    border: '1px solid red',
+    
     minWidth: '400px',
     width: '400px',
     [theme.breakpoints.down('md')]: {

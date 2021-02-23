@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -12,15 +12,10 @@ import {
 } from '../dogfriendsPostsSlice';
 import { makeStyles } from '@material-ui/core/styles';
 
-
-// import {ReactCSSTransitionGroup} from 'react-transition-group'; 
-
 const fadeInUpAnimation = keyframes`${fadeInUp}`;
 const FadeInUpAnimation = styled.div`
   animation: 3s ${fadeInUpAnimation};
 `;
-
-// const AWS_IMAGE_BUCKET_URL_BASE='https://dogfriends.s3-us-west-2.amazonaws.com/';
 
 const useStyles = makeStyles({
   root: {
@@ -42,15 +37,16 @@ const PostList = ({imageCount}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const [posts, setPosts] = useState([]);
   const selectList = useSelector(selectPosts);
   
   useEffect(() => {
-    if(selectList.status !== 'fulfilled' && !posts.length) {
       dispatch(getPostsData());
-    } else if(selectList.status === 'fulfilled') {      
-      setPosts(
-        selectList.data.map(e => (
+  },[dispatch]);
+  
+  return (    
+    <>   
+      <FadeInUpAnimation className={classes.fadeinContainer}>
+        {selectList.data.length && selectList.data.map(e => (
           <div 
             key={uuid()}
             onClick={() => history.push(`/post/${e.id}`)} >
@@ -61,18 +57,7 @@ const PostList = ({imageCount}) => {
               created_on={e.created_on}
               />
           </div>
-      )));
-      console.log('PostList useEffect selectList',selectList)
-    }
-    // console.log('PostList useEffect getPosts()',posts)
-    // console.log('PostList useEffect selectList',selectList)
-    // eslint-disable-next-line
-  },[selectList.status]);
-  
-  return (    
-    <>   
-      <FadeInUpAnimation className={classes.fadeinContainer}>
-        {posts}
+      ))}
       </FadeInUpAnimation>
       <div style={{marginBottom: '20px'}} />
     </>
