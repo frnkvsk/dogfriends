@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 
 import { 
-  Grid,
-  Button,
+  // Grid,
+  // Button,
   Typography,
   makeStyles,
  } from '@material-ui/core';
  
-import ButtonArrow from '../components/ButtonArrow';
+// import ButtonArrow from '../components/ButtonArrow';
 import PostList from '../components/PostList';
 import { AuthContext } from '../context/AuthContext';
 
@@ -39,12 +39,11 @@ const Home = () => {
   const username = auth.authState.userInfo.username;
   
   
-  return (   
-    <>
-    <Grid container direction='column'>
-      <Grid sm item>
-        <Grid container justify='center' alignItems='center' direction='row'>
-          <Grid container className={classes.heading}>
+  return (        
+    <div>
+      <div sm item>
+        <div>
+          <div className={classes.heading}>
             {username ? 
             <Typography variant='h2' align='center'>
               Welcome back {username}.
@@ -55,26 +54,15 @@ const Home = () => {
               with other dog friends
             </Typography>
             }
-          </Grid>
-          <Grid container className={classes.buttons}>            
-            {!username && 
-              <Grid item>
-                <Button variant='contained'>
-                Get Started
-                <ButtonArrow width='15' height='15' fill='red' />
-              </Button>
-              </Grid>
-            }            
-          </Grid>          
-        </Grid>
-      </Grid>
-      <Grid sm item>
-        <Grid container className={classes.cardImageList}>
+          </div>         
+        </div>
+      </div>
+      <div sm item>
+        <div className={classes.cardImageList}>
           <PostList imageCount={10} />
-        </Grid>        
-      </Grid>
-    </Grid>
-    </>
+        </div>        
+      </div>
+    </div>    
   );
 }
 

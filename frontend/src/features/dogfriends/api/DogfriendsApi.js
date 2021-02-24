@@ -5,7 +5,7 @@ const BASE_URL = 'http://localhost:5000/api/';
 
 const request = async (endpoint, paramsOrData = {}, verb = "get") => {  
   
-  console.debug("API Call:", endpoint, paramsOrData, verb, BASE_URL);
+  console.log("API Call:", endpoint, paramsOrData, verb, BASE_URL);
   try {
     const res = await axios({
       method: verb,
@@ -96,21 +96,10 @@ const signup = async (data) => {
   }   
 }
 const getUserInfo = async (payload) => {
-  // console.log('DogfriendsApi payload',payload)
+  console.log('DogfriendsApi payload',payload)
   const {username, token} = payload;
-  let photo_url = null;
   try {  
-    const res = await request(`users/${username}/`, {_token: token});
-    // console.log('DogfriendsApi getUserInfo 0res',res)
-    if(res.data.user.photo_id) {
-      // console.log('DogfriendsApi getUserInfo res.data.user.photo_id',res.data.user.photo_id)
-      const resp = await request(`photos/${res.data.user.photo_id}`);
-      // console.log('DogfriendsApi getUserInfo 0resp',resp)
-      photo_url = resp.data.url;
-    
-    }
-    res.data.user.photo_url = photo_url;
-    // console.log('DogfriendsApi getUserInfo 1res',res)
+    const res = await request(`users/${username}/`, {_token: token});    
     return res;
   } catch (error) {
     // console.log('Error getUserInfo')

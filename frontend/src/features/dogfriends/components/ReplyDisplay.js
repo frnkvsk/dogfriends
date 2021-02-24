@@ -2,36 +2,37 @@ import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 
-import Paper from '@material-ui/core/Paper';
+// import Paper from '@material-ui/core/Paper';
 
 import useDate from '../hooks/useDate';
 
 const useStyles = makeStyles({
-  root: {
-    width: 'auto',
+  root: {    
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    justifyContent: 'stretch',
+    // width: '100%',
+    // blockSize: 'fit-content',
     // minWidth: '400px',
-    margin: '1px 0 1px 0',
+    margin: '1px 12px 1px 3px',
+    padding: '2px 5px 2px 5px',
     // border: '1px solid red',
   },
-  media: {
-    width: '93%',
-    minWidth: '380px',
-    padding: '5px 10px 3px 10px',
-    margin: '3px 0 3px 0',
-    border: '1px solid #eeeeee',
-  },
   mediaBody: {
+    display: 'flex',
+    flexWrap: 'wrap',
     maxWidth: '350px',
+    fontSize: '18px',
     wordWrap: 'break-word',
-    // overflow: 'hidden',
+    overflow: 'hidden',
   },
   mediaInfo: {
     display: 'flex',
     justifyContent: 'space-between',
-    fontSize: '11px',
-    // width: '100%',    
+    fontSize: '11px', 
   }
 });
 
@@ -40,15 +41,13 @@ export default function ReplyDisplay({username, body, created_on}) {
   
   return ( 
     <div className={classes.root}> 
-      <Paper elevation={1} className={classes.media}>
-        <Typography className={classes.mediaBody}>
-          {body}
-        </Typography>
-        <Typography className={classes.mediaInfo} variant="subtitle2">
-          <div>By {username}</div>
-          <div>{useDate(created_on)}</div>
-        </Typography>
-      </Paper>
+      <div className={classes.mediaBody}>
+        {body}
+      </div>
+      <div className={classes.mediaInfo}>
+        <div>By {username}</div>
+        <div>{useDate(created_on)}</div>
+      </div>
     </div> 
   );
 }

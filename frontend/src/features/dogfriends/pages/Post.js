@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-// import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
-// import CloseIcon from '@material-ui/icons/Close';
-// import EditIcon from '@material-ui/icons/Edit';
-
-// import { useSelector, useDispatch } from 'react-redux';
 import PostDisplay from '../components/PostDisplay';
 import { 
   getPostsData,
@@ -15,45 +10,59 @@ import {
 } from '../dogfriendsPostsSlice';
 import RepliesList from '../components/RepliesList';
 
-// import { AuthContext } from '../context/AuthContext';
-
 const useStyles = makeStyles((theme) => ({
   root: {    
     display: 'flex',
+    flexDirection: 'column',
+    // alignItems: 'center',
+    // justifyContent: 'center',    
+    // width: '70%', 
+    // fontSize: '22px',
+    // padding: '7px',    
+    // [theme.breakpoints.down('md')]: {
+    //   flexDirection: 'row',
+    //   width: '85%',
+    // }, 
+    // [theme.breakpoints.down('sm')]: {
+    //   flexDirection: 'column',
+    //   alignItems: 'stretch',
+    //   justifyContent: 'stretch',
+    //   // alignItems: 'center',
+    //   width: '90%',
+    // },
+    // border: '1px solid blue'
+  },
+  mainContainer: {    
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: 'flex-start',
-    justifyContent: 'center',
-    
-    width: '70%', 
+    // justifyContent: 'space-around',    
+    width: '100%', 
     fontSize: '22px',
-    padding: '7px',
-    
+    padding: '7px',    
     [theme.breakpoints.down('md')]: {
       flexDirection: 'row',
-      // justifyContent: 'flex-start',
       width: '85%',
-      // border: '1px solid blue', 
     }, 
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
-      alignItems: 'center',
-      // justifyContent: 'center',
-      width: '100%',
-      
-      // border: '1px solid green', 
+      alignItems: 'stretch',
+      justifyContent: 'stretch',
+      // alignItems: 'center',
+      width: '90%',
     },
-    // border: '1px solid red', 
+    // border: '1px solid red'
   },
   replies: {
-    // [theme.breakpoints.down('md')]: {
-    //   width: '100%'
-    // },
-    // [theme.breakpoints.up('lg')]: {
-    //   width: '85%'
-    // },
-    // [theme.breakpoints.up('xl')]: {
-    //   width: '75%'
-    // },
-    // border: '1px solid orange',
+    [theme.breakpoints.up('lg')]: {
+      width: '70%'
+    },
+    [theme.breakpoints.down('lg')]: {
+      width: '85%'
+    },
+    [theme.breakpoints.up('xl')]: {
+      width: '100%'
+    },
   }
   
 }));
@@ -63,10 +72,8 @@ export default function Post() {
   const { parent_id } = useParams();
   const selectList = useSelector(selectPosts);
   const dispatch = useDispatch();
-  const [post, setPost] = useState(null)
-  // console.log('id',id)
-  // const auth = useContext(AuthContext);
-  // const history = useHistory();
+  const [post, setPost] = useState(null);
+
   useEffect(() => {
     if(selectList.status !== 'fulfilled' && !post) {
       dispatch(getPostsData());
@@ -74,16 +81,17 @@ export default function Post() {
       setPost( selectList.data.find(e => e.id === parent_id) );
     }
     console.log('Post useEffect post',post)
-  }, [selectList.status, selectList.data, post, dispatch, parent_id]);
-
-  
+  }, [selectList.status, selectList.data, post, dispatch, parent_id]);  
 
   return (
     <div className={classes.root}>
-      {post && <PostDisplay post={post} />}
-      <div className={classes.replies}>
-        <RepliesList post={post}/>
+      <div className={classes.mainContainer}>
+        {post && <PostDisplay post={post} />}
+        <div className={classes.replies}>
+          <RepliesList post={post}/>
+        </div>      
       </div>
     </div>
+    
   );
 }

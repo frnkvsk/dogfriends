@@ -63,17 +63,13 @@ const PostFormNew = () => {
   
 
   const dispatch = useDispatch();
-  // let initInfo;// = dispatch(postInitInfoData({_token: auth.authState.token}));
-  // console.log('PostFormNew initInfo',initInfo)
   const history = useHistory();
-  // console.log('PostFormNew auth',auth)
   const [title, setTitle] = useState('');
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
   const [body, setBody] = useState('');
   const [image, setImage] = useState(null);
   const [imageBase, setImageBase] = useState(null);
-  // const [imageBlob, setImageBlob] = useState(null);
   const [color, setColor] = useState('#000000');
   const [titleValid, setTitleValid] = useState('');
   const [topTextValid, setTopTextValid] = useState('');
@@ -139,7 +135,6 @@ const PostFormNew = () => {
       // post photo to db photos table
       putNewPhoto(image, photo_id, AWS_UPLOAD_IMAGE_LAMBDA_URL, auth.authState.token);
   
-      // const photo_url = `${AWS_IMAGE_BUCKET_URL_BASE}/${photo_id}`;
       const payload = {
         id: uuid(),
         title,

@@ -24,10 +24,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     
-    width: '400px',
+    width: '100%',
     margin: '3px 0 2px 0',
-    padding: '8px',
-    border: '2px solid #eceff1',
+    padding: '3px',
+    border: '1px solid #eeeeee',
   },
   control: {
     display: 'flex',    
@@ -56,38 +56,7 @@ const ReplyFormNew = ({handleSubmit}) => {
       setBodyValid('');
     }
   }, [body]);
-
-  // const handleSubmit = useCallback((e) => {
-  //   // e.preventDefault();
-  //   console.log('ReplyFormNew parent_id',parent_id)
-  //   if(body) {      
-  //     const payload = {
-  //       parent_id,
-  //       body,
-  //       username: auth.authState.userInfo.username,
-  //       _token: auth.authState.token
-  //     }
-  //     // commit reply details to database
-  //     dispatch(addNewReply(payload)); 
-  //     setBody('');
-  //   }
-  //   // eslint-disable-next-line
-  // }, [body]) 
-  // e => {   
-  //   e.preventDefault();
-  //   console.log('ReplyFormNew parent_id',parent_id)
-  //   if(body) {      
-  //     const payload = {
-  //       parent_id,
-  //       body,
-  //       username: auth.authState.userInfo.username,
-  //       _token: auth.authState.token
-  //     }
-  //     // commit reply details to database
-  //     dispatch(addNewReply(payload)); 
-  //     setBody('');
-  //   }      
-  // }
+ 
   const handleButtonClick = () => {
     if(body) {
       handleSubmit(body);

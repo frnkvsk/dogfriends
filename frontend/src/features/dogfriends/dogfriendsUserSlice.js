@@ -7,11 +7,9 @@ import {
   signup,
 } from './api/DogfriendsApi';
 
-
 export const loginSlice = createAsyncThunk(
   'login',
   async (payload) => {
-    console.log('dogfriendsUserSlice payload',payload)
     const response = await login({
       username: payload.username,
       password: payload.password
@@ -25,11 +23,9 @@ export const checkUsernameSlice = createAsyncThunk(
   'preSignup',
   async (payload) => {
     try {
-      // console.log('preSignupSlice payload',payload)
       const response = await preSignupUsernameCheck({
         username: payload.username
       });
-      // console.log('--preSignupSlice response',response)
       return response;
     } catch (error) {
       console.error('dogfriendsUserSlice preSignupSlice error',error)
@@ -41,7 +37,6 @@ export const checkUsernameSlice = createAsyncThunk(
 export const signUpSlice = createAsyncThunk(
   'signup',
   async (payload) => {
-    console.log('dogfriendsUserSlice payload',payload)
     const response = await signup({
       username: payload.username, 
       password: payload.password, 
@@ -54,7 +49,6 @@ export const signUpSlice = createAsyncThunk(
       state: payload.state ? payload.state : '', 
       country: payload.country ? payload.country : ''
     });
-    console.log('dogfriendsUserSlice response',response)
     return response.data;
   }
 );
@@ -62,9 +56,7 @@ export const signUpSlice = createAsyncThunk(
 export const getUserInfoSlice = createAsyncThunk(
   'getUserInfo',
   async (payload) => {
-    // console.log('dogfriendsUserSlice getUserInfoSlice payload',payload)
     const response = await getUserInfo(payload);
-    // console.log('dogfriendsUserSlice getUserInfoSlice response',response)
     return response.data;
   }
 );
@@ -72,7 +64,6 @@ export const getUserInfoSlice = createAsyncThunk(
 export const updateUserInfoSlice = createAsyncThunk(
   'patchUserInfo',
   async (payload) => {
-    // console.log('updateUserInfoSlice payload',payload)
     const response = await patchUserInfo(payload);
     return response.data;
   }

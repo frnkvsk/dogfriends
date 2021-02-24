@@ -1,13 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { AuthContext } from '../context/AuthContext';
-import { selectUser } from '../dogfriendsUserSlice';
+import { 
+  selectUser,
+  getUserInfoSlice } from '../dogfriendsUserSlice';
 import { useSelector } from 'react-redux';
 import UserAvatar from '../components/UserAvatar';
 import { Button, TextField } from '@material-ui/core';
-// import UploadPhoto from './UploadPhoto';
+import UploadImage from './UploadImage';
 import { useHistory } from 'react-router-dom';
-
+import { putNewPhoto } from '../api/DogfriendsPhotosApi';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,18 +77,17 @@ const useStyles = makeStyles((theme) => ({
 
 
 const UserInfoForm = ({title, handleSubmit}) => {
+  const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://3ynkxwkjf5.execute-api.us-west-2.amazonaws.com/dev/upload';
   const classes = useStyles();
   const auth = useContext(AuthContext);
+  const dispatch = useDispatch();
   console.log('UserInfoForm auth',auth)
   const userList = useSelector(selectUser);
   const [username, setUsername] = useState('');
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [photo_details, setPhotoDetails] = useState({
-    photo_id: null,
-    photo_url: null
-  });
+  const [photo_id, setPhotoId] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [country, setCountry] = useState('');
@@ -96,15 +98,18 @@ const UserInfoForm = ({title, handleSubmit}) => {
       setFirstName(userList.data.user.first_name);
       setLastName(userList.data.user.last_name);
       setEmail(userList.data.user.email);
-      setPhotoDetails({
-        photo_id: userList.data.user.photo_id,
-        photo_url: userList.data.user.photo_url
-      });
+      setPhotoId(userList.data.user.photo_id);
       setCity(userList.data.user.city);
       setState(userList.data.user.state);
       setCountry(userList.data.user.country);
+    } else {
+      const payload = {
+        'username': auth.authState.userInfo.username,
+        'token': auth.authState.token,
+      }
+      dispatch(getUserInfoSlice(payload));      
     }
-    // console.log('UserInfoForm useEffect userList',userList)
+    console.log('UserInfoForm useEffect userList',userList)
     // eslint-disable-next-line
   }, [userList.status])
   
@@ -118,7 +123,7 @@ const UserInfoForm = ({title, handleSubmit}) => {
        first_name,
        last_name, 
        email, 
-       photo_details,
+       photo_id,
        city, 
        state, 
        country, 
@@ -127,7 +132,7 @@ const UserInfoForm = ({title, handleSubmit}) => {
   // const handleOpenModel = () => {
   //   setShowModel('inline');
   // }
-  // console.log('UserInfoForm photo_details',photo_details)
+  console.log('UserInfoForm userList',userList)
   return (
     <div className={classes.root}>
       

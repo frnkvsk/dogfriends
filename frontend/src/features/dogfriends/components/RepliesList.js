@@ -16,53 +16,49 @@ import {
 } from '../dogfriendsRepliesSlice';
 import ReplyDisplay from './ReplyDisplay';
 import ReplyFormNew from './ReplyFormNew';
-import { 
-  Grid, } from '@material-ui/core';
-
-  import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
 
 const useStyles = makeStyles((theme) => ({  
   root: {
-    // display: 'flex',
-    // alignItems: 'flex-start',
-    // justifyContent: 'center',
-    // overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    justifyContent: 'center',
-    
+    justifyContent: 'center',    
     margin: '0 20px',
     cursor: 'pointer',
-    width: '100%',
-    minWidth: '350px',
+    width: '95%',
+    // minWidth: '350px',
+    // width: 'fit-content',
+    // blockSize: 'fit-content',
     [theme.breakpoints.down('md')]: {
-      width: '100%',
-      minWidth: '300px',
+      width: '80%',
     }, 
     [theme.breakpoints.down('sm')]: {
       width: '100%',
-      minWidth: '300px',
     },
     
     // border: '1px solid green',
   },
-  gridList: {
+  commentSection: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-start',
+    alignItems: 'stetch',
     // justifyContent: 'center',
-    // width: '100%',
+    width: '100%',
     height: 450,
     overflow: 'auto',
     padding: '3px',
+    // border: '1px solid blue',
     border: '1px solid #eeeeee',
   },
-  gridItem: {
-    // width: '50%',
-    margin: '2px 0 2px 0',
-    padding: '0 5px 0 5px',
-    // border: '1px solid orange',
+  comment: {
+    // display: 'flex',
+    // flexDirection: 'column',
+    // alignItems: 'stetch',
+    width: '100%',
+    // margin: '2px 5px 2px 0',
+    // padding: '0 15px 0 8px',
+    border: '1px solid #eeeeee',
   }
 }));
 
@@ -105,19 +101,19 @@ export default function RepliesList() {
   console.log('RepliesList replies', selectList.status, selectList)
   return (  
     
-    <div key={uuid()} className={classes.root} >
-      <div className={classes.gridList} >
-        {selectList.data.length && selectList.data.map(e => (
+    <div className={classes.root} >
+      <div className={classes.commentSection} >
+        {selectList.data.length ? selectList.data.map(e => (
           <div key={uuid()}>
-            <Grid item className={classes.gridItem}>
+            <div className={classes.comment}>
               <ReplyDisplay 
                 username={e.username}
                 body={e.body} 
                 created_on={e.created_on} />
-            </Grid>
+            </div>
             
           </div>
-      ))}
+      )) : <div className={classes.gridItem} />}
       </div>
       <ReplyFormNew handleSubmit={handleSubmit}/>             
     </div>    
