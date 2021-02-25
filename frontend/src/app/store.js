@@ -5,6 +5,7 @@ import dogfriendsRepliesSlice from '../features/dogfriends/dogfriendsRepliesSlic
 import dogfriendsVotesSlice from '../features/dogfriends/dogfriendsVotesSlice';
 import dogfriendsUserSlice from '../features/dogfriends/dogfriendsUserSlice';
 import dogfriendsPhotosSlice from '../features/dogfriends/dogfriendsPhotosSlice';
+import dogfriendsAvatarSlice from '../features/dogfriends/dogfriendsAvatarSlice';
 
 export default configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export default configureStore({
     pageCount: dogfriendsPageCountSlice,
     userList: dogfriendsUserSlice,
     photoList: dogfriendsPhotosSlice,
+    avatarUrl: dogfriendsAvatarSlice,
   },
 });

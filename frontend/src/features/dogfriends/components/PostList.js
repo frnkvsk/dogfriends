@@ -40,13 +40,13 @@ const PostList = ({imageCount}) => {
   const selectList = useSelector(selectPosts);
   
   useEffect(() => {
-      dispatch(getPostsData());
+    dispatch(getPostsData());
   },[dispatch]);
   
   return (    
     <>   
       <FadeInUpAnimation className={classes.fadeinContainer}>
-        {selectList.data.length && selectList.data.map(e => (
+        {selectList.data.length ? selectList.data.map(e => (
           <div 
             key={uuid()}
             onClick={() => history.push(`/post/${e.id}`)} >
@@ -56,8 +56,8 @@ const PostList = ({imageCount}) => {
               username={e.username} 
               created_on={e.created_on}
               />
-          </div>
-      ))}
+          </div> 
+      )) : <div></div>}
       </FadeInUpAnimation>
       <div style={{marginBottom: '20px'}} />
     </>

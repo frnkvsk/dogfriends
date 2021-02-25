@@ -64,8 +64,13 @@ export const getUserInfoSlice = createAsyncThunk(
 export const updateUserInfoSlice = createAsyncThunk(
   'patchUserInfo',
   async (payload) => {
+
     const response = await patchUserInfo(payload);
-    return response.data;
+    console.log('dogfriendsUserSlice updateUserInfoSlice response',response)
+    
+    if(response.status === 200) {
+      return response.data;
+    }    
   }
 );
 
@@ -82,9 +87,9 @@ export const dogfriendsUserSlice = createSlice({
     logout: (state, action) => {
       state.userList = action.payload;
     },
-    setUserList: (state, action) => {
-      state.userList = action.payload;
-    },
+    // setUserList: (state, action) => {
+    //   state.userList = action.payload;
+    // },
   },
   extraReducers: {
     // login
@@ -135,21 +140,24 @@ export const dogfriendsUserSlice = createSlice({
     [getUserInfoSlice.pending]: (state, action) => {
       state.userList = {
         status: 'pending',
-        data: {},
+        data: state.userList.userList,
         error: {}
       };
     },
     [getUserInfoSlice.fulfilled]: (state, action) => {
       state.userList = {
         status: 'fulfilled',
-        data: action.payload,
+        data: {
+          ...state.userList.userList,
+          ...action.payload
+        },
         error: {}
       };
     },
     [getUserInfoSlice.rejected]: (state, action) => {
       state.userList = {
         status: 'rejected',
-        data: {},
+        data: state.userList.userList,
         error: action.payload,
       };
     }, 
@@ -157,22 +165,25 @@ export const dogfriendsUserSlice = createSlice({
     [updateUserInfoSlice.pending]: (state, action) => {
       state.userList = {
         status: 'pending',
-        data: {},
+        data: state.userList.userList,
         error: {}
       };
     },
     [updateUserInfoSlice.fulfilled]: (state, action) => {
       state.userList = {
         status: 'fulfilled',
-        data: action.payload,
+        data: {
+          ...state.userList.userList,
+          ...action.payload
+        },
         error: {}
       };
     },
     [updateUserInfoSlice.rejected]: (state, action) => {
       state.userList = {
         status: 'rejected',
-        data: {},
-        error: action.payload,
+        data: state.userList.userList,
+        error: {error: 'update error'},
       };
     }, 
   }
@@ -180,7 +191,7 @@ export const dogfriendsUserSlice = createSlice({
 
 export const {
   logout,
-  setUserList
+  // setUserList
 } = dogfriendsUserSlice.actions;
 
 export const selectUser = state => state.userList.userList;

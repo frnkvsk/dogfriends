@@ -8,9 +8,9 @@ import {
 import { useSelector } from 'react-redux';
 import UserAvatar from '../components/UserAvatar';
 import { Button, TextField } from '@material-ui/core';
-import UploadImage from './UploadImage';
+import {UploadImage} from './UploadImage';
 import { useHistory } from 'react-router-dom';
-import { putNewPhoto } from '../api/DogfriendsPhotosApi';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,13 +71,21 @@ const useStyles = makeStyles((theme) => ({
     '& button': {
       height: '30px',
     }
+  },
+  imagePreview: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    maxWidth: '100px',
+    maxHeight: '100px',
+    // marginLeft: '7px',
   }
 
 }));
 
 
 const UserInfoForm = ({title, handleSubmit}) => {
-  const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://3ynkxwkjf5.execute-api.us-west-2.amazonaws.com/dev/upload';
+  // const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://3ynkxwkjf5.execute-api.us-west-2.amazonaws.com/dev/upload';
   const classes = useStyles();
   const auth = useContext(AuthContext);
   const dispatch = useDispatch();
@@ -91,7 +99,8 @@ const UserInfoForm = ({title, handleSubmit}) => {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [country, setCountry] = useState('');
-  
+  const [imageBase64, setImageBase64] = useState(null);
+
   useEffect(() => {
     if(userList.status === 'fulfilled') {
       setUsername(userList.data.user.username);
@@ -118,7 +127,7 @@ const UserInfoForm = ({title, handleSubmit}) => {
   const [photoDropVisibility, setPhotoDropVisibility] = useState('none');
   const history = useHistory();  
   
-  const handleClick = () => {
+  const handleClick = () => {    
     handleSubmit({
        first_name,
        last_name, 
@@ -127,11 +136,12 @@ const UserInfoForm = ({title, handleSubmit}) => {
        city, 
        state, 
        country, 
+       imageBase64
     });
   }
-  // const handleOpenModel = () => {
-  //   setShowModel('inline');
-  // }
+  const handleUploadImage = async (canvas, imageUrl) => {
+    setImageBase64(imageUrl);
+  }
   console.log('UserInfoForm userList',userList)
   return (
     <div className={classes.root}>
@@ -146,12 +156,15 @@ const UserInfoForm = ({title, handleSubmit}) => {
         </Button>
       </div>
       <div style={{display: photoDropVisibility}}>
-        {/* <UploadPhoto token={auth.authState.token} setPhotoDetails={setPhotoDetails}/> */}
+        <UploadImage handleUploadImage={handleUploadImage} width={100} height={100} />
+      </div>
+      <div className={classes.imagePreview} >
+        <img id='uploadIMG' name='uploadImage' src={imageBase64} alt=''/>
       </div>
       <div className={classes.form}>
         <div className={classes.formAvatar} >          
-          <UserAvatar />
-          {/* <UserAvatar photo_url={photo_details.photo_url}/> */}
+          {/* <UserAvatar /> */}
+          <UserAvatar photo_url={imageBase64}/>
           {username}
           <Button 
             name="avatar" 

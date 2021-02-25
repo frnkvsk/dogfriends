@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 // import { AuthContext } from '../context/AuthContext';
 import { deepOrange } from '@material-ui/core/colors';
-import { selectUser } from '../dogfriendsUserSlice';
+import { selectAvatar } from '../dogfriendsAvatarSlice';
 import { useSelector } from 'react-redux';
 
 // import { getUserInfoData, selectUser } from '../dogfriendsUserSlice';
@@ -25,21 +25,21 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserAvatar() {
   const classes = useStyles();
-  const userList = useSelector(selectUser);
+  const avatarUrl = useSelector(selectAvatar);
   const [photo_url, setPhotoUrl] = useState(null);
 
   // const auth = useContext(AuthContext);
   // console.log('UserAvatar auth',auth)
   
   useEffect(() => {
-    if(userList.status === 'fulfilled') {
-      setPhotoUrl(userList.data.user.photo_url);
+    if(avatarUrl.status === 'fulfilled') {
+      setPhotoUrl(avatarUrl.data);
     }
-  }, [userList.status, photo_url, userList]);
+  }, [avatarUrl.status, photo_url, avatarUrl]);
   
-  const initials = userList.status==='fulfilled' ? userList.data.user.first_name[0].toUpperCase() + userList.data.user.last_name[0].toUpperCase() : '';
+  const initials = 'NO' //userList.status==='fulfilled' ? userList.data.user.first_name[0].toUpperCase() + userList.data.user.last_name[0].toUpperCase() : '';
 
-  // console.log('UserAvatar userList',userList)
+  console.log('UserAvatar avatarUrl',avatarUrl)
   return (
     
     <div className={classes.root}>

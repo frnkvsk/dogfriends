@@ -106,9 +106,9 @@ const getUserInfo = async (payload) => {
     console.error(error);
   }   
 }
-const patchUserInfo = async (userInfo) => {
+const patchUserInfo = async (payload) => {
   try {
-    return await request(`users/${userInfo.username}`, userInfo, 'patch');
+    return await request(`users/${payload.username}`, payload, 'patch');
   } catch (error) {
     console.error(error);
   }   
