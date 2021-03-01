@@ -13,9 +13,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    width: '100%',
+    // alignItems: 'flex-start',
+    // justifyContent: 'space-between',
+    width: '97%',
     padding: '0',
     margin: '0',
     // height: '100vh',
@@ -25,9 +25,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     
     width: '100%',
-    margin: '3px 0 2px 0',
-    padding: '3px',
-    border: '1px solid #eeeeee',
+    // margin: '3px 0 2px 0',
+    // padding: '3px',
+    // border: '1px solid #eeeeee',
   },
   control: {
     display: 'flex',    
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
   formItem: {
-    margin: '5px 0 5px 0',
+    margin: '3px 0 7px 0',
   },
 
 }));

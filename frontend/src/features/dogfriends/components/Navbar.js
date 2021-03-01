@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import { useTheme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
@@ -22,11 +23,12 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import { AuthContext } from '../context/AuthContext';
 // import UserAvatar from './UserAvatar';
-// import { getUserInfoSlice } from '../dogfriendsUserSlice';
+import { addUserInfo } from '../dogfriendsUserSlice';
 // import { logout } from '../dogfriendsUserSlice';
-
+import { getUserInfo } from '../api/DogfriendsApi';
 
 import logo from '../assets/logo.png';
+import UserAvatar from './UserAvatar';
 
 const useStyles = makeStyles(theme => ({
   toolbarMargin: {
@@ -57,7 +59,7 @@ const useStyles = makeStyles(theme => ({
   tab: {
     ...theme.typography.tab,
     minWidth: 10,
-    marginLeft: '25px',
+    marginRight: '25px',
     
   },
   button: {
@@ -105,6 +107,11 @@ const useStyles = makeStyles(theme => ({
     zIndex: theme.zIndex.modal + 1,
     position: 'fixed',
     background: `linear-gradient(45deg, ${theme.palette.common.brown} 30%, ${theme.palette.common.brownLight} 90%)`,
+  },
+  avatar: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
   }
 }));
 
@@ -132,12 +139,11 @@ function HideOnScroll(props) {
 HideOnScroll.propTypes = {
   children: PropTypes.element.isRequired
 };
-export default function Header(props) {
+export default function Navbar(props) {
   const classes = useStyles();
   const history = useHistory();
   const auth = useContext(AuthContext);
-  // console.log('Navbar auth',auth)
-//   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const location = useLocation();
   const theme = useTheme();
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -147,13 +153,45 @@ export default function Header(props) {
   const [value, setValue] = useState(0);  
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const username = auth.authState.userInfo.username;
+  const [username, setUserName] = useState(''); //auth.authState.userInfo.username;
   const [listItems, setListItems] = useState({});
+
   
-  // if username not equal to undefined then user is logged in 
+
+  /**
+   * We are going to check the login status of the user
+   * here at the Navbar because it is the top level Component
+   * in this app.
+   */
+  useEffect(() => {
+    const getSetUserInfo = async () => {
+      const data = {
+        username: auth.authState.userInfo.username,
+        token: auth.authState.token
+      }
+      const resp = await getUserInfo(data);
+      if(resp.status === 200) {
+        dispatch(addUserInfo(resp.data.user))
+      }
+    }
+    // if auth contains the user token, then the 
+    // user is signed in.
+    if(auth.authState && auth.authState.token.length && !username.length) {
+      // set the username
+      setUserName(auth.authState.userInfo.username);
+      // get and set the user infomation in Redux so the rest of
+      // the app has access to this information
+      getSetUserInfo();
+    } else {
+      setUserName('');
+    }
+    // eslint-disable-next-line
+  }, [auth.authState, dispatch]);
+  
+  // if token not equal to undefined then user is logged in 
   // and has a different set of Navbar options
   useEffect(() => {
-    username ? setListItems({
+    username.length ? setListItems({
       '/': {name: 'Home', index: 0},
       '/new': {name: 'New Post', index: 1},
       '/profile': {name: 'Profile', index: 2},
@@ -166,22 +204,17 @@ export default function Header(props) {
       '/contact': {name: 'Contact Us', index: 2},
       '/login': {name: 'Login', index: 3},
     });
-  }, [username]);
+  }, [username.length]);
    
-
+  // set the focus on the correct navbar index
   useEffect(() => {
-    // console.log('Navbar useEffect listItems[location.pathname]',listItems[location.pathname])
-    // console.log('0location.pathname',location.pathname, value)
     if(listItems[location.pathname]) {
       if(listItems[location.pathname].index === 5) {
         setValue(0);
-        // history.push('/');
       } else {
         setValue(listItems[location.pathname].index);  
       }       
-    }  
-    // console.log('1location.pathname',location.pathname, value)
-        
+    }          
   }, [listItems, location.pathname]);
 
   const handleClick = async e => {
@@ -192,7 +225,7 @@ export default function Header(props) {
       history.push('/login');
     }      
   }
-
+  console.log('Navbar username',username)
   const tabs = (
     <>
     <Tabs 
@@ -200,6 +233,10 @@ export default function Header(props) {
       value={value && !auth.authState.userInfo ? value -2 : value} 
       TabIndicatorProps={{style: {backgroundColor: 'primary', opacity: 0}}}          
       >
+        
+          
+        
+        
         {Object.entries(listItems).map(e => 
           e[0]==='/login' ? (
             <Tab 
@@ -219,7 +256,8 @@ export default function Header(props) {
             />
           )          
         )}      
-    </Tabs>    
+    </Tabs> 
+      
     </>
   );
 
@@ -277,8 +315,16 @@ export default function Header(props) {
             <Toolbar disableGutters>
               <Button className={classes.logoContainer} component={Link} to='/' disableRipple>
                 <img src={logo} className={classes.logo} alt='company logo'/>
-              </Button>            
+              </Button>                    
               {matches ? drawer : tabs}
+              {username ? (
+                <div 
+                  className={classes.avatar}
+                  onClick={() => history.push('/profile')}>
+                  {username}
+                  <UserAvatar />
+                </div>
+              ) : ''} 
             </Toolbar>
           </AppBar>
         </HideOnScroll>            

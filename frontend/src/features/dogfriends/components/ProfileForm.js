@@ -1,16 +1,22 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { AuthContext } from '../context/AuthContext';
-import { 
-  selectUser,
-  getUserInfoSlice } from '../dogfriendsUserSlice';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import UserAvatar from '../components/UserAvatar';
-import { Button, TextField } from '@material-ui/core';
-import {UploadImage} from './UploadImage';
 import { useHistory } from 'react-router-dom';
+// import { v4 as uuid } from 'uuid';
+import { makeStyles } from '@material-ui/core/styles';
+import { 
+  TextField,
+  Button } from '@material-ui/core';
+// import { AuthContext } from '../context/AuthContext';
+import { selectUser } from '../dogfriendsUserSlice';
+import { selectAvatar } from '../dogfriendsAvatarSlice';
 
+import UserAvatar from './UserAvatar';
+
+import {UploadImage} from './UploadImage';
+
+// import { getUserInfo } from '../api/DogfriendsApi';
+// import { addAvatarUrl } from '../dogfriendsAvatarSlice';
+// import { putNewPhoto } from '../api/DogfriendsPhotosApi';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,11 +25,13 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
-    minHeight: '100vh',
+    // minHeight: '100vh',
     maxWidth: '700px',
     padding: '2px',
-    height: '100vh',
-    border: '1px solid red',
+    // height: '100vh',
+    backgroundColor: theme.palette.common.yellow,
+    // background: `linear-gradient(45deg, ${theme.palette.common.brown} 10%, ${theme.palette.common.brownLight} 50%)`,
+    border: '1px solid #eeeeee',
   },
   form: {
     display: 'flex',
@@ -31,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     width: '100%',
     fontSize: '24px',
-    border: '1px solid green',
+    // border: '1px solid green',
   },
   formElement: {
     // display: 'flex',
@@ -39,22 +47,31 @@ const useStyles = makeStyles((theme) => ({
     // justifyContent: 'space-between',
     width: 'auto',
     margin: '10px 15px',
-    // cursor: 'pointer',
   },
   formAvatar: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     margin: '20px 15px',
-    border: '1px solid pink',
+    padding: '5px',
+    border: '1px solid #00000030',
+    '&:hover': {
+      border: '1px solid #00000090',
+    },
+    borderRadius: '5px',
   },
   formLabel: {
-    // display: 'flex',
     margin: '10px 20px 15px',
   },
   button: {
-    borderRadius: '12px',
-    marginLeft: '10px',
+    ...theme.typography.button,
+    backgroundColor: theme.palette.common.yellowDark,
+    borderRadius: '22px',
+    margin: '0 25px 0 50px',    
+    height: '45px',
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.light,
+    }
   },
   header: {
     display: 'flex',
@@ -62,11 +79,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
     height: '50px',
     margin: '20px 0 20px 0',
-    // border: '1px solid orange',
     '& p': {
       fontSize: '38px',
       color: 'green',
-      // border: '1px solid pink',
     },
     '& button': {
       height: '30px',
@@ -78,19 +93,17 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     maxWidth: '100px',
     maxHeight: '100px',
-    // marginLeft: '7px',
   }
 
 }));
 
-
-const UserInfoForm = ({title, handleSubmit}) => {
-  // const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://3ynkxwkjf5.execute-api.us-west-2.amazonaws.com/dev/upload';
+const ProfileForm = ({title, handleSubmit}) => {
+  
   const classes = useStyles();
-  const auth = useContext(AuthContext);
-  const dispatch = useDispatch();
-  console.log('UserInfoForm auth',auth)
-  const userList = useSelector(selectUser);
+  // const auth = useContext(AuthContext);
+  // const dispatch = useDispatch();
+  const selectUserData = useSelector(selectUser);
+  const selectAvatarData = useSelector(selectAvatar);
   const [username, setUsername] = useState('');
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
@@ -99,35 +112,27 @@ const UserInfoForm = ({title, handleSubmit}) => {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [country, setCountry] = useState('');
-  const [imageBase64, setImageBase64] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
-    if(userList.status === 'fulfilled') {
-      setUsername(userList.data.user.username);
-      setFirstName(userList.data.user.first_name);
-      setLastName(userList.data.user.last_name);
-      setEmail(userList.data.user.email);
-      setPhotoId(userList.data.user.photo_id);
-      setCity(userList.data.user.city);
-      setState(userList.data.user.state);
-      setCountry(userList.data.user.country);
-    } else {
-      const payload = {
-        'username': auth.authState.userInfo.username,
-        'token': auth.authState.token,
-      }
-      dispatch(getUserInfoSlice(payload));      
-    }
-    console.log('UserInfoForm useEffect userList',userList)
+    if(selectUserData.status === 'fulfilled') {
+      setUsername(selectUserData.data.username ? selectUserData.data.username : '');
+      setFirstName(selectUserData.data.first_name ? selectUserData.data.first_name : '');
+      setLastName(selectUserData.data.last_name ? selectUserData.data.last_name : '');
+      setEmail(selectUserData.data.email ? selectUserData.data.email : '');
+      setPhotoId(selectUserData.data.photo_id ? selectUserData.data.photo_id : '');
+      setCity(selectUserData.data.city ? selectUserData.data.city : '');
+      setState(selectUserData.data.state ? selectUserData.data.state : '');
+      setCountry(selectUserData.data.country ? selectUserData.data.country : '');
+    }     
+   
     // eslint-disable-next-line
-  }, [userList.status])
-  
-  
+  }, [selectAvatarData.data.imageUrl, selectUserData.data.first_name, selectUserData.data.last_name, selectUserData.data.email, selectUserData.data.photo_id, selectUserData.data.city, selectUserData.data.state, selectUserData.data.country, selectUserData.status]);  
 
   const [photoDropVisibility, setPhotoDropVisibility] = useState('none');
   const history = useHistory();  
   
-  const handleClick = () => {    
+  const handleClick = () => {        
     handleSubmit({
        first_name,
        last_name, 
@@ -135,14 +140,15 @@ const UserInfoForm = ({title, handleSubmit}) => {
        photo_id,
        city, 
        state, 
-       country, 
-       imageBase64
+       country,
+       imageUrl
     });
   }
-  const handleUploadImage = async (canvas, imageUrl) => {
-    setImageBase64(imageUrl);
+  const handleUploadImage = async (canvas, imageUrl) => {    
+    setImageUrl(imageUrl);    
   }
-  console.log('UserInfoForm userList',userList)
+  console.log('UserInfoForm userList',selectUserData);
+  
   return (
     <div className={classes.root}>
       
@@ -159,12 +165,11 @@ const UserInfoForm = ({title, handleSubmit}) => {
         <UploadImage handleUploadImage={handleUploadImage} width={100} height={100} />
       </div>
       <div className={classes.imagePreview} >
-        <img id='uploadIMG' name='uploadImage' src={imageBase64} alt=''/>
+        <img id='uploadIMG' name='uploadImage' src={imageUrl} alt=''/>
       </div>
       <div className={classes.form}>
-        <div className={classes.formAvatar} >          
-          {/* <UserAvatar /> */}
-          <UserAvatar photo_url={imageBase64}/>
+        <div className={classes.formAvatar} >
+          <UserAvatar photo_url={imageUrl}/>
           {username}
           <Button 
             name="avatar" 
@@ -210,10 +215,9 @@ const UserInfoForm = ({title, handleSubmit}) => {
           label='Country: (optional)' 
           variant='outlined' 
           value={country} 
-          onChange={e => setCountry(e.target.value)}/>
-      
+          onChange={e => setCountry(e.target.value)}/>      
       </div>
     </div>
   );
 }
-export default UserInfoForm;
+export default ProfileForm;

@@ -2,15 +2,19 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
 import fadeInUp from 'react-animations/lib/fade-in-up';
-import Post from './Post';
+
 import { v4 as uuid } from 'uuid';
-import {
-  getPostsData,
-  selectPosts
-} from '../dogfriendsPostsSlice';
+
 import { makeStyles } from '@material-ui/core/styles';
+import styled, { keyframes } from 'styled-components';
+
+import Post from './Post';
+
+import { selectPosts, addPosts } from '../dogfriendsPostsSlice';
+import {
+  getPosts,
+} from '../api/DogfriendsApi';
 
 const fadeInUpAnimation = keyframes`${fadeInUp}`;
 const FadeInUpAnimation = styled.div`
@@ -39,26 +43,38 @@ const PostList = ({imageCount}) => {
   const history = useHistory();
   const selectList = useSelector(selectPosts);
   
-  useEffect(() => {
-    dispatch(getPostsData());
-  },[dispatch]);
   
+  useEffect(() => {
+    const getPostsData = async () => {
+      const response = await getPosts();
+      if(response.status === 200) {
+        dispatch(addPosts(response.data));
+      }      
+    }
+    if(selectList.status !== 'fulfilled') {
+      getPostsData();
+    }    
+  }, [selectList.status, dispatch]);
+  console.log('PostList selectList',selectList)
   return (    
     <>   
-      <FadeInUpAnimation className={classes.fadeinContainer}>
+      
         {selectList.data.length ? selectList.data.map(e => (
-          <div 
-            key={uuid()}
+          <FadeInUpAnimation 
+            className={classes.fadeinContainer}
+            key={uuid()} >
+          <div             
             onClick={() => history.push(`/post/${e.id}`)} >
             <Post 
-              id={e.photo_id+'.txt'}
+              id={e.photo_id}
               title={e.title} 
               username={e.username} 
               created_on={e.created_on}
               />
           </div> 
+          </FadeInUpAnimation>
       )) : <div></div>}
-      </FadeInUpAnimation>
+      
       <div style={{marginBottom: '20px'}} />
     </>
   )

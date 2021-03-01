@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const AWS_IMAGE_BUCKET_URL_BASE='https://dogfriends.s3-us-west-2.amazonaws.com/';
+// const AWS_IMAGE_BUCKET_URL_BASE='https://dogfriends.s3-us-west-2.amazonaws.com/';
 const BASE_URL = 'http://localhost:5000/api/';
 
 const request = async (endpoint, paramsOrData = {}, verb = "get") => {    
@@ -41,33 +41,31 @@ const getPhotoById = async () => {
 }
 
 // gets Base 64 image/jpeg string from AWS S3 bucket
-const getPhotoBySrc = async (key) => {
-  console.log('--DogfriendsPhotosApi getPhotoBySrc key',key)
+// return Buffer
+const getPhotoBySrc = async (key, lambdaUrl) => {
+  console.log('--DogfriendsPhotosApi getPhotoBySrc key',key, lambdaUrl)
   const data = {
     key
   }
-  const lambdaSRC = 'https://qljffa4b43.execute-api.us-west-2.amazonaws.com/dev1/images';
-  return await request(lambdaSRC, data, 'post');
+  // const lambdaSRC = 'https://qljffa4b43.execute-api.us-west-2.amazonaws.com/dev1/images';
+  return await request(lambdaUrl, data, 'post');
 }
 
 // puts Base 64 image/jpeg string into AWS S3 bucket
 // posts image id and url to database
-const putNewPhoto = async (image, imageName, upload_base, _token) => { 
+const putNewPhoto = async (image, imageName, aws_endpoint_up, _token, aws_endpoint_down) => { 
+  // if(!imageName.endsWith('.txt')) imageName = `${imageName}.txt`;
   try {
-    const data = {
-      image,
-      imageName
-    } 
     // upload photo to AWS S3 bucket   
-    const res = await request(upload_base, JSON.stringify(data), 'put');
+    const res = await request(aws_endpoint_up, {image, imageName}, 'put');
     if(await res) {
       // write image data to database photos table
-      const data2 = {
+      const data = {
         photo_id: imageName,
-        photo_url: `${AWS_IMAGE_BUCKET_URL_BASE}${imageName}`,
+        photo_url: `${aws_endpoint_down}/${imageName}`,
         _token
       }
-      await request(`${BASE_URL}photos/`, data2, 'post');
+      await request(`${BASE_URL}photos/`, data, 'post');
     }
   } catch (error) {
     console.log(error);

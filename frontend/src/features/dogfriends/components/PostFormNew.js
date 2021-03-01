@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 
 import { 
-  addNewPost,
+  addPosts,
  } from '../dogfriendsPostsSlice';
 import { AuthContext } from '../context/AuthContext';
 
@@ -17,7 +17,7 @@ import {UploadImage} from './UploadImage';
 import { v4 as uuid } from 'uuid';
 import { FillTextImage } from './FillTextImage';
 import { putNewPhoto } from '../api/DogfriendsPhotosApi';
-
+import { postPostNew } from '../api/DogfriendsApi';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,9 +32,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     width: '400px',
-    margin: '30px 0 20px 0',
+    margin: '0 0 20px 0',
     padding: '15px',
-    border: '2px solid #eceff1',
+    backgroundColor: theme.palette.common.yellow,
+    border: '1px solid #eeeeee',    
   },
   control: {
     display: 'flex',    
@@ -50,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     maxWidth: '400px',
     maxHeight: '400px',
-    // marginLeft: '7px',
   }
 
 }));
@@ -125,11 +125,11 @@ const PostFormNew = () => {
   }, [body]);
  
   
-  const handleSubmit = e => {   
+  const handleSubmit = async e => {   
     e.preventDefault();
     // console.log('PostFormNew initInfo',initInfo)
     if(image) {
-      const photo_id = 'lg-' + uuid();
+      const photo_id = 'lg-' + uuid() + '.txt';
 
       // put photo in AWS S3 bucket with lambda function
       // post photo to db photos table
@@ -146,8 +146,10 @@ const PostFormNew = () => {
         username: auth.authState.userInfo.username,
         _token: auth.authState.token
       }
+      dispatch(addPosts(payload)); 
       // commit post details to database
-      dispatch(addNewPost(payload));  
+      postPostNew(payload);
+       
       history.push('/');
     }
       
@@ -224,7 +226,7 @@ const PostFormNew = () => {
             className={classes.formItem} 
             onClick={() => history.push('/')} 
             variant='contained' 
-            color='default' >
+            color='secondary' >
             Cancel
           </Button>
         </div>      

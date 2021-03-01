@@ -20,11 +20,12 @@ const useStyles = makeStyles({
     margin: '1px 12px 1px 3px',
     padding: '2px 5px 2px 5px',
     // border: '1px solid red',
+    
   },
   mediaBody: {
     display: 'flex',
     flexWrap: 'wrap',
-    maxWidth: '350px',
+    // maxWidth: '350px',
     fontSize: '18px',
     wordWrap: 'break-word',
     overflow: 'hidden',

@@ -25,7 +25,7 @@ const request = async (endpoint, paramsOrData = {}, verb = "get") => {
 // posts
 const getPosts = async () => {
   let res = await request('posts');
-  // console.log('DogfriendApi getPosts res',res)
+  console.log('DogfriendApi getPosts res',res)
   return res;
 }
 const getPostById = async (id) => {
@@ -67,7 +67,10 @@ const postReplyNew = async (data) => {
   request('replies/', data, 'post');
 }
 
-// login / signup
+/**
+ * User logs in to the system
+ * @param {username, password} data 
+ */
 const login = async (data) => {
   // console.log('DogfriendsApi login data',data)
   try {
@@ -77,9 +80,13 @@ const login = async (data) => {
   }   
 }
 
-const preSignupUsernameCheck = async ({username}) => {
+/**
+ * Checks to see if username is already in use
+ * @param {username} data 
+ */
+const preSignupUsernameCheck = async (data) => {
   try {
-    const res = await request(`users/${username}`, {}, 'post');
+    const res = await request(`users/${data.username}`, {}, 'post');
     return res.data;
   } catch (error) {
     console.error(error);
@@ -95,17 +102,20 @@ const signup = async (data) => {
     console.error(error);
   }   
 }
+
+/**
+ * Get user information
+ * @param {username, token} payload 
+ */
 const getUserInfo = async (payload) => {
-  console.log('DogfriendsApi payload',payload)
   const {username, token} = payload;
   try {  
-    const res = await request(`users/${username}/`, {_token: token});    
-    return res;
+    return await request(`users/${username}/`, {_token: token}); 
   } catch (error) {
-    // console.log('Error getUserInfo')
     console.error(error);
   }   
 }
+
 const patchUserInfo = async (payload) => {
   try {
     return await request(`users/${payload.username}`, payload, 'patch');

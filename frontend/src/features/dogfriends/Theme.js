@@ -1,7 +1,7 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
 const dfBrownDark = '#99710a';
-const dfBrown = '#b66b35'//'#d2691e';
+const dfBrown = '#b66b35';
 const dfBrownLight = '#e1782d';
 
 const dfYellowDark = '#c99e03';

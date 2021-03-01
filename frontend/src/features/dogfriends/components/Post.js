@@ -14,10 +14,11 @@ import Typography from '@material-ui/core/Typography';
 // import useImageUrl from '../hooks/useImageUrl';
 import useDate from '../hooks/useDate';
 // import ImageComp from './ImageComp';
-// import getUrlImageHelper from '../assets/getUrlImageHelper';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { getPhotoBySrc } from '../api/DogfriendsPhotosApi';
 import { addPhotoUrl, selectPhotos } from '../dogfriendsPhotosSlice';
+import { selectUser } from '../dogfriendsUserSlice';
 
 const useStyles = makeStyles({
   // root: {
@@ -41,7 +42,8 @@ const useStyles = makeStyles({
     margin: '15px',
     border: '2px solid #f5f5f5',
     borderRadius: '4px',
-    boxShadow: '0 8px 6px -6px black'
+    boxShadow: '0 10px 6px -6px #80808040',
+    cursor: 'pointer',
   },
   media: {    
     // width: '400px',
@@ -56,6 +58,7 @@ const useStyles = makeStyles({
     // border: '1px solid blue',  
     borderTopRightRadius: '4px', 
     borderTopLeftRadius: '4px', 
+    
   },
   mediaItem: {
     display: 'flex',
@@ -79,36 +82,44 @@ const useStyles = makeStyles({
 
 export default function Post({id, title, username, created_on}) {
   const classes = useStyles();
-  const selectList = useSelector(selectPhotos);
+  const selectPhotosList = useSelector(selectPhotos);
+  const selectUserInfo = useSelector(selectUser);
   const dispatch = useDispatch();
-  if(!id.endsWith('.txt')) {
-    id += '.txt';
-  }
-  const [imageUrl, setImageUrl] = useState(null);
+  // if(!id.endsWith('.txt')) {
+  //   id += '.txt';
+  // }
+  const [imageUrl, setImageUrl] = useState('');
   
+  // console.log('Post selectUserInfo', selectUserInfo)
+  // console.log('Post selectPhotosList', selectPhotosList)
+  // console.log('---------------------')
 
   useEffect(() => {
     async function getImage() { 
       if(id) {
-        if( selectList.status === 'fulfilled' && [...selectList.data].some(post => id.startsWith(post.photo_id)) ) {
-          const post = [...selectList.data].find(post => id.startsWith(post.photo_id));
-          setImageUrl(post.imageUrl);
+        const existingPost = [...selectPhotosList.data].find(post => id.startsWith(post.photo_id));
+        // console.log('0Post existingPost',existingPost)
+        if( selectPhotosList.status === 'fulfilled' && 
+          existingPost) {
+
+          // console.log('Post existingPost',existingPost)
+          setImageUrl(existingPost.imageUrl);
         } else {
-          const res = await getPhotoBySrc(id);
+          const res = await getPhotoBySrc(id, selectUserInfo.data.aws_bucket_endpoint_down);
           if(res && res.data.Body) {
-            const base64 = String.fromCharCode(...res.data.Body.data).toString('base64');
-            setImageUrl(base64); 
+            const imageUrl = String.fromCharCode(...res.data.Body.data).toString('base64');
+            setImageUrl(imageUrl); 
             let payload = {
               photo_id: id,
-              imageUrl: base64
+              imageUrl
             }
             dispatch(addPhotoUrl(payload));        
           }
         }
       }     
     };
-    if(!imageUrl) {
-      getImage();
+    if(!imageUrl.length) {
+      getImage();    
     }
     // eslint-disable-next-line
   }, [imageUrl]);

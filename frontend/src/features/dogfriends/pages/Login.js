@@ -11,12 +11,12 @@ import { AuthContext } from '../context/AuthContext';
 import { useDispatch } from 'react-redux';
 import SignupForm from '../components/SignupForm';
 import LoginForm from '../components/LoginForm';
-import { 
-  checkUsernameSlice,
-  signUpSlice, 
-  loginSlice, 
-  getUserInfoSlice 
-} from '../dogfriendsUserSlice';
+import { addUserInfo } from '../dogfriendsUserSlice';
+import {
+  getUserInfo, 
+  login, 
+  preSignupUsernameCheck,
+  signup} from '../api/DogfriendsApi';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -63,79 +63,78 @@ export default function Login() {
   const dispatch = useDispatch();
   const [loginType, setValue] = useState('login');
 
+  /**
+   * Toggle between Login and Signup functionality
+   * value is the Tab value string
+   * @param {event} e 
+   * @param {value} newValue 
+   */
   const handleChange = (e, newValue) => {
     setValue(newValue);
   }
 
-  const handleLogin = async ({
-    username,
-    password
-  }) => {
+  /**
+   * Login user
+   * @param {username, password} data 
+   */
+  const handleLogin = async (data) => {
     try {
-      // verify username and password are correct
-      const resp = await dispatch(loginSlice({
-        username: username,
-        password: password
-      }));
-      console.log('LoginForm handleSubmitForm resp',resp)
-      // if logged in, use resp.token to get user information
-      if(resp && resp.payload.token.length) {
-        console.log('if resp && resp.token.length',resp , resp.payload.token.length)
-        const userInfo = await dispatch(getUserInfoSlice({
-          token: resp.payload.token, 
-          username: username
-        }));
-  
+      // login to database
+      const response = await login(data);
+      // if logged in get user information
+      if(response && response.status === 200) {
+        data['token'] = response.data.token;
+        const userInfo = await getUserInfo(data);
+        await dispatch(addUserInfo(userInfo.data.user));
         auth.setAuthState({
-          userInfo: userInfo.payload.user,
-          token: resp.payload.token,
+          userInfo: {username: data.username},
+          token: data.token,
         });
         return true;
       } else {
-        console.log('else resp && resp.token.length',resp , resp.payload.token.length)
+        console.log('Error login',response)
         return false;
-      }      
-      
+      }        
     } catch (error) {
       console.log(error)
       return false;
     }
   }
-
-  // check if username is available
-  const handleCheckUsernameAvailability = async ({username}) => {
-    if(username.length) {
-      return await dispatch(checkUsernameSlice({username}));
+  
+  /**
+   * Check if username is available
+   * @param {username} data 
+   */
+  const handleCheckUsernameAvailability = async (data) => {
+    if(data.username.length) {
+      return await preSignupUsernameCheck(data);
     }    
   }
   
-  const handleSignup = async (
-    // {
-    // username,
-    // password, 
-    // first_name,
-    // last_name,
-    // email
-    // }
-    data) => {
-    // const userInfo = {
-    //   username,
-    //   password,
-    //   first_name,
-    //   last_name, 
-    //   email,
-    // }
-    
-    console.log('SignupForm userInfo',data)
-    const resp = await dispatch(signUpSlice(data));
-    console.log('Login handleSignup resp',resp)
-    if(await resp.payload.token) {
+  /**
+   * Signup user
+   * @param {
+   *  username, (required)
+   *  password, (required)
+   *  first_name, (required)
+   *  last_name, (required)
+   *  email, (required)
+   *  city, (optional)
+   *  state, (optional)
+   *  country (optional)
+   * } data 
+   */
+  const handleSignup = async (data) => {  
+    const resp = await signup(data);
+    if(resp.status === 201) {
       auth.setAuthState({
-        userInfo: data,
-        token: resp.payload.token,
+        userInfo: {username: data.username},
+        token: resp.data.token,
       });
       history.push('/');
-    }    
+    } else {
+      return false;
+    }   
   }  
 
   return (    

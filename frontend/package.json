@@ -12,6 +12,7 @@
     "aws-sdk": "^2.831.0",
     "axios": "^0.21.1",
     "react": "^16.13.1",
+    "react-animation": "^1.2.2",
     "react-animations": "^1.0.0",
     "react-dom": "^16.13.1",
     "react-fade-in": "^2.0.1",

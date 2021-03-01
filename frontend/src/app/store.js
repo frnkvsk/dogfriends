@@ -13,7 +13,7 @@ export default configureStore({
     replyList: dogfriendsRepliesSlice,
     votesList: dogfriendsVotesSlice,
     pageCount: dogfriendsPageCountSlice,
-    userList: dogfriendsUserSlice,
+    userInfo: dogfriendsUserSlice,
     photoList: dogfriendsPhotosSlice,
     avatarUrl: dogfriendsAvatarSlice,
   },

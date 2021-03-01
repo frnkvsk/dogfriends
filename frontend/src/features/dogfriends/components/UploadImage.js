@@ -4,17 +4,19 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   form: {
-    margin: '20px 0 20px 0',
-    // border: '1px solid red',
+    margin: '6px 0 6px 0',
   },
   photoDrop: {
     backgroundImage: `url(${photo_drop_zone})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    width: '400px',
+    padding: '5px',
+    width: '388px',
     height: '370px',
+    borderRadius: '7px',
+    cursor: 'pointer',  
     border: '2px dotted salmon',
-    cursor: 'pointer',    
+      
   },
   errorMsg: {
     color: 'red',

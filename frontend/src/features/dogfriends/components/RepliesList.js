@@ -22,40 +22,41 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'center',    
-    margin: '0 20px',
-    cursor: 'pointer',
-    width: '95%',
-    // minWidth: '350px',
+    // margin: '0 20px',
+    // cursor: 'pointer',
+    width: '100%',
+    minWidth: '350px',
     // width: 'fit-content',
     // blockSize: 'fit-content',
-    [theme.breakpoints.down('md')]: {
-      width: '80%',
-    }, 
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
-    },
+    // [theme.breakpoints.down('md')]: {
+    //   width: '80%',
+    // }, 
+    // [theme.breakpoints.down('sm')]: {
+    //   width: '100%',
+    // },
     
-    // border: '1px solid green',
+    border: '1px solid #eeeeee',
+    boxShadow: '0 10px 6px -6px #80808040',
   },
   commentSection: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'stetch',
-    // justifyContent: 'center',
+    justifyContent: 'flex-start',
     width: '100%',
     height: 450,
     overflow: 'auto',
-    padding: '3px',
+    // padding: '3px',
     // border: '1px solid blue',
-    border: '1px solid #eeeeee',
+    // border: '1px solid #eeeeee',
   },
   comment: {
     // display: 'flex',
     // flexDirection: 'column',
     // alignItems: 'stetch',
-    width: '100%',
+    width: 'auto',
     // margin: '2px 5px 2px 0',
     // padding: '0 15px 0 8px',
     border: '1px solid #eeeeee',
@@ -91,7 +92,7 @@ export default function RepliesList() {
       }
       // commit reply details to database
       await dispatch(addNewReply(payload)); 
-      console.log('-RepliesList handleSubmit dispatch')
+      console.log('-RepliesList handleSubmit dispatch', payload)
       // update replies list
       dispatch(getRepliesDataById(parent_id));
     }
