@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -12,6 +12,8 @@ import styled, { keyframes } from 'styled-components';
 import Post from './Post';
 
 import { selectPosts, addPosts } from '../dogfriendsPostsSlice';
+// import { selectPhotos, addPhotoUrl } from '../dogfriendsPhotosSlice';
+// import useImageUrl from '../hooks/useImageUrl';
 import {
   getPosts,
 } from '../api/DogfriendsApi';
@@ -41,25 +43,32 @@ const PostList = ({imageCount}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const selectList = useSelector(selectPosts);
+  const selectPostsData = useSelector(selectPosts);
   
   
-  useEffect(() => {
-    const getPostsData = async () => {
-      const response = await getPosts();
-      if(response.status === 200) {
-        dispatch(addPosts(response.data));
-      }      
-    }
-    if(selectList.status !== 'fulfilled') {
-      getPostsData();
-    }    
-  }, [selectList.status, dispatch]);
-  console.log('PostList selectList',selectList)
+  // useMemo(() => {
+    // const getPostsData = async () => {
+    //   // gets all posts from database
+    //   const response = await getPosts();
+      
+    //   // TODO: create pagination to only show so many per page
+
+    //   if(response.status === 200) {
+    //     dispatch(addPosts(response.data));
+    //   }  
+         
+    // }
+    // if(selectPostsData.status !== 'fulfilled') {
+    //   getPostsData();
+    // } 
+    // eslint-disable-next-line   
+  // }, [selectPostsData.data]);
+
+  console.log('PostList selectList',selectPostsData)
   return (    
     <>   
       
-        {selectList.data.length ? selectList.data.map(e => (
+        {selectPostsData.data.length ? selectPostsData.data.map(e => (
           <FadeInUpAnimation 
             className={classes.fadeinContainer}
             key={uuid()} >

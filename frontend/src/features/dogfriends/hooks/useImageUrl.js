@@ -6,9 +6,6 @@ import { addPhotoUrl, selectPhotos } from '../dogfriendsPhotosSlice';
 export default function useImageUrl(key) {
   const selectList = useSelector(selectPhotos);
   const dispatch = useDispatch();
-  // if(!key.endsWith('.txt')) {
-  //   key += '.txt';
-  // }
   const [imageUrl, setImageUrl] = useState('');
   const getImage = async () => { 
     if(key) {

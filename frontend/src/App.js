@@ -18,16 +18,17 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: '20px',
-    width: '97%',
+    justifyContent: 'flex-start',
+    // padding: '20px',
+    width: '100%',
     minHeight: '80vh',
+    border: '1px solid red',
   },
   main: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     [theme.breakpoints.down('lg')]: {
       width: '100%'
     },

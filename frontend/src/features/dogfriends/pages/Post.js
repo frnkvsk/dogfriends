@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 
 import { animations } from 'react-animation';
 import { makeStyles } from '@material-ui/core';
+
 import PostDisplay from '../components/PostDisplay';
 import { 
   selectPosts, 

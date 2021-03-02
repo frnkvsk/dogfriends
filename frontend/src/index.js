@@ -5,13 +5,16 @@ import App from './App';
 import store from './app/store';
 import { Provider } from 'react-redux';
 import { AuthProvider } from './features/dogfriends/context/AuthContext';
+import { PageInitProvider } from './features/dogfriends/context/PageInitContext';
 
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <Provider store={store}>
     <AuthProvider>
-      <App />    
+      <PageInitProvider>
+        <App />
+      </PageInitProvider>          
     </AuthProvider>    
   </Provider>,
   document.getElementById('root')

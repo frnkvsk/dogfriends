@@ -116,7 +116,12 @@ export default function RepliesList() {
           </div>
       )) : <div className={classes.gridItem} />}
       </div>
-      <ReplyFormNew handleSubmit={handleSubmit}/>             
-    </div>    
+      {auth.authState.userInfo.username && auth.authState.userInfo.username.length ?         
+        <ReplyFormNew handleSubmit={handleSubmit}/>
+        : ''
+      }             
+    </div>
+      
+          
   );
 }

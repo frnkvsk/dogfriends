@@ -16,6 +16,7 @@ import useDate from '../hooks/useDate';
 // import ImageComp from './ImageComp';
 
 import { useSelector, useDispatch } from 'react-redux';
+// import { AuthContext } from '../context/AuthContext';
 import { getPhotoBySrc } from '../api/DogfriendsPhotosApi';
 import { addPhotoUrl, selectPhotos } from '../dogfriendsPhotosSlice';
 import { selectUser } from '../dogfriendsUserSlice';
@@ -82,6 +83,7 @@ const useStyles = makeStyles({
 
 export default function Post({id, title, username, created_on}) {
   const classes = useStyles();
+  
   const selectPhotosList = useSelector(selectPhotos);
   const selectUserInfo = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -96,29 +98,27 @@ export default function Post({id, title, username, created_on}) {
 
   useEffect(() => {
     async function getImage() { 
-      if(id) {
-        const existingPost = [...selectPhotosList.data].find(post => id.startsWith(post.photo_id));
-        // console.log('0Post existingPost',existingPost)
-        if( selectPhotosList.status === 'fulfilled' && 
-          existingPost) {
+      const existingPost = [...selectPhotosList.data].find(post => id.startsWith(post.photo_id));
+      // console.log('0Post existingPost',existingPost)
+      if( selectPhotosList.status === 'fulfilled' && 
+        existingPost) {
 
-          // console.log('Post existingPost',existingPost)
-          setImageUrl(existingPost.imageUrl);
-        } else {
-          const res = await getPhotoBySrc(id, selectUserInfo.data.aws_bucket_endpoint_down);
-          if(res && res.data.Body) {
-            const imageUrl = String.fromCharCode(...res.data.Body.data).toString('base64');
-            setImageUrl(imageUrl); 
-            let payload = {
-              photo_id: id,
-              imageUrl
-            }
-            dispatch(addPhotoUrl(payload));        
+        // console.log('Post existingPost',existingPost)
+        setImageUrl(existingPost.imageUrl);
+      } else {
+        const res = await getPhotoBySrc(id, selectUserInfo.data.aws_bucket_endpoint_down);
+        if(res && res.data.Body) {
+          const imageUrl = String.fromCharCode(...res.data.Body.data).toString('base64');
+          setImageUrl(imageUrl); 
+          let payload = {
+            photo_id: id,
+            imageUrl
           }
+          dispatch(addPhotoUrl(payload));        
         }
       }     
     };
-    if(!imageUrl.length) {
+    if(!imageUrl.length && id) {
       getImage();    
     }
     // eslint-disable-next-line

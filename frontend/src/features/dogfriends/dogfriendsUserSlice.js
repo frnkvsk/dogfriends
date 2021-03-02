@@ -87,10 +87,7 @@ export const dogfriendsUserSlice = createSlice({
     addUserInfo: (state, action) => {
       state.userInfo = {
         status: 'fulfilled',
-        data: {
-          ...state.userInfo.data,
-          ...action.payload
-        }
+        data: action.payload
       }
     }
     // logout: (state, action) => {
