@@ -1,5 +1,5 @@
 {
-  "$id": "http://example.com/example.json",
+  "$id": "521ed6f9-5cfc-4704-83a9-674f629867b5",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -9,7 +9,7 @@
       "title": "The Username Schema ",
       "minLength": 3,
       "maxLength": 55,
-      "examples": ["hueter"]
+      "examples": ["UName"]
     },
     "password": {
       "$id": "/properties/password",
@@ -17,7 +17,7 @@
       "title": "The Password Schema ",
       "minLength": 6,
       "maxLength": 55,
-      "examples": ["foo123"]
+      "examples": ["Name123"]
     },
     "first_name": {
       "$id": "/properties/first_name",
@@ -25,7 +25,7 @@
       "title": "The First_name Schema ",
       "minLength": 3,
       "maxLength": 55,
-      "examples": ["Michael"]
+      "examples": ["FName"]
     },
     "last_name": {
       "$id": "/properties/last_name",
@@ -33,7 +33,7 @@
       "title": "The Last_name Schema ",
       "minLength": 3,
       "maxLength": 55,
-      "examples": ["Hueter"]
+      "examples": ["LName"]
     },
     "email": {
       "$id": "/properties/email",
@@ -41,13 +41,13 @@
       "minLength": 6,
       "maxLength": 60,
       "title": "The Email Schema ",
-      "examples": ["michael@rithmschool.com"]
+      "examples": ["name@name.com"]
     },
     "photo_id": {
       "$id": "/properties/photo",
       "type": "uuid",
       "title": "The Photo Schema ",
-      "default": null,
+      "default": "",
       "examples": [
         "45ab-678a-123b-543z"
       ]
@@ -65,7 +65,7 @@
       "$id": "/properties/city",
       "type": "string",
       "maxLength": 60,
-      "default": null,
+      "default": "",
       "title": "The State Schema ",
       "examples": ["Seattle"]
     },
@@ -73,7 +73,7 @@
       "$id": "/properties/state",
       "type": "string",
       "maxLength": 60,
-      "default": null,
+      "default": "",
       "title": "The State Schema ",
       "examples": ["WA"]
     },
@@ -81,10 +81,10 @@
       "$id": "/properties/country",
       "type": "string",
       "maxLength": 60,
-      "default": null,
+      "default": "",
       "title": "The Country Schema ",
       "examples": ["usa"]
     }
   },
-  "required": ["username", "password"]
+  "required": ["username", "password", "first_name", "last_name", "email"]
 }

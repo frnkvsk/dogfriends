@@ -2,12 +2,10 @@
 require('dotenv/config');
 const db = require("../db");
 const express = require("express");
-const { v4: uuid } = require('uuid');
 const router = express.Router({ mergeParams: true });
 const { ensureCorrectUser, authRequired } = require("../middleware/auth");
 
-///home/fv/js/capstone2/dogfriends/backend/test-images
-///home/fv/js/capstone2/dogfriends/backend/routes
+
 /** GET /        get photo by id for post or comment
  *
  * => { id, text }
@@ -23,7 +21,6 @@ router.get("/:id", async function (req, res, next) {
        ORDER BY id`,
       [req.params.id]);
     const result2 = res.json(result.rows[0]);
-    console.log('---result',result2)
     return result2;
   } catch (err) {
     return next(err);
@@ -42,7 +39,6 @@ router.post("/", authRequired, async function (req, res, next) {
   try {
     const photo_id = req.body.photo_id;
     const photo_url = req.body.photo_url;
-    console.log('---photos photo_id',photo_id,'  photo_url',photo_url)
     const result = await db.query(
       `INSERT INTO photos (id, url) 
        VALUES ($1, $2) 

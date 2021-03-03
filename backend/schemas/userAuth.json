@@ -1,5 +1,5 @@
 {
-  "$id": "http://example.com/example.json",
+  "$id": "521ed6f9-5cfc-4704-83a9-674f629867b5",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -7,13 +7,13 @@
       "$id": "/properties/username",
       "type": "string",
       "title": "The Username Schema ",
-      "examples": ["hueter"]
+      "examples": ["UName"]
     },
     "password": {
       "$id": "/properties/password",
       "type": "string",
       "title": "The Password Schema ",
-      "examples": ["foo123"]
+      "examples": ["name123"]
     }
   },
   "required": ["username", "password"]

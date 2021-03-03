@@ -15,7 +15,6 @@ const {SECRET_KEY} = require("../config");
 
 function authRequired(req, res, next) {
   try {
-    console.log('auth authRequired req.body',req.body)
     const tokenStr = req.body._token || req.query._token;
     let token = jwt.verify(tokenStr, SECRET_KEY);
     req.username = token.username;

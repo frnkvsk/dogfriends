@@ -2,7 +2,6 @@
 
 const db = require("../db");
 const express = require("express");
-const { v4: uuid } = require('uuid');
 const router = new express.Router();
 const { ensureCorrectUser, authRequired } = require("../middleware/auth");
 const AWS_BUCKET_ENDPOINT = process.env.AWS_IMAGE_BUCKET_URL_BASE; 
@@ -30,29 +29,11 @@ router.get("/", async function (req, res, next) {
       {...e,
       base_url: AWS_BUCKET_ENDPOINT}
     ));
-    // console.log('get posts result',result)
     return res.json(result);
   } catch (err) {
     return next(err);
   }
 });
-// router.get("/", async function (req, res, next) {
-//   try {
-//     const result = await db.query(
-//       `SELECT p.id,
-//               p.title,
-//               COALESCE(SUM(v.direction),0) votes
-//        FROM posts p
-//        LEFT JOIN votes v ON p.id = v.post_id
-//        GROUP BY p.id
-//        ORDER BY p.id
-//       `
-//     );
-//     return res.json(result.rows);
-//   } catch (err) {
-//     return next(err);
-//   }
-// });
 
 /** GET /[id]  get detail on post
  *

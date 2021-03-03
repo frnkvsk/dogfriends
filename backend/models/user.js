@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const partialUpdate = require("../helpers/partialUpdate");
 
 const BCRYPT_WORK_FACTOR = 10;
-const { v4: uuid } = require('uuid');
 
 /** Related functions for users. */
 
@@ -44,20 +43,12 @@ class User {
           WHERE UPPER(username) = UPPER($1)`,
       [username]
     );
-    console.log('-------usernameCheck',duplicateCheck.rows, duplicateCheck.rows.length > 0)
     // returns true if username is already in use
     return duplicateCheck.rows.length > 0;
-    // if (duplicateCheck.rows[0]) {
-    //   const err = new Error(
-    //       `There already exists a user with username '${data.username}`);
-    //   err.status = 409;
-    //   throw err;
-    // }
   }
-  /** Register user with data. Returns new user data. */
 
+  /** Register user with data. Returns new user data. */
   static async register(data) {
-    console.log('-----------data',data)
     const duplicateCheck = await db.query(
         `SELECT username 
             FROM users 
@@ -137,7 +128,6 @@ class User {
    */
 
   static async update(username, data) {
-    console.log('---------update',data)
     if (data.password) {
       data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
     }
