@@ -42,9 +42,17 @@ export default createMuiTheme({
     h2: {
       fontFamily: 'Raleway',
       fontWeight: 700,
-      fontSize: '2.5rem',
+      fontSize: '3.5rem',
       color: `${dfBrown}`,
       lineHeight: 1.5,
+    },
+    subTitle: {
+      fontFamily: 'Raleway',
+      fontWeight: 600,
+      fontStyle: 'italic',
+      fontSize: '0.8rem',
+      color: `${dfBrown}`,
+      lineHeight: 1,
     }
   }
 })

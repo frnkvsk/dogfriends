@@ -42,13 +42,8 @@ const getPhotoById = async () => {
 
 // gets Base 64 image/jpeg string from AWS S3 bucket
 // return Buffer
-const getPhotoBySrc = async (key, lambdaUrl) => {
-  console.log('--DogfriendsPhotosApi getPhotoBySrc key',key, lambdaUrl)
-  const data = {
-    key
-  }
-  // const lambdaSRC = 'https://qljffa4b43.execute-api.us-west-2.amazonaws.com/dev1/images';
-  return await request(lambdaUrl, data, 'post');
+const getPhotoBySrc = async (key, lambdaUrl) => {  
+  return await request(lambdaUrl, {key}, 'post');
 }
 
 // puts Base 64 image/jpeg string into AWS S3 bucket

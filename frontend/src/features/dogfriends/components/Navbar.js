@@ -22,9 +22,7 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { AuthContext } from '../context/AuthContext';
-// import UserAvatar from './UserAvatar';
 import { addUserInfo } from '../dogfriendsUserSlice';
-// import { logout } from '../dogfriendsUserSlice';
 import { getUserInfo } from '../api/DogfriendsApi';
 
 import logo from '../assets/logo.png';
@@ -196,20 +194,18 @@ export default function Navbar(props) {
       '/new': {name: 'New Post', index: 1},
       '/profile': {name: 'Profile', index: 2},
       '/about': {name: 'About Us', index: 3},
-      '/contact': {name: 'Contact Us', index: 4},
-      '/login': {name: 'Logout', index: 5},
+      '/login': {name: 'Logout', index: 4},
     }) : setListItems({
       '/': {name: 'Home', index: 0},
       '/about': {name: 'About Us', index:1},
-      '/contact': {name: 'Contact Us', index: 2},
-      '/login': {name: 'Login', index: 3},
+      '/login': {name: 'Login', index: 2},
     });
   }, [username.length]);
    
   // set the focus on the correct navbar index
   useEffect(() => {
     if(listItems[location.pathname]) {
-      if(listItems[location.pathname].index === 5) {
+      if(listItems[location.pathname].index === 4) {
         setValue(0);
       } else {
         setValue(listItems[location.pathname].index);  
@@ -233,10 +229,6 @@ export default function Navbar(props) {
       value={value && !auth.authState.userInfo ? value -2 : value} 
       TabIndicatorProps={{style: {backgroundColor: 'primary', opacity: 0}}}          
       >
-        
-          
-        
-        
         {Object.entries(listItems).map(e => 
           e[0]==='/login' ? (
             <Tab 
