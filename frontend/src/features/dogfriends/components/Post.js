@@ -8,7 +8,7 @@ import useDate from '../hooks/useDate';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPhotoBySrc } from '../api/DogfriendsPhotosApi';
 import { addPhotoUrl, selectPhotos } from '../dogfriendsPhotosSlice';
-import { selectUser } from '../dogfriendsUserSlice';
+import { selectInitInfo } from '../dogfriendsInitInfoSlice';
 
 const useStyles = makeStyles({
   root: {
@@ -60,28 +60,18 @@ export default function Post({id, title, username, created_on}) {
   const classes = useStyles();
   
   const selectPhotosList = useSelector(selectPhotos);
-  const selectUserInfo = useSelector(selectUser);
+  const selectInitInfoData = useSelector(selectInitInfo);
   const dispatch = useDispatch();
-  // if(!id.endsWith('.txt')) {
-  //   id += '.txt';
-  // }
   const [imageUrl, setImageUrl] = useState('');
-  
-  // console.log('Post selectUserInfo', selectUserInfo)
-  // console.log('Post selectPhotosList', selectPhotosList)
-  // console.log('---------------------')
 
   useEffect(() => {
     async function getImage() { 
       const existingPost = [...selectPhotosList.data].find(post => id.startsWith(post.photo_id));
-      // console.log('0Post existingPost',existingPost)
       if( selectPhotosList.status === 'fulfilled' && 
         existingPost) {
-
-        // console.log('Post existingPost',existingPost)
         setImageUrl(existingPost.imageUrl);
-      } else {
-        const res = await getPhotoBySrc(id, selectUserInfo.data.aws_bucket_endpoint_down);
+      } else if(selectInitInfoData.data.aws_bucket_endpoint_down !== undefined) {
+        const res = await getPhotoBySrc(id, selectInitInfoData.data.aws_bucket_endpoint_down);
         if(res && res.data.Body) {
           const imageUrl = String.fromCharCode(...res.data.Body.data).toString('base64');
           setImageUrl(imageUrl); 
@@ -98,7 +88,7 @@ export default function Post({id, title, username, created_on}) {
     }
     // eslint-disable-next-line
   }, [imageUrl]);
-
+  
   return (
     <div className={classes.root}>
       <div className={classes.mediaWrapper}>
@@ -107,8 +97,7 @@ export default function Post({id, title, username, created_on}) {
         ) : (
           <CircularProgress />
         )}
-      </div>
-      
+      </div>      
       <CardContent className={classes.cardContent}>
         <Typography gutterBottom variant="h6">
           {title}

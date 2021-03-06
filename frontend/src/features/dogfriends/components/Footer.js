@@ -22,7 +22,6 @@ const useStyles = makeStyles(theme => ({
     background: `linear-gradient(45deg, ${theme.palette.common.brown} 30%, ${theme.palette.common.brownLight} 90%)`,
     width: '100%',
     position: 'sticky',
-    // top: 'auto',
     bottom: 0,
     [theme.breakpoints.down('md')]: {
       display: 'none',
@@ -34,9 +33,6 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down('md')]: {
       width: '5em',
     },
-    // [theme.breakpoints.down('xs')]: {
-    //   width: '1em',
-    // },
     height: '2.5rem',
   },
   mainContainer: {
@@ -96,10 +92,9 @@ export default function Footer(props) {
     const listItems = {
       '/': {name: 'Home', index: 0},
       '/about': {name: 'About Us', index: 1},
-      '/contact': {name: 'Contact Us', index: 2},
-      '/login': {name: 'Logout', index: 3},
-      '/profile': {name: 'Profile', index: 4},
-      '/new': {name: 'New', index: 5}    
+      '/profile': {name: 'Profile', index: 2},
+      '/login': {name: 'Logout', index: 3},      
+      '/new': {name: 'New', index: 4}    
     }
     if(!location.pathname.startsWith('/post')) {
       setValue(listItems[location.pathname].index);
@@ -138,26 +133,10 @@ export default function Footer(props) {
                 style={{opacity: value === 1 ? 1 : 0.7}} >
                 About Us
               </Grid>
-              <Grid 
-                className={classes.button}
-                item 
-                component={Button} 
-                onClick={() => history.push('/contact')} 
-                style={{opacity: value === 2 ? 1 : 0.7}} >
-                Contact Us
-              </Grid>
             </Grid>
           </Grid>
           <Grid item className={classes.gridItem}>
             <Grid container direction='row'>
-              <Grid 
-                className={classes.button}
-                item 
-                component={Button}
-                onClick={handleClick} 
-                style={{opacity: value === 3 ? 1 : 0.7}} >
-                {username ? 'Logout' : 'Login'}
-              </Grid>
               {username && 
                 <Grid 
                   className={classes.button}
@@ -167,7 +146,16 @@ export default function Footer(props) {
                   style={{opacity: value === 4 ? 1 : 0.7}} >
                   Profile
                 </Grid>
-              }              
+              }
+              <Grid 
+                className={classes.button}
+                item 
+                component={Button}
+                onClick={handleClick} 
+                style={{opacity: value === 3 ? 1 : 0.7}} >
+                {username ? 'Logout' : 'Login'}
+              </Grid>
+                            
             </Grid>
           </Grid>
         </Grid>
@@ -178,7 +166,6 @@ export default function Footer(props) {
         className={classes.adornment}
       />
       </footer>
-    </HideOnScroll>
-    
+    </HideOnScroll>    
   );
 }

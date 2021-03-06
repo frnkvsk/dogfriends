@@ -96,7 +96,7 @@ export default function Login() {
         return false;
       }        
     } catch (error) {
-      console.log(error)
+      console.error(error)
       return false;
     }
   }

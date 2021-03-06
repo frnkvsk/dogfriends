@@ -15,13 +15,11 @@ const useStyles = makeStyles((theme) => ({
     height: '370px',
     borderRadius: '7px',
     cursor: 'pointer',  
-    border: '2px dotted salmon',
-      
+    border: '2px dotted salmon',      
   },
   errorMsg: {
     color: 'red',
-  }
-    
+  }    
 }));
 
 const fileReader = new FileReader();

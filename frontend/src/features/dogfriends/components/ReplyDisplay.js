@@ -1,11 +1,5 @@
 import React from 'react';
-
 import { makeStyles } from '@material-ui/core/styles';
-
-// import Typography from '@material-ui/core/Typography';
-
-// import Paper from '@material-ui/core/Paper';
-
 import useDate from '../hooks/useDate';
 
 const useStyles = makeStyles({
@@ -14,18 +8,12 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     alignItems: 'stretch',
     justifyContent: 'stretch',
-    // width: '100%',
-    // blockSize: 'fit-content',
-    // minWidth: '400px',
     margin: '1px 12px 1px 3px',
-    padding: '2px 5px 2px 5px',
-    // border: '1px solid red',
-    
+    padding: '2px 5px 2px 5px',    
   },
   mediaBody: {
     display: 'flex',
     flexWrap: 'wrap',
-    // maxWidth: '350px',
     fontSize: '18px',
     wordWrap: 'break-word',
     overflow: 'hidden',

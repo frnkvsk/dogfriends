@@ -7,6 +7,7 @@ import {
   Button, 
   TextField,
  } from '@material-ui/core';
+ 
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -125,6 +126,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
   const steps = getSteps();
 
   const handleNext = async () => {
+    console.log('HandleNext')
     switch(activeStep) {
       case 0:
         if(!usernameValid.length && username.length && !passwordValid.length && password.length) {
@@ -163,7 +165,10 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
         {activeStep === steps.length ? (
           <div>
             <div component={'span'} className={classes.main}>All steps completed</div>
-            <Button onClick={handleReset}>Reset</Button>
+            <Button 
+              variant='contained'
+              color='secondary'
+              onClick={handleReset}>Reset</Button>
           </div>
         ) : (
           <div >
@@ -275,8 +280,8 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
             <div>
               <Button 
                 className={classes.button}
-                variant="contained" 
-                color="primary" 
+                variant='contained'
+                color='primary'
                 onClick={handleNext}>
                 {activeStep === steps.length - 1 ? 'Complete Signup' : 'Next'}
               </Button>

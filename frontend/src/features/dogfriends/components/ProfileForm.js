@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-// import { v4 as uuid } from 'uuid';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
   TextField,
   Button } from '@material-ui/core';
-// import { AuthContext } from '../context/AuthContext';
 import { selectUser } from '../dogfriendsUserSlice';
 import { selectAvatar } from '../dogfriendsAvatarSlice';
-
 import UserAvatar from './UserAvatar';
-
 import {UploadImage} from './UploadImage';
-
-// import { getUserInfo } from '../api/DogfriendsApi';
-// import { addAvatarUrl } from '../dogfriendsAvatarSlice';
-// import { putNewPhoto } from '../api/DogfriendsPhotosApi';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,12 +17,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
-    // minHeight: '100vh',
     maxWidth: '700px',
     padding: '2px',
-    // height: '100vh',
-    backgroundColor: theme.palette.common.yellow,
-    // background: `linear-gradient(45deg, ${theme.palette.common.brown} 10%, ${theme.palette.common.brownLight} 50%)`,
+    backgroundColor: theme.palette.common.yellowLight,
     border: '1px solid #eeeeee',
   },
   form: {
@@ -39,12 +28,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     width: '100%',
     fontSize: '24px',
-    // border: '1px solid green',
   },
   formElement: {
-    // display: 'flex',
-    // alignItems: 'center',
-    // justifyContent: 'space-between',
     width: 'auto',
     margin: '10px 15px',
   },
@@ -64,14 +49,14 @@ const useStyles = makeStyles((theme) => ({
     margin: '10px 20px 15px',
   },
   button: {
-    ...theme.typography.button,
-    backgroundColor: theme.palette.common.yellowDark,
-    borderRadius: '22px',
+    // ...theme.typography.button,
+    // backgroundColor: theme.palette.common.yellowDark,
+    // borderRadius: '22px',
     margin: '0 25px 0 50px',    
-    height: '45px',
-    '&:hover': {
-      backgroundColor: theme.palette.secondary.light,
-    }
+    // height: '45px',
+    // '&:hover': {
+    //   backgroundColor: theme.palette.secondary.light,
+    // }
   },
   header: {
     display: 'flex',
@@ -97,11 +82,8 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const ProfileForm = ({title, handleSubmit}) => {
-  
+const ProfileForm = ({title, handleSubmit}) => {  
   const classes = useStyles();
-  // const auth = useContext(AuthContext);
-  // const dispatch = useDispatch();
   const selectUserData = useSelector(selectUser);
   const selectAvatarData = useSelector(selectAvatar);
   const [username, setUsername] = useState('');
@@ -124,8 +106,7 @@ const ProfileForm = ({title, handleSubmit}) => {
       setCity(selectUserData.data.city ? selectUserData.data.city : '');
       setState(selectUserData.data.state ? selectUserData.data.state : '');
       setCountry(selectUserData.data.country ? selectUserData.data.country : '');
-    }     
-   
+    }   
     // eslint-disable-next-line
   }, [selectAvatarData.data.imageUrl, selectUserData.data.first_name, selectUserData.data.last_name, selectUserData.data.email, selectUserData.data.photo_id, selectUserData.data.city, selectUserData.data.state, selectUserData.data.country, selectUserData.status]);  
 
@@ -147,19 +128,17 @@ const ProfileForm = ({title, handleSubmit}) => {
   const handleUploadImage = async (canvas, imageUrl) => {    
     setImageUrl(imageUrl);    
   }
-  console.log('UserInfoForm userList',selectUserData);
   
   return (
-    <div className={classes.root}>
-      
+    <div className={classes.root}>      
       <div className={classes.header}>
         <p>{title}</p>
-        <Button className={classes.button} variant="contained" onClick={() => history.push('/')}>
-          Cancel
-        </Button> 
-        <Button className={classes.button} variant="contained" onClick={handleClick}>
+        <Button className={classes.button} color='primary' variant='contained' onClick={handleClick}>
           Done
         </Button>
+        <Button className={classes.button} color='secondary' variant='contained' onClick={() => history.push('/')}>
+          Cancel
+        </Button>         
       </div>
       <div style={{display: photoDropVisibility}}>
         <UploadImage handleUploadImage={handleUploadImage} width={100} height={100} />
@@ -172,11 +151,11 @@ const ProfileForm = ({title, handleSubmit}) => {
           <UserAvatar photo_url={imageUrl}/>
           {username}
           <Button 
-            name="avatar" 
+            name='avatar' 
             onClick={() => setPhotoDropVisibility('inline')}
-            // onClick={handleOpenModel}
             className={classes.button} 
-            variant="contained">
+            color='primary'
+            variant='contained'>
             Change
           </Button>      
         </div>

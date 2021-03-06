@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
-// import { AuthContext } from '../context/AuthContext';
 import { deepOrange } from '@material-ui/core/colors';
 import { addAvatarUrl, selectAvatar } from '../dogfriendsAvatarSlice';
 import { selectUser } from '../dogfriendsUserSlice';
+import { selectInitInfo } from '../dogfriendsInitInfoSlice';
 import { getPhotoBySrc } from '../api/DogfriendsPhotosApi';
 
 const useStyles = makeStyles((theme) => ({
@@ -33,13 +32,14 @@ export default function UserAvatar() {
   const dispatch = useDispatch();
   const selectAvatarData = useSelector(selectAvatar);
   const selectUserInfo = useSelector(selectUser);
+  const selectInitInfoData = useSelector(selectInitInfo);
   const [photo_url, setPhotoUrl] = useState(selectAvatarData.data ? selectAvatarData.data.imageUrl : null);
   
   useEffect(() => {    
     const getAvatarData = async () => {
       if(selectUserInfo.status === 'fulfilled' && !photo_url && selectUserInfo.data.photo_id) {
         const photo_id = selectUserInfo.data.photo_id;
-        const bucket_endpoint = selectUserInfo.data.aws_bucket_endpoint_down;
+        const bucket_endpoint = selectInitInfoData.data.aws_bucket_endpoint_down;
         const res = await getPhotoBySrc(photo_id, bucket_endpoint);
         if(res && res.data.Body) {
           const base64 = String.fromCharCode(...res.data.Body.data).toString('base64');
@@ -51,9 +51,7 @@ export default function UserAvatar() {
           dispatch(addAvatarUrl(payload));  
           
         }  
-        console.log('UserAvatar useEffect res',res)
-      }
-      
+      }      
     }
     getAvatarData();
   });

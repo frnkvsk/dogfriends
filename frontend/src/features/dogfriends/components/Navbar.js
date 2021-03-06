@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation, useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useTheme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
@@ -23,10 +23,15 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import { AuthContext } from '../context/AuthContext';
 import { addUserInfo } from '../dogfriendsUserSlice';
-import { getUserInfo } from '../api/DogfriendsApi';
+import { 
+  getUserInfo,
+  getInitInfo } from '../api/DogfriendsApi';
 
 import logo from '../assets/logo.png';
 import UserAvatar from './UserAvatar';
+import { 
+  addInitInfo,
+  selectInitInfo } from '../dogfriendsInitInfoSlice';
 
 const useStyles = makeStyles(theme => ({
   toolbarMargin: {
@@ -40,16 +45,18 @@ const useStyles = makeStyles(theme => ({
     }, 
   },
   logo: {
-    height: '5em', 
-    // [theme.breakpoints.down('md')]: {
-    //   height: '5em',
-    // }, 
+    height: '4em', 
+    
+    [theme.breakpoints.down('md')]: {
+      height: '4.5em',
+    }, 
     // [theme.breakpoints.down('xs')]: {
     //   height: '5em'
     // },   
   },
   logoContainer: {
-    padding: '0'
+    padding: '0',
+    backgroundColor: 'transparent',
   },
   tabContainer: {
     marginLeft: 'auto',
@@ -62,13 +69,17 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     ...theme.typography.button,
-    backgroundColor: theme.palette.common.yellow,
+    // background: theme.palette.secondary,
     borderRadius: '50px',
     margin: '0 25px 0 50px',    
     height: '45px',
     '&:hover': {
       backgroundColor: theme.palette.secondary.light,
     }
+  },
+  buttonSecondary: {
+    // ...theme.typography.button,
+    backgroundColor: 'transparent',
   },
   drawer: {
     backgroundColor: theme.palette.common.brown,
@@ -89,7 +100,7 @@ const useStyles = makeStyles(theme => ({
     opacity: 0.7,
   },
   drawerItemLogin: {
-    backgroundColor: theme.palette.common.yellow,
+    backgroundColor: 'transparent'//theme.palette.common.yellow,
   },
   drawerItemSelected: {
     // opacity: 1,
@@ -104,7 +115,8 @@ const useStyles = makeStyles(theme => ({
   appBar: {
     zIndex: theme.zIndex.modal + 1,
     position: 'fixed',
-    background: `linear-gradient(45deg, ${theme.palette.common.brown} 30%, ${theme.palette.common.brownLight} 90%)`,
+    background: `linear-gradient(45deg, ${theme.palette.common.brown} 30%, ${theme.palette.common.brownDark} 90%)`
+    // background: `linear-gradient(45deg, ${theme.palette.common.brown} 30%, ${theme.palette.common.brownLight} 90%)`,
   },
   avatar: {
     display: 'flex',
@@ -142,6 +154,7 @@ export default function Navbar(props) {
   const history = useHistory();
   const auth = useContext(AuthContext);
   const dispatch = useDispatch();
+  const selectInitInfoData = useSelector(selectInitInfo)
   const location = useLocation();
   const theme = useTheme();
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -151,11 +164,22 @@ export default function Navbar(props) {
   const [value, setValue] = useState(0);  
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const [username, setUserName] = useState(''); //auth.authState.userInfo.username;
+  const [username, setUserName] = useState(''); 
   const [listItems, setListItems] = useState({});
 
   
-
+  useEffect(() => {
+    const getInitInfoData = async () => {
+      const response = await getInitInfo();
+      if(response.status === 200) {
+        dispatch(addInitInfo(response.data));
+      }      
+    }
+    if(selectInitInfoData.status !== 'fulfilled') {
+      getInitInfoData();
+    }    
+    // eslint-disable-next-line
+  }, [])
   /**
    * We are going to check the login status of the user
    * here at the Navbar because it is the top level Component
@@ -221,7 +245,7 @@ export default function Navbar(props) {
       history.push('/login');
     }      
   }
-  console.log('Navbar username',username)
+  
   const tabs = (
     <>
     <Tabs 
@@ -232,8 +256,10 @@ export default function Navbar(props) {
         {Object.entries(listItems).map(e => 
           e[0]==='/login' ? (
             <Tab 
-              key={e}
+              key={e}              
               className={classes.button}
+              variant='outlined'
+              color='secondary'
               component={Button}
               label={e[1].name}
               onClick={handleClick}

@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center', 
-    // maxWidth: '420px',
     border: '2px solid #eeeeee',
     borderRadius: '4px',
     boxShadow: '0 10px 6px -6px #80808040',
@@ -25,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
       borderBottomRightRadius: 'none',
       marginRight: '0',
     }
-    // boxShadow: '0 8px 6px -6px black',
   },
   media: { 
     borderTopRightRadius: '4px', 
@@ -45,20 +43,16 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    // justifyContent: 'space-between',
     width: '95%',
     padding: '7px',
-    // border: '1px solid blue',   
   }
 }));
 
 
 export default function PostDisplay(post) {
-  // console.log('Post post',post)
   const {body, photo_id, title, username, created_on} = post.post;
   const classes = useStyles();
   const urlImage = useImageUrl(photo_id+'.txt');
-  // console.log('body, photo_id, title, username, created_on',body, photo_id, title, username, created_on)
   return (
     <div className={classes.root}>
       {urlImage ? <img src={urlImage} alt='title' className={classes.media} />

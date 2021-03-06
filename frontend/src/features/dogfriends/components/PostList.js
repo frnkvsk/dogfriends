@@ -6,21 +6,12 @@ import fadeInUp from 'react-animations/lib/fade-in-up';
 
 import { v4 as uuid } from 'uuid';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core';
 import styled, { keyframes } from 'styled-components';
-
 import Post from './Post';
-
 import { selectPosts, addPosts } from '../dogfriendsPostsSlice';
-// import { selectPhotos, addPhotoUrl } from '../dogfriendsPhotosSlice';
-// import useImageUrl from '../hooks/useImageUrl';
-import {
-  getPosts,
-} from '../api/DogfriendsApi';
-import { 
-  // setPages,
-  selectPageCount,
- } from '../dogfriendsPageCountSlice';
+import { getPosts } from '../api/DogfriendsApi';
+import {  selectPageCount } from '../dogfriendsPageCountSlice';
 import PaginationComp from './Pagination';
 
 const fadeInUpAnimation = keyframes`${fadeInUp}`;
@@ -36,24 +27,17 @@ const useStyles = makeStyles({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
-    height: '80vh',
-    // border: '1px solid red',
+    // height: '70vh',
   },
   media: {
-    display: 'flex',
-    
+    display: 'flex',    
   },
   fadeinContainer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    // marginBottom: 250,
   },
-  pagination: {
-    // height: '100%',
-    // border: '1px solid blue',
-  }
 });
 
 const PostList = () => {
@@ -93,10 +77,6 @@ const PostList = () => {
       to: pageCurr * posts_per_page + posts_per_page,
     })
   }, [pageCurr]);
-  
-
-  console.log('PostList selectList',selectPostsData)
-  console.log('PostList from to',currentPages.from, currentPages.to, Math.floor(selectPostsData.data.length/currentPages.to))
   return (    
     <div className={classes.root}>   
       <div className={classes.media}>
@@ -104,9 +84,7 @@ const PostList = () => {
             <FadeInUpAnimation 
               className={classes.fadeinContainer}
               key={uuid()} >
-            <div 
-                        
-              onClick={() => history.push(`/post/${e.id}`)} >
+            <div onClick={() => history.push(`/post/${e.id}`)} >
               <Post 
                 id={e.photo_id}
                 title={e.title} 
@@ -116,11 +94,13 @@ const PostList = () => {
             </div> 
             </FadeInUpAnimation>
         )) : <div></div>}
+      </div>        
+      <div>
+        <PaginationComp 
+          pageCount={selectPostsData.data.length} 
+          posts_per_page={posts_per_page}/>
       </div>
         
-      <div className={classes.pagination}>
-      <PaginationComp pageCount={selectPostsData.data.length} posts_per_page={posts_per_page}/>
-      </div>
     </div>
   )
 }

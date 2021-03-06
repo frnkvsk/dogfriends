@@ -63,7 +63,7 @@ const putNewPhoto = async (image, imageName, aws_endpoint_up, _token, aws_endpoi
       await request(`${BASE_URL}photos/`, data, 'post');
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   
 }

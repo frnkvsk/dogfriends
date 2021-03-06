@@ -37,66 +37,11 @@ export const dogfriendsPostsSlice = createSlice({
         data: action.payload
       }
     }
-    // editPost: (state, action) => {
-    //   putPostUpdate(action.payload);
-    // },
-    // removePost: (state, action) => {
-    //   deletePost(action.payload);
-    // },
   },
-  // extraReducers: {
-  //   // get all posts
-  //   [getPostsData.pending]: (state, action) => {
-  //     state.postList = {
-  //       status: 'pending',
-  //       data: {},
-  //       error: {}
-  //     };
-  //   },
-  //   [getPostsData.fulfilled]: (state, action) => {
-  //     state.postList = {
-  //       status: 'fulfilled',
-  //       data: action.payload,
-  //       error: {}
-  //     };
-  //   },
-  //   [getPostsData.rejected]: (state, action) => {
-  //     state.postList = {
-  //       status: 'rejected',
-  //       data: {},
-  //       error: action.payload,
-  //     };
-  //   },
-  //   // get post by id
-  //   [getPostDataById.pending]: (state, action) => {
-  //     state.postList = {
-  //       status: 'pending',
-  //       data: {},
-  //       error: {}
-  //     };
-  //   },
-  //   [getPostDataById.fulfilled]: (state, action) => {
-  //     state.postList = {
-  //       status: 'fulfilled',
-  //       data: action.payload,
-  //       error: {}
-  //     };
-  //   },
-  //   [getPostDataById.rejected]: (state, action) => {
-  //     state.postList = {
-  //       status: 'rejected',
-  //       data: {},
-  //       error: action.payload,
-  //     };
-  //   },    
-  // }
 });
 
 export const {
   addPosts,
-  // addPostUrl,
-  // editPost,
-  // removePost,
 } = dogfriendsPostsSlice.actions;
 
 export const selectPosts = state => state.postList.postList;

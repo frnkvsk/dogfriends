@@ -1,14 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-// import { useSelector } from 'react-redux';
 import { 
   Zoom,
   makeStyles,
- } from '@material-ui/core';
- 
+ } from '@material-ui/core'; 
 import PostList from '../components/PostList';
 import { AuthContext } from '../context/AuthContext';
 import { PageInitContext } from '../context/PageInitContext';
-// import { selectPageCount } from './../dogfriendsPageCountSlice';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,13 +58,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Home = () => {
-  const classes = useStyles();
-  
+  const classes = useStyles();  
   const [pageWelcome, setPageWelcome] = useState([]); 
   const auth = useContext(AuthContext);
   const pageInitContext = useContext(PageInitContext);
-  const username = auth.authState.userInfo.username; 
-  
+  const username = auth.authState.userInfo.username;  
 
   useEffect(() => {
     const setWelcome = () => {   
@@ -78,19 +74,19 @@ const Home = () => {
           setPageWelcome(['']);
         }
       } else {
-        setPageWelcome(['Dog Friends','Share Your Dog Photos with other dog friends']);
+        setPageWelcome(['Dog Friends','Share your dog photos with other dog friends']);
       }
     }
     setWelcome();
-    console.log('Home useEffect')
     // eslint-disable-next-line
   },[]);
 
   return (        
     <div className={classes.root}>   
       <Zoom in={true} style={{ transitionDelay: '1000ms' }}>      
-      <div key='div1' className={pageWelcome.length===1 ? classes.headingMargin1 : classes.headingMargin2}>
-        <div key='div2' >{pageWelcome.map((e,i) => <div key={e+i} className={i===0 ? classes.heading : classes.subHeading}>{e}</div>)}</div>      
+      <div key='home1' className={pageWelcome.length===1 ? classes.headingMargin1 : classes.headingMargin2}>
+        {pageWelcome.map((e,i) => i===0 ? 
+          <div key={e+i} variant='h1'>{e}</div> : <div variant='subtitle1'>{e}</div>)}      
       </div>
       </Zoom>        
       <div>

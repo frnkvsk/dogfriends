@@ -25,7 +25,6 @@ const request = async (endpoint, paramsOrData = {}, verb = "get") => {
 // posts
 const getPosts = async () => {
   let res = await request('posts');
-  console.log('DogfriendApi getPosts res',res)
   return res;
 }
 const getPostById = async (id) => {
@@ -58,12 +57,9 @@ const deletePost = async (id, username, token) => {
 // replies
 const getRepliesById = async (id) => {
   const res = await request(`replies/${id}`);
-  console.log('DogfriendsApi getRepliesById res',res)
   return res;
 }
 const postReplyNew = async (data) => {
-  console.log('DogfriendsApi data',data)
-  // return await request('replies/', data, 'post');
   request('replies/', data, 'post');
 }
 
@@ -72,7 +68,6 @@ const postReplyNew = async (data) => {
  * @param {username, password} data 
  */
 const login = async (data) => {
-  // console.log('DogfriendsApi login data',data)
   try {
     return await request('login/', data, 'post');
   } catch (error) {
@@ -96,7 +91,6 @@ const preSignupUsernameCheck = async (data) => {
 const signup = async (data) => {   
   try {
     const res = await request('users/', data, 'post');
-      // console.log('DogfriendsApi signup res',res)
     return res;    
   } catch (error) {
     console.error(error);
@@ -116,6 +110,19 @@ const getUserInfo = async (payload) => {
   }   
 }
 
+/**
+ * getInitInfo gets aws endpoints for uploading and 
+ * downloading images
+ */
+const getInitInfo = async () => {
+  return await request('initinfo/');
+}
+
+/**
+ * 
+ * @param {*} payload 
+ * @returns 
+ */
 const patchUserInfo = async (payload) => {
   try {
     return await request(`users/${payload.username}`, payload, 'patch');
@@ -137,5 +144,6 @@ export {
   getUserInfo,
   patchUserInfo,
   getRepliesById,
-  postReplyNew
+  postReplyNew,
+  getInitInfo
 };

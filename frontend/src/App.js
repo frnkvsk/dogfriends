@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
-import theme from './features/dogfriends/Theme';
+import { theme } from './features/dogfriends/Theme';
 import Navbar from './features/dogfriends/components/Navbar'; 
 import Home from './features/dogfriends/pages/Home';
 import NewPost from './features/dogfriends/pages/NewPost';

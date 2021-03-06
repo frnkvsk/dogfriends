@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
+import { 
+  Slide,
+  makeStyles,
+ } from '@material-ui/core'; 
 import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
 import { 
@@ -24,11 +27,6 @@ export default function PaginationComp({pageCount, posts_per_page}) {
   let {pagesTotal, pageCurr} = useSelector(selectPageCount);
   const [page, setPage] = React.useState(0);
 
-  // const [currentPages, setCurrentPages] = useState({
-  //   from: pageCurr * posts_per_page,
-  //   to: pageCurr * posts_per_page + posts_per_page,
-  // });
-
   useEffect(() => {
     dispatch(setPages({
       pagesTotal: pageCount,
@@ -39,14 +37,18 @@ export default function PaginationComp({pageCount, posts_per_page}) {
   const handleChange = (event, value) => {
     setPage(value - 1);
   }
-  console.log('Pagination pagesTotal, pageCurr',pagesTotal, pageCurr)
+  
   return (
+    <Slide direction='up' in={true} mountOnEnter unmountOnExit timeout={4000}>
     <div className={classes.root}>
+      
       <Typography>Page: {pageCurr+1}</Typography>
       <Pagination 
         count={pagesTotal%posts_per_page ? ~~(pagesTotal/posts_per_page)+1 : ~~(pagesTotal/posts_per_page)} 
         page={+pageCurr+1} 
         onChange={handleChange}/>
+      
     </div> 
+    </Slide>
   );
 }

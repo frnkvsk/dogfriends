@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
   Button, 
@@ -11,13 +12,11 @@ import {
   addPosts,
  } from '../dogfriendsPostsSlice';
 import { AuthContext } from '../context/AuthContext';
-
 import {UploadImage} from './UploadImage';
-
-import { v4 as uuid } from 'uuid';
 import { FillTextImage } from './FillTextImage';
 import { putNewPhoto } from '../api/DogfriendsPhotosApi';
 import { postPostNew } from '../api/DogfriendsApi';
+import { selectInitInfo } from '../dogfriendsInitInfoSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     width: '400px',
     margin: '0 0 20px 0',
     padding: '15px',
-    backgroundColor: theme.palette.common.yellow,
+    backgroundColor: theme.palette.common.yellowLight,
     border: '1px solid #eeeeee',    
   },
   control: {
@@ -51,6 +50,20 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     maxWidth: '400px',
     maxHeight: '400px',
+  },
+  
+  buttons: {
+    display: 'flex',
+    justifyContent: 'space-around',
+  },
+  button: {
+    ...theme.typography.button,
+    // backgroundColor: theme.palette.common.yellowDark,
+    borderRadius: '22px', 
+    height: '45px',
+    // '&:hover': {
+    //   backgroundColor: theme.palette.secondary.light,
+    // }
   }
 
 }));
@@ -59,7 +72,7 @@ const PostFormNew = () => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
   
-  const AWS_UPLOAD_IMAGE_LAMBDA_URL='https://3ynkxwkjf5.execute-api.us-west-2.amazonaws.com/dev/upload';
+  const selectInitInfoData = useSelector(selectInitInfo);
   
 
   const dispatch = useDispatch();
@@ -127,13 +140,12 @@ const PostFormNew = () => {
   
   const handleSubmit = async e => {   
     e.preventDefault();
-    // console.log('PostFormNew initInfo',initInfo)
     if(image) {
       const photo_id = 'lg-' + uuid() + '.txt';
-
+      const aws_endpoint_up = selectInitInfoData.data.aws_bucket_endpoint_up;
       // put photo in AWS S3 bucket with lambda function
       // post photo to db photos table
-      putNewPhoto(image, photo_id, AWS_UPLOAD_IMAGE_LAMBDA_URL, auth.authState.token);
+      putNewPhoto(image, photo_id, aws_endpoint_up, auth.authState.token);
   
       const payload = {
         id: uuid(),
@@ -142,7 +154,6 @@ const PostFormNew = () => {
         photo_id,
         votes: 0,
         replies: 0,
-        // photo_url,
         username: auth.authState.userInfo.username,
         _token: auth.authState.token
       }
@@ -162,14 +173,12 @@ const PostFormNew = () => {
 
   return (
     <div className={classes.root}> 
-      <form method='post' className={classes.form} id='imageUploadForm'>   
-
+      <form method='post' className={classes.form} id='imageUploadForm'> 
         <TextField 
           className={classes.formItem}
           label='Title (optional)' 
           variant='outlined' 
           value={title}
-          // inputRef={input => !title.length && input && input.focus()}
           error={titleValid.length ? true : false}
           helperText={titleValid.length ? titleValid : ''}
           onChange={e => setTitle(e.target.value)} />
@@ -177,8 +186,7 @@ const PostFormNew = () => {
           <UploadImage handleUploadImage={handleUploadImage} width={400} height={400} />
           <div className={classes.imagePreview} >
             <img id='uploadIMG' name='uploadImage' src={image} alt=''/>
-          </div>
-          
+          </div>          
           <div className={classes.formItem}>
             Text Color&nbsp;  
             <input                         
@@ -215,7 +223,7 @@ const PostFormNew = () => {
         </div>        
         <div className={classes.buttons}>
           <Button 
-            className={classes.formItem} 
+            className={classes.button} 
             variant='contained' 
             color='primary' 
             onClick={handleSubmit} 
@@ -223,7 +231,7 @@ const PostFormNew = () => {
             Save
           </Button>
           <Button 
-            className={classes.formItem} 
+            className={classes.button} 
             onClick={() => history.push('/')} 
             variant='contained' 
             color='secondary' >
