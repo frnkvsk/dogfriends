@@ -4,7 +4,7 @@ const db = require("../db");
 const express = require("express");
 const router = new express.Router();
 const { ensureCorrectUser, authRequired } = require("../middleware/auth");
-const AWS_BUCKET_ENDPOINT = process.env.AWS_IMAGE_BUCKET_URL_BASE; 
+
 
 
 
@@ -23,13 +23,8 @@ router.get("/", async function (req, res, next) {
   try {
     const response = await db.query(
       `SELECT * FROM posts ORDER BY created_on`
-    );
-    
-    const result = response.rows.map(e => (
-      {...e,
-      base_url: AWS_BUCKET_ENDPOINT}
-    ));
-    return res.json(result);
+    );    
+    return res.json(response.rows);
   } catch (err) {
     return next(err);
   }

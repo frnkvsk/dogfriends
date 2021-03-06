@@ -2,7 +2,7 @@
 
 const express = require("express");
 const morgan = require("morgan");
-const initInfoRoutes = require("./routes/initInfo");
+const initInfoRoutes = require("./routes/initinfo");
 const postsRoutes = require("./routes/posts");
 const authRoutes = require("./routes/auth");
 const usersRoutes = require("./routes/users");

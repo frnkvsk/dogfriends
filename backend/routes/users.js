@@ -9,8 +9,6 @@ const { validate } = require("jsonschema");
 const { userNewSchema, userUpdateSchema } = require("../schemas");
 
 const createToken = require("../helpers/createToken");
-const AWS_BUCKET_ENDPOINT = process.env.AWS_IMAGE_BUCKET_URL_BASE; 
-const AWS_UPLOAD_IMAGE_LAMBDA_URL = process.env.AWS_UPLOAD_IMAGE_LAMBDA_URL;
 
 
 /** GET /[username] => {user: user} */
@@ -18,8 +16,6 @@ const AWS_UPLOAD_IMAGE_LAMBDA_URL = process.env.AWS_UPLOAD_IMAGE_LAMBDA_URL;
 router.get("/:username", authRequired, async function(req, res, next) {
   try {
     const user = await User.findOne(req.params.username);
-    user['aws_bucket_endpoint_up'] = AWS_UPLOAD_IMAGE_LAMBDA_URL;
-    user['aws_bucket_endpoint_down'] = AWS_BUCKET_ENDPOINT;
     return res.json({ user });
   } catch (err) {
     return next(err);
