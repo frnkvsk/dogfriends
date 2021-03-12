@@ -16,7 +16,7 @@ import PaginationComp from './Pagination';
 
 const fadeInUpAnimation = keyframes`${fadeInUp}`;
 const FadeInUpAnimation = styled.div`
-  animation: 3s ${fadeInUpAnimation};
+  animation: 0.8s ${fadeInUpAnimation};
 `;
 
 const useStyles = makeStyles({
@@ -27,10 +27,12 @@ const useStyles = makeStyles({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
-    // height: '70vh',
+    minHeight: '60vh',
   },
   media: {
-    display: 'flex',    
+    display: 'flex', 
+    justifyContent: 'center',   
+    flexWrap: 'wrap',
   },
   fadeinContainer: {
     display: 'flex',
@@ -44,7 +46,7 @@ const PostList = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const posts_per_page = 2;
+  const posts_per_page = 3;
   const selectPostsData = useSelector(selectPosts);
   const { pageCurr } = useSelector(selectPageCount);
   const [currentPages, setCurrentPages] = useState({
@@ -53,30 +55,33 @@ const PostList = () => {
   });
 
   useEffect(() => {
-    const getPostsData = async () => {
+    const getPostsData = async (isSubscribed) => {
       // gets all posts from database
-      const response = await getPosts();
-      
-      // TODO: create pagination to only show so many per page
-      
-      
-      if(response.status === 200) {
-        dispatch(addPosts(response.data));
-      }  
-         
+      if(isSubscribed) {
+        const response = await getPosts();      
+        if(isSubscribed && response.status === 200) {
+          // store post data in Redux
+          dispatch(addPosts(response.data));
+        }
+      }
+                 
     }
-    if(selectPostsData.status !== 'fulfilled' && !selectPostsData.data.length) {
-      getPostsData();
+    let isSubscribed = true;
+    if(isSubscribed && selectPostsData.status !== 'fulfilled' && !selectPostsData.data.length) {
+      getPostsData(isSubscribed);
     } 
+    return () => isSubscribed = null;
     //eslint-disable-next-line   
   }, [selectPostsData.data]);
 
   useEffect(() => {
+    // set the pagination page
     setCurrentPages({
       from: pageCurr * posts_per_page,
       to: pageCurr * posts_per_page + posts_per_page,
     })
   }, [pageCurr]);
+
   return (    
     <div className={classes.root}>   
       <div className={classes.media}>
@@ -86,6 +91,7 @@ const PostList = () => {
               key={uuid()} >
             <div onClick={() => history.push(`/post/${e.id}`)} >
               <Post 
+                key={e.photo_id}
                 id={e.photo_id}
                 title={e.title} 
                 username={e.username} 
@@ -93,7 +99,7 @@ const PostList = () => {
                 />
             </div> 
             </FadeInUpAnimation>
-        )) : <div></div>}
+        )) : <div key={uuid()}></div>}
       </div>        
       <div>
         <PaginationComp 

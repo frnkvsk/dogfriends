@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 import { makeStyles } from '@material-ui/core';
 import { AuthContext } from '../context/AuthContext';
-
 import { addUserInfo } from '../dogfriendsUserSlice';
 import { selectInitInfo } from '../dogfriendsInitInfoSlice';
 import { addAvatarUrl } from '../dogfriendsAvatarSlice';

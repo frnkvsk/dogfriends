@@ -48,8 +48,7 @@ export default function UserAvatar() {
             photo_id,
             imageUrl: base64
           }
-          dispatch(addAvatarUrl(payload));  
-          
+          dispatch(addAvatarUrl(payload));            
         }  
       }      
     }

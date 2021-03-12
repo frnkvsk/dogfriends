@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "backend API for dogfriends app",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "main": "server.js",
     "start": "nodemon server.js",

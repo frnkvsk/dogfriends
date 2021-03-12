@@ -33,8 +33,7 @@ const useStyles = makeStyles({
     maxHeight: '350px',
     objectFit: 'contain',
     borderTopRightRadius: '4px', 
-    borderTopLeftRadius: '4px', 
-    
+    borderTopLeftRadius: '4px',     
   },
   mediaItem: {
     display: 'flex',
@@ -65,29 +64,64 @@ export default function Post({id, title, username, created_on}) {
   const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
-    async function getImage() { 
-      const existingPost = [...selectPhotosList.data].find(post => id.startsWith(post.photo_id));
-      if( selectPhotosList.status === 'fulfilled' && 
-        existingPost) {
-        setImageUrl(existingPost.imageUrl);
-      } else if(selectInitInfoData.data.aws_bucket_endpoint_down !== undefined) {
-        const res = await getPhotoBySrc(id, selectInitInfoData.data.aws_bucket_endpoint_down);
-        if(res && res.data.Body) {
-          const imageUrl = String.fromCharCode(...res.data.Body.data).toString('base64');
-          setImageUrl(imageUrl); 
-          let payload = {
-            photo_id: id,
-            imageUrl
+    let isSubscribed = true;
+    
+    async function getImage(isSubscribed) {   
+      if(isSubscribed) {
+        const existingPost = [...selectPhotosList.data].find(post => id.startsWith(post.photo_id));
+        if(selectPhotosList.status === 'fulfilled' && existingPost) {
+          if(isSubscribed){
+            setImageUrl(existingPost.imageUrl);
           }
-          dispatch(addPhotoUrl(payload));        
+        } else if(selectInitInfoData.data.aws_bucket_endpoint_down !== undefined) {
+          try {
+            // const getSource = () => getPhotoBySrc(id, selectInitInfoData.data.aws_bucket_endpoint_down)
+            // .then(res => {
+            //   const imageUrl = String.fromCharCode(...res.data.Body.data).toString('base64');            
+            //   const payload = {
+            //     photo_id: id,
+            //     imageUrl
+            //   }
+            //   if(isSubscribed){
+            //     setImageUrl(imageUrl); 
+            //     dispatch(addPhotoUrl(payload));      
+            //   }
+            // });
+            // setTimeout(() => {
+            //   getSource();
+            // });
+            const getSource = async () => {
+              let res = await getPhotoBySrc(id, selectInitInfoData.data.aws_bucket_endpoint_down);
+              if(res.status === 200 && res.data.Body) {
+                const imageUrl = String.fromCharCode(...res.data.Body.data).toString('base64');            
+                let payload = {
+                  photo_id: id,
+                  imageUrl
+                }
+                if(isSubscribed){
+                  setImageUrl(imageUrl); 
+                  dispatch(addPhotoUrl(payload));      
+                }              
+              }
+            } 
+            setTimeout(() => {
+              getSource();
+            }, 100);
+            
+          } catch (error) {
+            console.error(error);
+          }
+          
         }
-      }     
-    };
-    if(!imageUrl.length && id) {
-      getImage();    
+        return () => isSubscribed = false;
+      }                   
+    }; 
+    if(isSubscribed && !imageUrl.length && id) {
+      getImage(isSubscribed);  
     }
+    return () => isSubscribed = false;
     // eslint-disable-next-line
-  }, [imageUrl]);
+  }, [imageUrl.length, selectPhotosList.status]);
   
   return (
     <div className={classes.root}>

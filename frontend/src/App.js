@@ -10,19 +10,14 @@ import Login from './features/dogfriends/pages/Login';
 import Post from './features/dogfriends/pages/Post';
 import Profile from './features/dogfriends/pages/Profile';
 import About from './features/dogfriends/pages/About';
-import Contact from './features/dogfriends/pages/Contact';
 import Footer from './features/dogfriends/components/Footer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    // flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'center',
-    // padding: '20px',
-    // width: '100%',
     minHeight: '90vh',
-    // border: '1px solid red',
   },
   main: {
     display: 'flex',
@@ -38,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('xl')]: {
       width: '75%'
     },
-    // border: '1px solid orange',
   },
 }));
 function App() {
@@ -62,9 +56,6 @@ function App() {
             </Route>            
             <Route exact path="/about">
               <About/>        
-            </Route>
-            <Route exact path="/contact">
-              <Contact/>        
             </Route>
             <Route exact path="/login">
               <Login/>        

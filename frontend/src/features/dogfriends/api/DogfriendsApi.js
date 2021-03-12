@@ -1,16 +1,24 @@
 import axios from 'axios';
 
 
+// const BASE_URL = 'https://app-dogfriends.herokuapp.com/api/';
 const BASE_URL = 'http://localhost:5000/api/';
 
 const request = async (endpoint, paramsOrData = {}, verb = "get") => {  
   
-  console.log("API Call:", endpoint, paramsOrData, verb, BASE_URL);
+  console.debug("API Call:", endpoint, paramsOrData, verb, BASE_URL);
   try {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('GET', 'POST', 'PUT', 'OPTIONS');
     const res = await axios({
       method: verb,
       url: `${BASE_URL}${endpoint}`,
-      [verb === "get" ? "params" : "data"]: paramsOrData});
+      
+      [verb === "get" ? "params" : "data"]: paramsOrData,
+      headers: headers
+    });
     
     return res;
       // axios sends query string data via the "params" key,

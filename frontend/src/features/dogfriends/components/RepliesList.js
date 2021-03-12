@@ -22,8 +22,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    minWidth: '350px',    
+    minWidth: 350,    
+    marginLeft: 20,
     border: '1px solid #eeeeee',
+    borderRadius: 6,
     boxShadow: '0 10px 6px -6px #80808040',
   },
   commentSection: {
@@ -86,8 +88,7 @@ export default function RepliesList() {
                 username={e.username}
                 body={e.body} 
                 created_on={e.created_on} />
-            </div>
-            
+            </div>            
           </div>
       )) : <div className={classes.noreplies}>No replies yet.</div>}
       </div>

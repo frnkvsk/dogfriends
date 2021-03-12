@@ -9,7 +9,6 @@
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/user-event": "^12.1.7",
-    "aws-sdk": "^2.831.0",
     "axios": "^0.21.1",
     "react": "^16.13.1",
     "react-animation": "^1.2.2",
@@ -53,5 +52,10 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.4",
     "msw": "^0.20.5"
-  }
+  },
+  "proxy": "http://localhost:5000/api/",
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }

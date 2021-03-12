@@ -26,7 +26,6 @@ import { addUserInfo } from '../dogfriendsUserSlice';
 import { 
   getUserInfo,
   getInitInfo } from '../api/DogfriendsApi';
-
 import logo from '../assets/logo.png';
 import UserAvatar from './UserAvatar';
 import { 
@@ -45,14 +44,10 @@ const useStyles = makeStyles(theme => ({
     }, 
   },
   logo: {
-    height: '4em', 
-    
+    height: '4em',     
     [theme.breakpoints.down('md')]: {
       height: '4.5em',
-    }, 
-    // [theme.breakpoints.down('xs')]: {
-    //   height: '5em'
-    // },   
+    },  
   },
   logoContainer: {
     padding: '0',
@@ -69,7 +64,6 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     ...theme.typography.button,
-    // background: theme.palette.secondary,
     borderRadius: '50px',
     margin: '0 25px 0 50px',    
     height: '45px',
@@ -78,7 +72,6 @@ const useStyles = makeStyles(theme => ({
     }
   },
   buttonSecondary: {
-    // ...theme.typography.button,
     backgroundColor: 'transparent',
   },
   drawer: {
@@ -100,7 +93,7 @@ const useStyles = makeStyles(theme => ({
     opacity: 0.7,
   },
   drawerItemLogin: {
-    backgroundColor: 'transparent'//theme.palette.common.yellow,
+    backgroundColor: 'transparent',
   },
   drawerItemSelected: {
     // opacity: 1,
@@ -115,8 +108,7 @@ const useStyles = makeStyles(theme => ({
   appBar: {
     zIndex: theme.zIndex.modal + 1,
     position: 'fixed',
-    background: `linear-gradient(45deg, ${theme.palette.common.brown} 30%, ${theme.palette.common.brownDark} 90%)`
-    // background: `linear-gradient(45deg, ${theme.palette.common.brown} 30%, ${theme.palette.common.brownLight} 90%)`,
+    background: `linear-gradient(45deg, ${theme.palette.common.brown} 30%, ${theme.palette.common.brownDark} 90%)`,
   },
   avatar: {
     display: 'flex',
@@ -158,12 +150,9 @@ export default function Navbar(props) {
   const location = useLocation();
   const theme = useTheme();
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
-
   const matches = useMediaQuery(theme.breakpoints.down('md'));
-
   const [value, setValue] = useState(0);  
   const [openDrawer, setOpenDrawer] = useState(false);
-
   const [username, setUserName] = useState(''); 
   const [listItems, setListItems] = useState({});
 

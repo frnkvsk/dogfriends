@@ -29,8 +29,7 @@ const useStyles = makeStyles((theme) => ({
       alignItems: 'stretch',
       justifyContent: 'stretch',
     },
-  },
-  
+  },  
 }));
 
 export default function Post() {

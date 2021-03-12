@@ -2,12 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
-import { makeStyles } from '@material-ui/core/styles';
+import { Zoom, makeStyles } from '@material-ui/core';
 import { 
   Button, 
   TextField,
 } from '@material-ui/core';
-
 import { 
   addPosts,
  } from '../dogfriendsPostsSlice';
@@ -17,6 +16,8 @@ import { FillTextImage } from './FillTextImage';
 import { putNewPhoto } from '../api/DogfriendsPhotosApi';
 import { postPostNew } from '../api/DogfriendsApi';
 import { selectInitInfo } from '../dogfriendsInitInfoSlice';
+import { selectPosts } from '../dogfriendsPostsSlice';
+import { addPhotoUrl } from '../dogfriendsPhotosSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,7 +35,8 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 0 20px 0',
     padding: '15px',
     backgroundColor: theme.palette.common.yellowLight,
-    border: '1px solid #eeeeee',    
+    border: '1px solid #eeeeee', 
+    borderRadius: 6,   
   },
   control: {
     display: 'flex',    
@@ -50,31 +52,24 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     maxWidth: '400px',
     maxHeight: '400px',
-  },
-  
+  },  
   buttons: {
     display: 'flex',
     justifyContent: 'space-around',
   },
   button: {
     ...theme.typography.button,
-    // backgroundColor: theme.palette.common.yellowDark,
     borderRadius: '22px', 
     height: '45px',
-    // '&:hover': {
-    //   backgroundColor: theme.palette.secondary.light,
-    // }
   }
 
 }));
 
 const PostFormNew = () => {
   const classes = useStyles();
-  const auth = useContext(AuthContext);
-  
+  const auth = useContext(AuthContext);  
   const selectInitInfoData = useSelector(selectInitInfo);
-  
-
+  const selectPostData = useSelector(selectPosts);
   const dispatch = useDispatch();
   const history = useHistory();
   const [title, setTitle] = useState('');
@@ -118,8 +113,7 @@ const PostFormNew = () => {
     let newImage = await FillTextImage({imageBase, topText, bottomText, color});
     if(newImage) {
       setImage(newImage);
-    }
-    
+    }    
   }
   // add text to image
   useEffect(() => {
@@ -146,7 +140,11 @@ const PostFormNew = () => {
       // put photo in AWS S3 bucket with lambda function
       // post photo to db photos table
       putNewPhoto(image, photo_id, aws_endpoint_up, auth.authState.token);
-  
+      let photoUrl = {
+        photo_id,
+        imageUrl: image
+      }
+      dispatch(addPhotoUrl(photoUrl)); 
       const payload = {
         id: uuid(),
         title,
@@ -157,10 +155,9 @@ const PostFormNew = () => {
         username: auth.authState.userInfo.username,
         _token: auth.authState.token
       }
-      dispatch(addPosts(payload)); 
+      dispatch(addPosts([payload, ...selectPostData.data])); 
       // commit post details to database
-      postPostNew(payload);
-       
+      postPostNew(payload);       
       history.push('/');
     }
       
@@ -172,6 +169,7 @@ const PostFormNew = () => {
   }
 
   return (
+    <Zoom in={true} style={{ transitionDelay: '1ms' }}> 
     <div className={classes.root}> 
       <form method='post' className={classes.form} id='imageUploadForm'> 
         <TextField 
@@ -241,6 +239,7 @@ const PostFormNew = () => {
       </form>
       
     </div>
+    </Zoom>
   );
 }
 

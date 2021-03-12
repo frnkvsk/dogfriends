@@ -14,9 +14,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center', 
     border: '2px solid #eeeeee',
-    borderRadius: '4px',
+    borderRadius: 6,
     boxShadow: '0 10px 6px -6px #80808040',
-    marginRight: '10px',
+    marginRight: '20px',
     [theme.breakpoints.down('sm')]: {
       boxShadow: 'none',
       borderBottom: 'none',
@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   media: { 
-    borderTopRightRadius: '4px', 
-    borderTopLeftRadius: '4px', 
+    borderTopRightRadius: 6, 
+    borderTopLeftRadius: 6, 
   },
   mediaItem: {
     display: 'flex',

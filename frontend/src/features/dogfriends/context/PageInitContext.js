@@ -14,6 +14,13 @@ const PageInitProvider = ({ children }) => {
       console.error(error);
     }    
   }
+  const resetInitCount = () => {
+    try {
+      setPageInitState({pageInitCount: 0});
+    } catch (error) {
+      console.error(error);
+    }    
+  }
   
   return (
     <Provider
@@ -21,6 +28,7 @@ const PageInitProvider = ({ children }) => {
         {
           pageInitState,
           incrementInitCount: () => incrementInitCount(),
+          resetInitCount: () => resetInitCount(),
         }
       }
       >

@@ -15,22 +15,19 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
+    width: '100%', 
   },
   formElement: {
     width: '95%',
-    margin: '10px'
+    margin: '10px', 
   },
   button: {
-    width: '100%',
-    minWidth: '435px',
     marginTop: '15px',
   },
   table: {
     border: '1px solid #EEF1F1',
     width: '100%',
-    minWidth: '435px',
-  
+    minWidth: '435px',  
   },
   tableRow: {
     '&:nth-of-type(odd)': {
@@ -39,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '22px',
     marginLeft: '5px',
   }
-
 }));
 
 function getSteps() {
@@ -144,8 +140,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
       default:
         setActiveStep((activeStep) => activeStep + 1);
         handleSignup({username, password,first_name,last_name,email,admin:false});
-    }
-    
+    }    
   };
 
   const handleReset = () => {
@@ -272,8 +267,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                       <tr className={classes.tableRow}>
                       <td style={{paddingLeft: '8px'}}>Country: {country}</td>
                       </tr>
-                    </tbody>
-                    
+                    </tbody>                    
                   </table>
                 </div>
               )}</div>
@@ -282,6 +276,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                 className={classes.button}
                 variant='contained'
                 color='primary'
+                fullWidth={true}
                 onClick={handleNext}>
                 {activeStep === steps.length - 1 ? 'Complete Signup' : 'Next'}
               </Button>

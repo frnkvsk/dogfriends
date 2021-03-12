@@ -1,20 +1,23 @@
 /** Database connection for Dogfriends. */
+require("dotenv").config();
+const Pool = require("pg").Pool;
+let pool;
 
-const { Client } = require("pg");
+if(process.env.NODE_ENV === 'production') {
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  });
+} else {
+  pool = new Pool({
+    user: process.env.PG_USER,
+    password: process.env.PG_PASSWORD,
+    host: process.env.PG_HOST,
+    database: process.env.PG_DATABASE,
+    port: process.env.PG_PORT,
+  });
+}
 
-// database username
-const databaseUserName = "postgres";
-
-// database user password
-const databaseUserPassword = "springboard";
-
-// port
-const port = "5432";
-
-let DB_URI = `postgres://${ databaseUserName }:${ databaseUserPassword }@localhost:${ port }/dogfriends`;
-const client = new Client(process.env.DATABASE_URL || DB_URI);
-
-client.connect();
-
-
-module.exports = client;
+module.exports = pool;

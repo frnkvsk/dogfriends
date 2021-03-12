@@ -4,7 +4,6 @@ import {
   Slide,
   makeStyles,
  } from '@material-ui/core'; 
-import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
 import { 
   setPages,
@@ -39,15 +38,12 @@ export default function PaginationComp({pageCount, posts_per_page}) {
   }
   
   return (
-    <Slide direction='up' in={true} mountOnEnter unmountOnExit timeout={4000}>
+    <Slide direction='up' in={true} mountOnEnter unmountOnExit timeout={1000}>
     <div className={classes.root}>
-      
-      <Typography>Page: {pageCurr+1}</Typography>
       <Pagination 
         count={pagesTotal%posts_per_page ? ~~(pagesTotal/posts_per_page)+1 : ~~(pagesTotal/posts_per_page)} 
         page={+pageCurr+1} 
-        onChange={handleChange}/>
-      
+        onChange={handleChange}/>      
     </div> 
     </Slide>
   );

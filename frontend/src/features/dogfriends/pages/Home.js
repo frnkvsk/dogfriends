@@ -7,55 +7,36 @@ import PostList from '../components/PostList';
 import { AuthContext } from '../context/AuthContext';
 import { PageInitContext } from '../context/PageInitContext';
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    [theme.breakpoints.down('sm')]: {
-      width: '100%'
-    },
-    [theme.breakpoints.up('md')]: {
-      width: '85%'
-    },
-    [theme.breakpoints.up('xl')]: {
-      width: '85%'
-    },
+    alignItems: 'center',
   },
   headingMargin1: {
-    marginTop: 0
+    marginTop: 0,
   },  
   headingMargin2: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
     marginTop: 50,
   },
   heading: {
     ...theme.typography.h2,
-    textAlign: 'center',
+    marginBottom: 2,
   },
   subHeading: {
-    ...theme.typography.subTitle,
-    textAlign: 'center',
+    ...theme.typography.subtitle1,
     marginBottom: 30,
   },
   cardImageList: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-around',
-    // [theme.breakpoints.down('lg')]: {
-    //   flexDirection: 'column'
-    // },
-    // [theme.breakpoints.up('md')]: {
-    //   flexDirection: 'column'
-    // },
-    // [theme.breakpoints.up('xs')]: {
-    //   flexDirection: 'row',
-    //   // alignItems: 'flex-start',
-    //   // justifyContent: 'flex-start',
-    // },
     marginTop: '25px',
   }
 }));
-
 
 const Home = () => {
   const classes = useStyles();  
@@ -83,10 +64,10 @@ const Home = () => {
 
   return (        
     <div className={classes.root}>   
-      <Zoom in={true} style={{ transitionDelay: '1000ms' }}>      
+      <Zoom in={true} style={{ transitionDelay: '1ms' }}>      
       <div key='home1' className={pageWelcome.length===1 ? classes.headingMargin1 : classes.headingMargin2}>
         {pageWelcome.map((e,i) => i===0 ? 
-          <div key={e+i} variant='h1'>{e}</div> : <div variant='subtitle1'>{e}</div>)}      
+          <div key={e+i} className={classes.heading}>{e}</div> : <div key={e+i} className={classes.subHeading}>{e}</div>)}      
       </div>
       </Zoom>        
       <div>

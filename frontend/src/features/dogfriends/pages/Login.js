@@ -17,7 +17,7 @@ import {
   login, 
   preSignupUsernameCheck,
   signup} from '../api/DogfriendsApi';
-
+import { PageInitContext } from '../context/PageInitContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '100%',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#ffffff',    
   },
   label: {
     fontSize: '18px',
@@ -60,9 +60,10 @@ export default function Login() {
   const classes = useStyles();
   const history = useHistory();
   const auth = useContext(AuthContext);
+  const pageInitContext = useContext(PageInitContext);
   const dispatch = useDispatch();
   const [loginType, setValue] = useState('login');
-
+  
   /**
    * Toggle between Login and Signup functionality
    * value is the Tab value string
@@ -79,6 +80,8 @@ export default function Login() {
    */
   const handleLogin = async (data) => {
     try {
+      // reset page count 
+      pageInitContext.resetInitCount();
       // login to database
       const response = await login(data);
       // if logged in get user information
@@ -125,16 +128,19 @@ export default function Login() {
    * } data 
    */
   const handleSignup = async (data) => {  
-    const resp = await signup(data);
-    if(resp.status === 201) {
+    try {
+      const resp = await signup(data);
+      // reset page count 
+      pageInitContext.resetInitCount();
       auth.setAuthState({
         userInfo: {username: data.username},
         token: resp.data.token,
       });
       history.push('/');
-    } else {
+    } catch (error) {
+      console.error(error);
       return false;
-    }   
+    }
   }  
 
   return (    

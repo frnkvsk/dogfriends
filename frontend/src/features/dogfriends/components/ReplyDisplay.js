@@ -9,14 +9,14 @@ const useStyles = makeStyles({
     alignItems: 'stretch',
     justifyContent: 'stretch',
     margin: '1px 12px 1px 3px',
-    padding: '2px 5px 2px 5px',    
+    padding: '2px 5px 2px 5px',       
   },
   mediaBody: {
     display: 'flex',
     flexWrap: 'wrap',
     fontSize: '18px',
     wordWrap: 'break-word',
-    overflow: 'hidden',
+    overflow: 'hidden',    
   },
   mediaInfo: {
     display: 'flex',

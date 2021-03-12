@@ -1,23 +1,20 @@
 import axios from 'axios';
 
-// const AWS_IMAGE_BUCKET_URL_BASE='https://dogfriends.s3-us-west-2.amazonaws.com/';
+// const BASE_URL = 'https://app-dogfriends.herokuapp.com/api/';
 const BASE_URL = 'http://localhost:5000/api/';
 
 const request = async (endpoint, paramsOrData = {}, verb = "get") => {    
-  console.log("API Call:", endpoint, paramsOrData, verb);
+  // console.debug("API Call:", endpoint, paramsOrData, verb);
   let headers = new Headers();
-
-  headers.append('Content-Type', 'application/json');//multipart/form-data
+  headers.append('Content-Type', 'application/json');
   headers.append('Accept', 'application/json');
-
   headers.append('GET', 'POST', 'PUT', 'OPTIONS');
   try {
     const res = await axios({
       method: verb,
       url: endpoint,
       [verb === "get" ? "params" : "data"]: paramsOrData,
-      headers: headers
-                
+      headers: headers                
     });
     
     return res;
@@ -31,15 +28,6 @@ const request = async (endpoint, paramsOrData = {}, verb = "get") => {
 }
 
 // photos
-const getPhotos = async () => {
-  // let res = await request('posts');
-  // return res;
-}
-const getPhotoById = async () => {
-  // return await request('https://dogfriends.s3-us-west-2.amazonaws.com/79abc5f5-514e-40b2-88a4-d7b37bd930fd.txt');
-  
-}
-
 // gets Base 64 image/jpeg string from AWS S3 bucket
 // return Buffer
 const getPhotoBySrc = async (key, lambdaUrl) => {  
@@ -49,7 +37,7 @@ const getPhotoBySrc = async (key, lambdaUrl) => {
 // puts Base 64 image/jpeg string into AWS S3 bucket
 // posts image id and url to database
 const putNewPhoto = async (image, imageName, aws_endpoint_up, _token, aws_endpoint_down) => { 
-  // if(!imageName.endsWith('.txt')) imageName = `${imageName}.txt`;
+  
   try {
     // upload photo to AWS S3 bucket   
     const res = await request(aws_endpoint_up, {image, imageName}, 'put');
@@ -74,12 +62,10 @@ const deletePhoto = async (id, username, token) => {
     username: username,
     _token: token  
   }
-  return await request(`posts/${id}`, data, 'delete');
+  return await request(`${BASE_URL}posts/${id}`, data, 'delete');
 }
 
 export {
-  getPhotos,
-  getPhotoById,
   getPhotoBySrc,
   deletePhoto,
   putNewPhoto

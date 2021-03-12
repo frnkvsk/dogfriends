@@ -1,12 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import {brown, yellow} from '@material-ui/core/colors'
-// const dfBrownDark = '#99710a';
-// const dfBrown = '#b66b35';
-// const dfBrownLight = '#e1782d';
-
-// const dfYellowDark = '#c99e03';
-// const dfYellow = '#bdb76b';
-// const dfYellowLight = '#c5c187';
 
 const theme = createMuiTheme({
   palette: {
@@ -17,13 +10,13 @@ const theme = createMuiTheme({
       yellow: yellow[500],
       yellowDark: yellow[600],
       yellowLight: yellow[100],
+      yellowMid: yellow[200],
     },
     primary: {
-      main: brown[300],//dfBrown,
-      // contrastText: yellow[600]
+      main: brown[300],
     },
     secondary: {
-      main: yellow[700],//dfYellow
+      main: yellow[700],
       contrastText: brown[400]
     }
   },
@@ -35,12 +28,6 @@ const theme = createMuiTheme({
       fontSize: '1rem',
       color: 'white',      
     },
-    button: {
-      // fontFamily: 'Pacifico',
-      // fontSize: '1rem',
-      // textTransform: 'none',
-      // color: 'white',
-    },
     h1: {
       fontFamily: 'Raleway',
       fontWeight: 700,
@@ -51,24 +38,37 @@ const theme = createMuiTheme({
     h2: {
       fontFamily: 'Raleway',
       fontWeight: 700,
-      fontSize: '1.5rem',
-      color: 'secondary',
+      fontSize: '3.3rem',
+      color: brown[900],
+      lineHeight: 1.1,
+    },
+    h3: {
+      fontFamily: 'Raleway',
+      fontWeight: 700,
+      fontSize: '2.5rem',
+      color: brown[900],
       lineHeight: 1.1,
     },
     subtitle1: {
       fontFamily: 'Raleway',
       fontWeight: 500,
       fontStyle: 'italic',
-      fontSize: '0.8rem',
-      color: 'secondary',
-      lineHeight: 1,
+      fontSize: '0.9rem',
+      color: brown[900],
+      lineHeight: 1.1,
+    },
+    subtitle2: {
+      fontFamily: 'Raleway',
+      fontWeight: 500,
+      fontSize: '0.9rem',
+      color: brown[900],
+      lineHeight: 1.5,
     }
   },
   props: {
     MuiButton: {
       disableElevation: true,      
-    },
-    
+    },    
   },
   overrides: {
     MuiButton: {
@@ -100,9 +100,6 @@ const theme = createMuiTheme({
         }
       }
     },
-    MuiTextField: {
-
-    }
   }
 })
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import { Zoom, makeStyles } from '@material-ui/core';
 import { 
   TextField,
   Button } from '@material-ui/core';
@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '2px',
     backgroundColor: theme.palette.common.yellowLight,
     border: '1px solid #eeeeee',
+    borderRadius: 6,   
   },
   form: {
     display: 'flex',
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     width: '100%',
     fontSize: '24px',
+    
   },
   formElement: {
     width: 'auto',
@@ -49,14 +51,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '10px 20px 15px',
   },
   button: {
-    // ...theme.typography.button,
-    // backgroundColor: theme.palette.common.yellowDark,
-    // borderRadius: '22px',
-    margin: '0 25px 0 50px',    
-    // height: '45px',
-    // '&:hover': {
-    //   backgroundColor: theme.palette.secondary.light,
-    // }
+    margin: '0 25px 0 50px', 
   },
   header: {
     display: 'flex',
@@ -130,6 +125,7 @@ const ProfileForm = ({title, handleSubmit}) => {
   }
   
   return (
+    <Zoom in={true} style={{ transitionDelay: '1ms' }}> 
     <div className={classes.root}>      
       <div className={classes.header}>
         <p>{title}</p>
@@ -197,6 +193,7 @@ const ProfileForm = ({title, handleSubmit}) => {
           onChange={e => setCountry(e.target.value)}/>      
       </div>
     </div>
+    </Zoom>
   );
 }
 export default ProfileForm;

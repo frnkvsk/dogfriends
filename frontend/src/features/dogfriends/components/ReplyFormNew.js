@@ -5,9 +5,6 @@ import {
   TextField,
 } from '@material-ui/core';
 
-
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -78,8 +75,7 @@ const ReplyFormNew = ({handleSubmit}) => {
           onClick={handleButtonClick} >
           Send
         </Button>
-      </form>
-      
+      </form>      
     </div>
   );
 }
