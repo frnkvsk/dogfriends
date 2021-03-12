@@ -1,0 +1,19 @@
+{
+  "name": "dogfriends",
+  "version": "1.0.0",
+  "description": "Springboard project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frnkvsk/dogfriends.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frnkvsk/dogfriends/issues"
+  },
+  "homepage": "https://github.com/frnkvsk/dogfriends#readme"
+}
