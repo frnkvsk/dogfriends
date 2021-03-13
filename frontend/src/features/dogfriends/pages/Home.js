@@ -1,11 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { 
   Zoom,
+  LinearProgress,
   makeStyles,
  } from '@material-ui/core'; 
 import PostList from '../components/PostList';
 import { AuthContext } from '../context/AuthContext';
 import { PageInitContext } from '../context/PageInitContext';
+import { selectInitInfo } from '../dogfriendsInitInfoSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,11 +38,18 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'space-around',
     marginTop: '25px',
+  },
+  progressBar: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
   }
 }));
 
 const Home = () => {
   const classes = useStyles();  
+  const selectInitInfoData = useSelector(selectInitInfo);
   const [pageWelcome, setPageWelcome] = useState([]); 
   const auth = useContext(AuthContext);
   const pageInitContext = useContext(PageInitContext);
@@ -62,6 +72,7 @@ const Home = () => {
     // eslint-disable-next-line
   },[]);
 
+  console.log('selectInitInfoData', selectInitInfoData)
   return (        
     <div className={classes.root}>   
       <Zoom in={true} style={{ transitionDelay: '1ms' }}>      
@@ -72,7 +83,15 @@ const Home = () => {
       </Zoom>        
       <div>
         <div className={classes.cardImageList}>
-          <PostList />
+          {selectInitInfoData.status === 'fulfilled' ? (
+            <PostList />
+          ) : (
+            <div className={classes.progressBar}>
+              <div className={classes.subHeading}>Sorry, our free server is sleeping...</div>
+              <div className={classes.subHeading}>It will take a few seconds more for it to wake up...</div>
+              <LinearProgress />
+            </div>)}
+          
         </div>        
       </div>
     </div>    

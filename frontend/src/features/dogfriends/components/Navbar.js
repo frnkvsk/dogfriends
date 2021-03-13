@@ -146,7 +146,7 @@ export default function Navbar(props) {
   const history = useHistory();
   const auth = useContext(AuthContext);
   const dispatch = useDispatch();
-  const selectInitInfoData = useSelector(selectInitInfo)
+  const selectInitInfoData = useSelector(selectInitInfo);
   const location = useLocation();
   const theme = useTheme();
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -165,7 +165,7 @@ export default function Navbar(props) {
       }      
     }
     if(selectInitInfoData.status !== 'fulfilled') {
-      getInitInfoData();
+      getInitInfoData();      
     }    
     // eslint-disable-next-line
   }, [])
