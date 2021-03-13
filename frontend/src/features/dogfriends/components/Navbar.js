@@ -165,7 +165,7 @@ export default function Navbar(props) {
       }      
     }
     if(selectInitInfoData.status !== 'fulfilled') {
-      getInitInfoData();      
+        getInitInfoData();
     }    
     // eslint-disable-next-line
   }, [])
