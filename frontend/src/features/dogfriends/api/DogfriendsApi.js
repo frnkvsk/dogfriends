@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 
-// const BASE_URL = 'https://app-dogfriends.herokuapp.com/api/';
-const BASE_URL = 'http://localhost:5000/api/';
+const BASE_URL = 'https://app-dogfriends.herokuapp.com/api/';
+// const BASE_URL = 'http://localhost:5000/api/';
 
 const request = async (endpoint, paramsOrData = {}, verb = "get") => {  
   
@@ -112,7 +112,8 @@ const signup = async (data) => {
 const getUserInfo = async (payload) => {
   const {username, token} = payload;
   try {  
-    return await request(`users/${username}/`, {_token: token}); 
+    const response = await request(`users/${username}/`, {_token: token});
+    return response;
   } catch (error) {
     console.error(error);
   }   
@@ -123,7 +124,8 @@ const getUserInfo = async (payload) => {
  * downloading images
  */
 const getInitInfo = async () => {
-  return await request('initinfo/');
+  const response = await request('initinfo/');
+  return response;  
 }
 
 /**

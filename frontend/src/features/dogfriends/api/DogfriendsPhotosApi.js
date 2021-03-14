@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// const BASE_URL = 'https://app-dogfriends.herokuapp.com/api/';
-const BASE_URL = 'http://localhost:5000/api/';
+const BASE_URL = 'https://app-dogfriends.herokuapp.com/api/';
+// const BASE_URL = 'http://localhost:5000/api/';
 
 const request = async (endpoint, paramsOrData = {}, verb = "get") => {    
   // console.debug("API Call:", endpoint, paramsOrData, verb);

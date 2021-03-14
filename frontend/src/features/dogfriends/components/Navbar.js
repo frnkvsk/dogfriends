@@ -155,20 +155,36 @@ export default function Navbar(props) {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [username, setUserName] = useState(''); 
   const [listItems, setListItems] = useState({});
-
+  const maxRetries = 5;
+  const [retryCount, setRetryCount] = useState(0);
   
   useEffect(() => {
     const getInitInfoData = async () => {
-      const response = await getInitInfo();
-      if(response.status === 200) {
-        dispatch(addInitInfo(response.data));
-      }      
+      try {
+        const response = await getInitInfo();
+        if(response.status === 200) {
+          dispatch(addInitInfo(response.data));
+        } else {
+          setTimeout(() => {
+            if(retryCount < maxRetries) {
+              setRetryCount(retryCount + 1);
+            }
+          }, 7000);
+        }
+      } catch (error) {
+        console.error('Navbar getInitInfo error',error)
+        setTimeout(() => {
+          if(retryCount < maxRetries) {
+            setRetryCount(retryCount + 1);
+          }
+        }, 7000);
+      }          
     }
     if(selectInitInfoData.status !== 'fulfilled') {
-        getInitInfoData();
+      getInitInfoData();      
     }    
     // eslint-disable-next-line
-  }, [])
+  }, [retryCount])
   /**
    * We are going to check the login status of the user
    * here at the Navbar because it is the top level Component

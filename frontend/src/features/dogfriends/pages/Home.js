@@ -72,7 +72,7 @@ const Home = () => {
     // eslint-disable-next-line
   },[]);
 
-  console.log('selectInitInfoData', selectInitInfoData)
+  console.log('selectInitInfoData.status === ', selectInitInfoData.status)
   return (        
     <div className={classes.root}>   
       <Zoom in={true} style={{ transitionDelay: '1ms' }}>      
