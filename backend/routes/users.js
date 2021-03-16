@@ -15,7 +15,7 @@ const createToken = require("../helpers/createToken");
  *  get a single user
  *  GET /[username] => {user: user} 
  */
-router.get("/:username", authRequired, async function(req, res, next) {
+router.get("/:username", authRequired, async (req, res, next) => {
   try {
     const user = await User.findOne(req.params.username);
     return res.json({ user });
@@ -28,7 +28,7 @@ router.get("/:username", authRequired, async function(req, res, next) {
  * pre registration username check
  * check if username is already taken
  */
-router.post("/:username", async function(req, res, next) {
+router.post("/:username", async (req, res, next) => {
   let resp = await User.usernameCheck(req.params.username);
   return res.status(201).json({resp});
 });
@@ -37,7 +37,7 @@ router.post("/:username", async function(req, res, next) {
  * register
  * POST / {userdata}  => {token: token} 
  */
-router.post("/", async function(req, res, next) {
+router.post("/", async (req, res, next) => {
   try {
     delete req.body._token;
     const validation = validate(req.body, userNewSchema);
@@ -61,7 +61,7 @@ router.post("/", async function(req, res, next) {
  * update user information
  * PATCH /[handle] {userData} => {user: updatedUser} 
  */
-router.patch("/:username", ensureCorrectUser, async function(req, res, next) {
+router.patch("/:username", ensureCorrectUser, async (req, res, next) => {
   try {
     delete req.body.username;
     delete req.body.admin;
@@ -84,7 +84,7 @@ router.patch("/:username", ensureCorrectUser, async function(req, res, next) {
  *  delete a single user
  *  DELETE /[handle]  =>  {message: "User deleted"} 
  */
-router.delete("/:username", ensureCorrectUser, async function(req, res, next) {
+router.delete("/:username", ensureCorrectUser, async (req, res, next) => {
   try {
     await User.remove(req.params.username);
     return res.json({ message: "User deleted" });

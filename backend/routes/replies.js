@@ -4,52 +4,40 @@ const db = require("../db");
 const express = require("express");
 const router = new express.Router();
 const { ensureCorrectUser, authRequired } = require("../middleware/auth");
+const Reply = require('../models/reply');
 
-/** GET /[id]  get detail on post
+/** 
+ * get replies related to a post
+ * GET /[id]  
  *
- * Returns: [ parent_post, children_post ... ]
- *
- * =>   [{ id,
- *         body,
- *         created_on,
- *         username,
- *         parent_id,
- *         photo_id
- *       }, 
- *       ...
- *      ]
+ * Returns: [ parent_post ] =>
+ *          [{ id, parent_id, username, body, created_on }, ... ]
  */
-
 router.get("/:id", async function (req, res, next) {
   try {
-    const result = await db.query(
-      `SELECT *
-       FROM replies
-       WHERE parent_id=$1
-       ORDER BY created_on
-      `, [req.params.id]      
-    );    
+    const result = await Reply.getReplies(req.params.id);
     return res.json(result.rows);
   } catch (err) {
     return next(err);
   }
 });
 
-/** POST /     add a new post
- *
- * { title, body, username }  =>  { id, title, body, username }
+/** 
+ * add a reply to a post
+ * POST /     
+ * 
+ * Returns { parent_id, username, body }  =>  { message: "inserted" }
  *
  */
-
 router.post("/", authRequired, async function (req, res, next) {
   try {
     const {parent_id, username, body} = req.body;
-
-    await db.query(
-      `INSERT INTO replies (parent_id, username, body) 
-        VALUES ($1, $2, $3)`,
-      [parent_id, username, body]);
-      return res.json({ message: "inserted" });
+    await Reply.replyToPost(parent_id, username, body);
+    // await db.query(
+    //   `INSERT INTO replies (parent_id, username, body) 
+    //     VALUES ($1, $2, $3)`,
+    //   [parent_id, username, body]);
+    return res.json({ message: "inserted" });
   } catch (err) {
     return next(err);
   }

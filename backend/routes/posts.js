@@ -4,147 +4,72 @@ const db = require("../db");
 const express = require("express");
 const router = new express.Router();
 const { ensureCorrectUser, authRequired } = require("../middleware/auth");
+const Post = require('../models/post');
 
 
 
-
-/** GET /   get overview of posts
+/** 
+ * get all posts order of newest first
+ * GET /   
  *
- * Returns:
- *
- * => [ { id
- *      },
- *      ...
- *    ]
+ * Returns: () => [ 
+ *                  { id, title, body, replies, votes, created_on, username,},
+ *                  ...
+ *                ]
  *
  */
-
 router.get("/", async function (req, res, next) {
   try {
-    const response = await db.query(
-      `SELECT * FROM posts ORDER BY created_on`
-    );    
+    const response = await Post.findAll();
     return res.json(response.rows);
   } catch (err) {
     return next(err);
   }
 });
 
-/** GET /[id]  get detail on post
+/** 
+ * get one post matching user id of post
+ * GET /[id]  
  *
- * Returns: [ parent_post, children_post ... ]
- *
- * =>   [{ id,
- *         body,
- *         created_on,
- *         username,
- *         parent_id,
- *         photo_id
- *       }, 
- *       ...
- *      ]
+ * Returns: [ id ] => [{ id, title, body, replies, votes, created_on, username}]
+ * 
  */
-
 router.get("/:id", async function (req, res, next) {
   try {
-    const result = await db.query(
-      `SELECT *
-       FROM posts
-       WHERE id=$1
-       ORDER BY created_on
-      `, [req.params.id]      
-    );
-    if(result.rows.length) {
-      const votes = await db.query(
-        `SELECT COALESCE(SUM(v.direction),0) votes
-        FROM votes v
-        WHERE post_id = $1`,
-        [req.params.id]
-      );
-      result.rows[0].votes = votes.rows[0].votes;
-    }
-    
+    const result = await Post.findOne(req.params.id);    
     return res.json(result.rows);
   } catch (err) {
     return next(err);
   }
 });
 
-
-/** POST /[id]/vote/(up|down)    Update up/down as post
+/**
+ * add a new post 
+ * POST /     
  *
- * => {  }
- *
- */
-
-router.post("/:id/vote/:direction", authRequired, async function (req, res, next) {
-  try {
-    const delta = req.params.direction === "up" ? +1 : -1;
-    const username= req.username;
-    const result = await db.query(
-      `INSERT INTO votes (post_id, username, direction) 
-        VALUES ($1, $2, $3)
-        ON CONFLICT (post_id, username) DO UPDATE
-        SET direction = $3`,
-      [req.params.id, username, delta]);
-    return res.json(result.rows[0]);
-  } catch (err) {
-    return next(err);
-  }
-});
-
-
-/** POST /     add a new post
- *
- * { title, body, username }  =>  { id, title, body, username }
+ * Returns: { title, body, username, photo_id }  =>  { id, title, body, username }
  *
  */
-
 router.post("/", authRequired, async function (req, res, next) {
   try {
     const {title, body, photo_id, username} = req.body;
-
-    await db.query(
-      `INSERT INTO posts (title, body, username, photo_id) 
-        VALUES ($1, $2, $3, $4)`,
-      [title, body, username, photo_id]);
-    
+    const result = await Post.addNew(title, body, username, photo_id);
+    return res.json(result.rows[0]);
   } catch (err) {
     return next(err);
   }
 });
 
-
-/** PUT /[id]     update existing post
+/** 
+ * delete a post
+ * DELETE /[id]     
  *
- * { title, body }  =>  { id, title, body, username }
- *
- */
-
-router.put("/:id", ensureCorrectUser, async function (req, res, next) {
-  try {
-    const {title, body, photo_id} = req.body;
-    const result = await db.query(
-      `UPDATE posts SET title=$1, body=$2, photo_id=$3
-        WHERE id = $4 
-        RETURNING id, title, body, photo_id, username`,
-      [title, body, photo_id, req.params.id]);
-    return res.json(result.rows[0]);
-  } catch (e) {
-    return next(e);
-  }
-});
-
-
-/** DELETE /[id]     delete post
- *
- * => { message: "deleted" }
+ * Returns: () => { message: "deleted" }
  *
  */
-
 router.delete("/:id", ensureCorrectUser, async (req, res, next) => {
   try {
-    await db.query("DELETE FROM posts WHERE id = $1", [req.params.id]);
+    const result = await Post.remove(req.params.id);
     return res.json({ message: "deleted" });
   } catch (err) {
     return next(err);

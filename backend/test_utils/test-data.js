@@ -31,20 +31,22 @@ class TestData {
     admin: false
   }
   static post1 = {
-    id: 'testpostid1', 
+    // id: 'testpostid1', 
     title: 'testtitle1', 
     body: 'testbody1',
     replies: 1,
     votes: 1, 
     photo_id: 'testphotoid1',
+    username: 'testusername1',
   }
   static post2 = {
-    id: 'testpostid2', 
+    // id: 'testpostid2', 
     title: 'testtitle2', 
     body: 'testbody2',
     replies: 1,
     votes: 1, 
     photo_id: 'testphotoid2',
+    username: 'testusername1',
   }
   static reply1 = {
     id: 'testrepliesid1',
