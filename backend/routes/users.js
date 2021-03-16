@@ -11,8 +11,10 @@ const { userNewSchema, userUpdateSchema } = require("../schemas");
 const createToken = require("../helpers/createToken");
 
 
-/** GET /[username] => {user: user} */
-
+/** 
+ *  get a single user
+ *  GET /[username] => {user: user} 
+ */
 router.get("/:username", authRequired, async function(req, res, next) {
   try {
     const user = await User.findOne(req.params.username);
@@ -26,7 +28,6 @@ router.get("/:username", authRequired, async function(req, res, next) {
  * pre registration username check
  * check if username is already taken
  */
-
 router.post("/:username", async function(req, res, next) {
   let resp = await User.usernameCheck(req.params.username);
   return res.status(201).json({resp});
@@ -34,8 +35,8 @@ router.post("/:username", async function(req, res, next) {
 
 /** 
  * register
- * POST / {userdata}  => {token: token} */
-
+ * POST / {userdata}  => {token: token} 
+ */
 router.post("/", async function(req, res, next) {
   try {
     delete req.body._token;
@@ -56,8 +57,10 @@ router.post("/", async function(req, res, next) {
   }
 });
 
-/** PATCH /[handle] {userData} => {user: updatedUser} */
-
+/** 
+ * update user information
+ * PATCH /[handle] {userData} => {user: updatedUser} 
+ */
 router.patch("/:username", ensureCorrectUser, async function(req, res, next) {
   try {
     delete req.body.username;
@@ -71,15 +74,16 @@ router.patch("/:username", ensureCorrectUser, async function(req, res, next) {
     }
 
     const user = await User.update(req.params.username, req.body);
-    user['aws_bucket_endpoint'] = AWS_UPLOAD_IMAGE_LAMBDA_URL;
     return res.json({ user });
   } catch (error) {
     return next(error);
   }
 });
 
-/** DELETE /[handle]  =>  {message: "User deleted"}  */
-
+/** 
+ *  delete a single user
+ *  DELETE /[handle]  =>  {message: "User deleted"} 
+ */
 router.delete("/:username", ensureCorrectUser, async function(req, res, next) {
   try {
     await User.remove(req.params.username);
