@@ -9,15 +9,12 @@ class Reply {
        WHERE parent_id=$1
        ORDER BY created_on
       `, [id]      
-    );  
-    // console.log('///////////////Reply.getAll response.rows',response.rows)
-    // console.log('///////////////Reply.getAll id',id)
+    ); 
     if(!response.rows.length) {
       const error = new Error('Invalid Credentials');
       error.status = 401;
       throw error;
-    }
-   
+    }   
     return response;
   }
 
@@ -27,14 +24,13 @@ class Reply {
         VALUES ($1, $2, $3)
         RETURNING *`,
       [parent_id, username, body]);
-    // if(response.rows[0].parent_id !== parent_id) {
-    //   const error = new Error('Invalid Credentials');
-    //   error.status = 400;
-    //   throw error;
-    // }
+    if(response.rows[0].parent_id !== parent_id) {
+      const error = new Error('Invalid Credentials');
+      error.status = 400;
+      throw error;
+    }
     return response.rows[0];
   }
-
   static async removeOne(id) {
     const response = await db.query(
       `DELETE FROM replies 

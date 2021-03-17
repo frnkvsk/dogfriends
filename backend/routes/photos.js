@@ -4,64 +4,64 @@ const db = require("../db");
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 const { ensureCorrectUser, authRequired } = require("../middleware/auth");
+const Photo = require('../models/photo');
 
-
-/** GET /        get photo by id for post or comment
+/**
+ *  get photo by id for post or comment
+ *  GET /        
  *
- * => { id, text }
+ *  Returns: { id }  =>  { id, url, created_on }
  *
  */
-
 router.get("/:id", async function (req, res, next) {
   try {
-    const result = await db.query(
-      `SELECT id, url, public_id, signature
-       FROM photos 
-       WHERE id = $1 
-       ORDER BY id`,
-      [req.params.id]);
-    const result2 = res.json(result.rows[0]);
-    return result2;
-  } catch (err) {
-    return next(err);
-  }
-});
-
-
-/** POST /      add a photo
- *
- * => { id, url }
- *
- */
-
-router.post("/", authRequired, async function (req, res, next) {
-  
-  try {
-    const photo_id = req.body.photo_id;
-    const photo_url = req.body.photo_url;
-    const result = await db.query(
-      `INSERT INTO photos (id, url) 
-       VALUES ($1, $2) 
-       RETURNING id, url`,
-       [photo_id, photo_url]);
-      
+    // const result = await db.query(
+    //   `SELECT id, url, created_on
+    //    FROM photos 
+    //    WHERE id = $1 
+    //    ORDER BY id`,
+    //   [req.params.id]);
+    // const result2 = res.json(result.rows[0]);
+    const result = await Photo.findOne(req.params.id)
     return res.json(result.rows[0]);
   } catch (err) {
     return next(err);
   }
 });
 
-/** DELETE /[id]      delete photo
+
+/** 
+ * add a new photo
+ * POST /      
  *
- * => { message: "deleted" }
+ * { photo_id, url, token } => { photo_id, url }
  *
  */
+router.post("/", authRequired, async function (req, res, next) {  
+  try {
+    const photo_id = req.body.photo_id;
+    const photo_url = req.body.photo_url;
+    const result = await Photo.addNew(photo_id, photo_url);
+    return res.json(result.rows[0]);
+  } catch (err) {
+    return next(err);
+  }
+});
 
+/** 
+ * delete a photo
+ * DELETE /[id]      
+ *
+ * { id } => { message: "deleted" }
+ *
+ */
 router.delete("/:id", ensureCorrectUser, async function (req, res, next) {
   try {
-    await db.query(`DELETE FROM photos 
-                    WHERE id=$1`, 
-                    [req.params.id]);
+    const result = await Photo.remove(req.params.id);
+    // await db.query(`DELETE FROM photos 
+    //                 WHERE id=$1`, 
+    //                 [req.params.id]);
+    // console.log('delete result',result)
     return res.json({ message: "deleted" });
   } catch (err) {
     return next(err);

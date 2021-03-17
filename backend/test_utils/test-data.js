@@ -61,12 +61,12 @@ class TestData {
     body: 'testbody2',
   }
   static photo1 = {
-    id: 'testphotosid1',
-    url: 'testurl1'
+    photo_id: 'testphotosid1',
+    photo_url: 'testurl1'
   }
   static photo2 = {
-    id: 'testphotosid2',
-    url: 'testurl2'
+    photo_id: 'testphotosid2',
+    photo_url: 'testurl2'
   }
 }
 
