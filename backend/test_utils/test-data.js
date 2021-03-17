@@ -31,7 +31,7 @@ class TestData {
     admin: false
   }
   static post1 = {
-    // id: 'testpostid1', 
+    //id: Note: id is not created yet,
     title: 'testtitle1', 
     body: 'testbody1',
     replies: 1,
@@ -40,7 +40,7 @@ class TestData {
     username: 'testusername1',
   }
   static post2 = {
-    // id: 'testpostid2', 
+    //id: Note: id is not created yet,
     title: 'testtitle2', 
     body: 'testbody2',
     replies: 1,
@@ -49,15 +49,15 @@ class TestData {
     username: 'testusername1',
   }
   static reply1 = {
-    id: 'testrepliesid1',
-    parent_id: 'testparentid1',
+    //id: Note: id is not created yet,
+    //parent_id: Note: parent_id is not created yet,
     username: 'testusername1',
     body: 'testbody1',
   }
   static reply2 = {
-    id: 'testrepliesid2',
-    parent_id: 'testparentid2',
-    username: 'testusername2',
+    //id: Note: id is not created yet,
+    //parent_id: Note: parent_id is not created yet,
+    username: 'testusername1',
     body: 'testbody2',
   }
   static photo1 = {

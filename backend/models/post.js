@@ -1,4 +1,5 @@
-const db = require("../db");
+// model for post routes
+const db = require('../db');
 
 class Post {
 
@@ -8,7 +9,7 @@ class Post {
     );  
 
     if(!response.rows.length) {
-      const error = new Error("Server Unavailable");
+      const error = new Error('Server Unavailable');
       error.status = 503;
       throw error;
     }
@@ -25,7 +26,7 @@ class Post {
       `, [id]      
     );
     if(!response.rows.length) {
-      const error = new Error("Invalid Credentials");
+      const error = new Error('Invalid Credentials');
       error.status = 401;
       throw error;
     }
@@ -44,14 +45,9 @@ class Post {
   }
   
   static async remove(id) {
-    const response = await db.query("DELETE FROM posts WHERE id = $1", [id]);
+    const response = await db.query('DELETE FROM posts WHERE id = $1', [id]);
     return response;
   }
-
-
-
-
-
 }
 
 module.exports = Post;

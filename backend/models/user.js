@@ -1,6 +1,6 @@
-const db = require("../db");
-const bcrypt = require("bcrypt");
-const partialUpdate = require("../helpers/partialUpdate");
+const db = require('../db');
+const bcrypt = require('bcrypt');
+const partialUpdate = require('../helpers/partialUpdate');
 
 const BCRYPT_WORK_FACTOR = 10;
 
@@ -30,7 +30,7 @@ class User {
       }
     }
 
-    const invalidPass = new Error("Invalid Credentials");
+    const invalidPass = new Error('Invalid Credentials');
     invalidPass.status = 401;
     throw invalidPass;
   }
@@ -120,7 +120,7 @@ class User {
 
   /** Update user data with `data`.
    *
-   * This is a "partial update" --- it's fine if data doesn't contain
+   * This is a 'partial update' --- it's fine if data doesn't contain
    * all the fields; this only changes provided ones.
    *
    * Return data for changed user.
@@ -133,9 +133,9 @@ class User {
     }
 
     let {query, values} = partialUpdate(
-        "users",
+        'users',
         data,
-        "username",
+        'username',
         username
     );
     const result = await db.query(query, values);

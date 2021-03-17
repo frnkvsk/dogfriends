@@ -15,7 +15,7 @@ const Reply = require('../models/reply');
  */
 router.get("/:id", async function (req, res, next) {
   try {
-    const result = await Reply.getReplies(req.params.id);
+    const result = await Reply.getAll(req.params.id);
     return res.json(result.rows);
   } catch (err) {
     return next(err);
@@ -32,11 +32,7 @@ router.get("/:id", async function (req, res, next) {
 router.post("/", authRequired, async function (req, res, next) {
   try {
     const {parent_id, username, body} = req.body;
-    await Reply.replyToPost(parent_id, username, body);
-    // await db.query(
-    //   `INSERT INTO replies (parent_id, username, body) 
-    //     VALUES ($1, $2, $3)`,
-    //   [parent_id, username, body]);
+    const result = await Reply.addNew(parent_id, username, body);
     return res.json({ message: "inserted" });
   } catch (err) {
     return next(err);
@@ -52,7 +48,7 @@ router.post("/", authRequired, async function (req, res, next) {
 
 router.delete("/:id", ensureCorrectUser, async (req, res, next) => {
   try {
-    await db.query("DELETE FROM posts WHERE id = $1", [req.params.id]);
+    const result = Reply.removeOne(req.params.id);
     return res.json({ message: "deleted" });
   } catch (err) {
     return next(err);
