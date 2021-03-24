@@ -75,21 +75,6 @@ export default function Post({id, title, username, created_on}) {
           }
         } else if(selectInitInfoData.data.aws_bucket_endpoint_down !== undefined) {
           try {
-            // const getSource = () => getPhotoBySrc(id, selectInitInfoData.data.aws_bucket_endpoint_down)
-            // .then(res => {
-            //   const imageUrl = String.fromCharCode(...res.data.Body.data).toString('base64');            
-            //   const payload = {
-            //     photo_id: id,
-            //     imageUrl
-            //   }
-            //   if(isSubscribed){
-            //     setImageUrl(imageUrl); 
-            //     dispatch(addPhotoUrl(payload));      
-            //   }
-            // });
-            // setTimeout(() => {
-            //   getSource();
-            // });
             const getSource = async () => {
               let res = await getPhotoBySrc(id, selectInitInfoData.data.aws_bucket_endpoint_down);
               if(res.status === 200 && res.data.Body) {

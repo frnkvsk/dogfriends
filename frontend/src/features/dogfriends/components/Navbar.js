@@ -172,7 +172,6 @@ export default function Navbar(props) {
           }, 7000);
         }
       } catch (error) {
-        console.error('Navbar getInitInfo error',error)
         setTimeout(() => {
           if(retryCount < maxRetries) {
             setRetryCount(retryCount + 1);
@@ -185,6 +184,7 @@ export default function Navbar(props) {
     }    
     // eslint-disable-next-line
   }, [retryCount])
+  
   /**
    * We are going to check the login status of the user
    * here at the Navbar because it is the top level Component

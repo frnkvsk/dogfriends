@@ -69,10 +69,15 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
   // verify username is not already in use and is in valid form
   useEffect(() => {
     const checkUsername = async () => {
+      // console.log('SignupForm checkUsername username',username)
       if(username.length) {
         const res = await handlePreSignup({username});
-        if(res.payload && res.payload.resp) 
+        // console.log('-----------res',res, res.payload)
+        if(res.resp) {
           setUsernameValid('Username is already taken.');
+          // console.log('--------setUsernameValie','Username is already taken.')
+        }
+          
       }      
     }
     const validateUsername = (username) => {
@@ -122,7 +127,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
   const steps = getSteps();
 
   const handleNext = async () => {
-    console.log('HandleNext')
+    // console.log('HandleNext')
     switch(activeStep) {
       case 0:
         if(!usernameValid.length && username.length && !passwordValid.length && password.length) {
@@ -171,7 +176,10 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
               {activeStep===0 ?
               (
                 <div className={classes.main}>
-                  <TextField                     
+                  <TextField   
+                    inputProps={{
+                      'data-testid': 'username'
+                    }}                 
                     className={classes.formElement} 
                     label='Username: (required)' 
                     variant='outlined' 
@@ -181,6 +189,9 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     helperText= {usernameValid.length ? usernameValid : ''}
                     onChange={e => setUsername(e.target.value)}/>
                   <TextField 
+                    inputProps={{
+                      'data-testid': 'password'
+                    }}
                     className={classes.formElement} 
                     label='Password: (required)' 
                     type='password'
@@ -195,6 +206,9 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
               (
                 <div className={classes.main}>
                   <TextField 
+                    inputProps={{
+                      'data-testid': 'first_name'
+                    }}
                     className={classes.formElement} 
                     label='First Name: (required)' 
                     variant='outlined' 
@@ -202,12 +216,18 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     inputRef={input => !first_name.length && input && input.focus()}
                     onChange={e => setFirstName(e.target.value)}/>
                   <TextField 
+                    inputProps={{
+                      'data-testid': 'last_name'
+                    }} 
                     className={classes.formElement} 
                     label='Last Name: (required)' 
                     variant='outlined' 
                     value={last_name} 
                     onChange={e => setLastName(e.target.value)}/>
                   <TextField 
+                    inputProps={{
+                      'data-testid': 'email'
+                    }} 
                     className={classes.formElement} 
                     label='Email: (required)' 
                     variant='outlined' 
@@ -222,6 +242,9 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
               (
                 <div className={classes.main}>
                   <TextField 
+                    inputProps={{
+                      'data-testid': 'city'
+                    }} 
                     className={classes.formElement} 
                     label='City: (optional)' 
                     variant='outlined' 
@@ -229,12 +252,18 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
                     inputRef={input => !city.length && input && input.focus()}
                     onChange={e => setCity(e.target.value)}/>
                   <TextField 
+                    inputProps={{
+                      'data-testid': 'state'
+                    }} 
                     className={classes.formElement} 
                     label='State: (optional)' 
                     variant='outlined' 
                     value={state} 
                     onChange={e => setState(e.target.value)}/>
                   <TextField 
+                    inputProps={{
+                      'data-testid': 'country'
+                    }} 
                     className={classes.formElement} 
                     label='Country: (optional)' 
                     variant='outlined' 

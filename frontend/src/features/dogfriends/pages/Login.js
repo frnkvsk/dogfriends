@@ -63,7 +63,8 @@ export default function Login() {
   const pageInitContext = useContext(PageInitContext);
   const dispatch = useDispatch();
   const [loginType, setValue] = useState('login');
-  
+  // const [errorLogin, setErrorLogin] = useState(false);
+
   /**
    * Toggle between Login and Signup functionality
    * value is the Tab value string
@@ -79,13 +80,17 @@ export default function Login() {
    * @param {username, password} data 
    */
   const handleLogin = async (data) => {
+    console.log('handleLogin',data)
     try {
       // reset page count 
       pageInitContext.resetInitCount();
       // login to database
-      const response = await login(data);
+      let response = await login(data);
+
+      console.log('response.status',response.status, response.data.token)
       // if logged in get user information
-      if(response && response.status === 200) {
+      if(response && response.data.token) {
+        console.log('response.status',response.status)
         data['token'] = response.data.token;
         const userInfo = await getUserInfo(data);
         await dispatch(addUserInfo(userInfo.data.user));
@@ -93,13 +98,14 @@ export default function Login() {
           userInfo: {username: data.username},
           token: data.token,
         });
-        return true;
-      } else {
-        console.log('Error login',response)
+        history.push('/');
         return false;
+      } else {
+        return true;
+        // console.log('Login handleLogin',errorLogin)
       }        
     } catch (error) {
-      console.error(error)
+      console.log('Error Login.handleLogin ', error)
       return false;
     }
   }
@@ -109,6 +115,7 @@ export default function Login() {
    * @param {username} data 
    */
   const handleCheckUsernameAvailability = async (data) => {
+    console.log('Login handeCheckUserAvailablity data',data)
     if(data.username.length) {
       return await preSignupUsernameCheck(data);
     }    
@@ -147,6 +154,7 @@ export default function Login() {
     <div className={classes.root}>
       <AppBar position='static'>
         <Tabs
+          
           variant='fullWidth'
           value={loginType}
           onChange={handleChange}
@@ -160,13 +168,21 @@ export default function Login() {
             }
           }   
         >
-          <Tab label='Login' value='login' />
-          <Tab label='Sign up' value='signup' />
+          <Tab             
+            data-testid = 'login'
+            label='Login' 
+            value='login' 
+          />
+          <Tab
+            data-testid = 'signup'
+            label='Sign up' 
+            value='signup' 
+          />
         </Tabs>
       </AppBar>
       
       { loginType === 'login' ? 
-        <LoginForm handleLogin={handleLogin}/> : 
+        <LoginForm handleLogin={handleLogin} /> : 
         <SignupForm 
           handlePreSignup={handleCheckUsernameAvailability}
           handleSignup={handleSignup} 

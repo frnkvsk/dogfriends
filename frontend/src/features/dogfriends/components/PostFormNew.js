@@ -155,6 +155,7 @@ const PostFormNew = () => {
         username: auth.authState.userInfo.username,
         _token: auth.authState.token
       }
+      
       dispatch(addPosts([payload, ...selectPostData.data])); 
       // commit post details to database
       postPostNew(payload);       

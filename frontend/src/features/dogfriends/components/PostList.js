@@ -58,7 +58,7 @@ const PostList = () => {
     const getPostsData = async (isSubscribed) => {
       // gets all posts from database
       if(isSubscribed) {
-        const response = await getPosts();      
+        const response = await getPosts();     
         if(isSubscribed && response.status === 200) {
           // store post data in Redux
           dispatch(addPosts(response.data));

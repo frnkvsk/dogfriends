@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
-  Box, 
   Button, 
+  FormHelperText,
   TextField, 
 } from '@material-ui/core';
 
@@ -23,40 +22,47 @@ const useStyles = makeStyles((theme) => ({
   err: {
     color: '#ff1744',
     fontSize: '24px',
+    textAlign: 'center',
   },
 }));
 
 
 export default function LoginForm({handleLogin}) {
   const classes = useStyles();
-  const history = useHistory();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState(true);
+  const [errorState, setErrorState] = useState(false);
 
-  const handleSubmitLogin = async (e) => {
-    e.preventDefault();
-    const valid = await handleLogin({username, password});
-    setErrorMessage(valid);
-    if(valid) history.push('/'); 
+  const handleSubmitLogin = async (e) => {    
+    e.preventDefault();    
+    let loginError = await handleLogin({username, password});
+    setErrorState(loginError);
   }
   
   return (
     <form className={classes.root} onSubmit={handleSubmitLogin}>
-      <Box className={classes.err} 
-        component="span" 
-        display={!errorMessage ? 'block' : 'none'}
-        >
-          Error: Invalid Login Credentials
-      </Box>
-      <TextField 
+      {errorState ? (
+        <FormHelperText 
+          className={classes.err} 
+          >
+            Error: Invalid Login Credentials
+        </FormHelperText> 
+      ) : ''}           
+      <TextField   
+        inputProps={{
+          'data-testid': 'username'
+        }}    
         className={classes.formElement} 
         label='Username: (required)' 
         variant='outlined' 
         value={username} 
         autoFocus={true}
         onChange={e => setUsername(e.target.value)}/>
-      <TextField 
+      <TextField   
+        inputProps={{
+          'data-testid': 'password'
+        }}    
+        id='password'
         className={classes.formElement} 
         type='password'
         label='Password: (required)' 
@@ -65,9 +71,9 @@ export default function LoginForm({handleLogin}) {
         onChange={e => setPassword(e.target.value)}/>
       <Button 
         className={classes.formElement} 
-        type="submit" 
-        variant="contained" 
-        color="primary" >
+        type='submit' 
+        variant='contained' 
+        color='primary' >
           Submit
       </Button>
     </form>

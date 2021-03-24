@@ -1,6 +1,7 @@
 import React, { useState, createContext } from 'react';
 import { useLogin } from '../hooks/useLogin';
 import { useUserInfo } from '../hooks/useUserInfo';
+
 const AuthContext = createContext();
 const { Provider } = AuthContext;
 

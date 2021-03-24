@@ -1,74 +1,52 @@
 import axios from 'axios';
 
 
-const BASE_URL = 'https://app-dogfriends.herokuapp.com/api/';
-// const BASE_URL = 'http://localhost:5000/api/';
+// const BASE_URL = 'https://app-dogfriends.herokuapp.com/api/';
+const BASE_URL = 'http://localhost:5000/api/';
 
-const request = async (endpoint, paramsOrData = {}, verb = "get") => {  
-  
-  console.debug("API Call:", endpoint, paramsOrData, verb, BASE_URL);
-  try {
-    let headers = new Headers();
+const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('GET', 'POST', 'PUT', 'OPTIONS');
-    const res = await axios({
-      method: verb,
-      url: `${BASE_URL}${endpoint}`,
-      
-      [verb === "get" ? "params" : "data"]: paramsOrData,
-      headers: headers
-    });
-    
-    return res;
-      // axios sends query string data via the "params" key,
-      // and request body data via the "data" key,
-      // so the key we need depends on the HTTP verb
-  }catch(err) {
-    let message = err.response ? err.response.data.message : err;
-    throw Array.isArray(message) ? message : [message];
-  }
-}
 
-// posts
+// get all posts
 const getPosts = async () => {
-  let res = await request('posts');
-  return res;
-}
-const getPostById = async (id) => {
-  return await request(`posts/${id}`);
-}
-const postPostVote = async (id, direction, token) => {
-  return await request(`posts/${id}/vote/${direction}`, {_token: token}, 'post');
-}
-const postPostNew = async (data) => {
-  return await request('posts/', data, 'post');
-}
-const putPostUpdate = async (id, title, body, username, token) => {  
-  const data = {
-    title,
-    body,  
-    username,
-    _token: token  
-  }
-  return await request(`posts/${id}`, data, 'put');
-}
-const deletePost = async (id, username, token) => {
-  const data = {
-    id,
-    username,
-    _token: token  
-  }
-  return await request(`posts/${id}`, data, 'delete');
+  const response = await axios({
+    method: 'GET',
+    url: `${BASE_URL}posts`, 
+    headers: headers
+  });
+  return response;
 }
 
-// replies
+// add new post
+const postPostNew = async (data) => {
+  const response = await axios({
+    method: 'POST',
+    url: `${BASE_URL}posts`, 
+    data,
+    headers: headers
+  });
+  return response;
+}
+
+// get replies to a post by post_id
 const getRepliesById = async (id) => {
-  const res = await request(`replies/${id}`);
-  return res;
+  const response = await axios({
+    method: 'GET',
+    url: `${BASE_URL}replies/${id}`,
+    headers: headers
+  });
+  return response;
 }
 const postReplyNew = async (data) => {
-  request('replies/', data, 'post');
+  const response = await axios({
+    method: 'POST',
+    url: `${BASE_URL}replies`,
+    data,
+    headers: headers
+  });
+  return response;
 }
 
 /**
@@ -76,11 +54,18 @@ const postReplyNew = async (data) => {
  * @param {username, password} data 
  */
 const login = async (data) => {
-  try {
-    return await request('login/', data, 'post');
-  } catch (error) {
-    console.error(error);
-  }   
+  
+  return await axios({
+      method: 'POST',
+      url: `${BASE_URL}${login}`,      
+      data,
+      headers: headers
+    });
+  //   console.log('DogfriendsApi login response',response)
+  //   return response;
+  // } catch (error) {
+  //   return error;
+  // }   
 }
 
 /**
@@ -88,35 +73,68 @@ const login = async (data) => {
  * @param {username} data 
  */
 const preSignupUsernameCheck = async (data) => {
-  try {
-    const res = await request(`users/${data.username}`, {}, 'post');
-    return res.data;
-  } catch (error) {
-    console.error(error);
-  }
+  // try {
+  //   const response = await axios({
+  //     method: 'POST',
+  //     url: `${BASE_URL}users/${data.username}`,
+  //     data,
+  //     headers: headers
+  //   });
+  //   return response;
+  // } catch (error) {
+  //   console.error(error);
+  // }
+  return await axios({
+    method: 'POST',
+    url: `${BASE_URL}users/${data.username}`,
+    data,
+    headers: headers
+  });
 }
 
 const signup = async (data) => {   
-  try {
-    const res = await request('users/', data, 'post');
-    return res;    
-  } catch (error) {
-    console.error(error);
-  }   
+  // try {
+  //   const response = await axios({
+  //     method: 'POST',
+  //     url: `${BASE_URL}users`,
+  //     data,
+  //     headers: headers
+  //   });
+  //   return response;
+  // } catch (error) {
+  //   console.error(error);
+  // } 
+  return await axios({
+    method: 'POST',
+    url: `${BASE_URL}users`,
+    data,
+    headers: headers
+  });  
 }
 
 /**
  * Get user information
- * @param {username, token} payload 
+ * @param {username, token} data 
  */
-const getUserInfo = async (payload) => {
-  const {username, token} = payload;
-  try {  
-    const response = await request(`users/${username}/`, {_token: token});
-    return response;
-  } catch (error) {
-    console.error(error);
-  }   
+const getUserInfo = async (data) => {
+  const {username, token} = data;
+  return await axios({
+    method: 'GET',
+    url: `${BASE_URL}users/${username}`,
+    data: {_token: token},
+    headers: headers
+  });
+  // try {  
+  //   const response = await axios({
+  //     method: 'GET',
+  //     url: `${BASE_URL}users/${username}`,
+  //     data: {_token: token},
+  //     headers: headers
+  //   });
+  //   return response;
+  // } catch (error) {
+  //   console.error(error);
+  // }   
 }
 
 /**
@@ -124,30 +142,55 @@ const getUserInfo = async (payload) => {
  * downloading images
  */
 const getInitInfo = async () => {
-  const response = await request('initinfo/');
-  return response;  
+  // try {
+  //   const response = await axios({
+  //     method: 'GET',
+  //     url: `${BASE_URL}initinfo`,
+  //     headers: headers
+  //   });
+  //   return response;
+  // } catch (error) {
+  //   console.error(error);
+  // }  
+  return await axios({
+    method: 'GET',
+    url: `${BASE_URL}initinfo`,
+    headers: headers
+  });  
 }
 
 /**
  * 
- * @param {*} payload 
+ * @param {*} data 
  * @returns 
  */
-const patchUserInfo = async (payload) => {
-  try {
-    return await request(`users/${payload.username}`, payload, 'patch');
-  } catch (error) {
-    console.error(error);
-  }   
+const patchUserInfo = async (data) => {
+  // try {
+  //   const response = await axios({
+  //     method: 'PATCH',
+  //     url: `${BASE_URL}users/${username}`,
+  //     data,
+  //     headers: headers
+  //   });
+  //   return response;
+  // } catch (error) {
+  //   console.error(error);
+  // }  
+  return await axios({
+    method: 'PATCH',
+    url: `${BASE_URL}users/${data.username}`,
+    data,
+    headers: headers
+  }); 
 }
 
 export {
   getPosts,
-  getPostById,
-  postPostVote,
+  // getPostById,
+  // postPostVote,
   postPostNew,
-  putPostUpdate,
-  deletePost,
+  // putPostUpdate,
+  // deletePost,
   login,
   preSignupUsernameCheck,
   signup,
