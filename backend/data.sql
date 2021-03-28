@@ -17,7 +17,7 @@ CREATE TABLE users (
     country TEXT,
     photo_id TEXT,
     created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
     admin boolean DEFAULT false NOT NULL
 );
 
@@ -34,15 +34,15 @@ CREATE TABLE posts (
 );
 
 CREATE TABLE votes (
-  post_id uuid DEFAULT uuid_generate_v4 () REFERENCES posts ON DELETE CASCADE,
+  photo_id TEXT REFERENCES posts ON DELETE CASCADE,
   username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
   direction INT,
-  PRIMARY KEY (post_id, username)
+  PRIMARY KEY (photo_id, username)
 );
 
 CREATE TABLE replies (
   id uuid DEFAULT uuid_generate_v4 (),
-  parent_id uuid REFERENCES posts ON DELETE CASCADE,
+  parent_id TEXT REFERENCES posts ON DELETE CASCADE,
   username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
   body TEXT,
   created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

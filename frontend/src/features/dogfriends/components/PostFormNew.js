@@ -13,7 +13,7 @@ import {
 import { AuthContext } from '../context/AuthContext';
 import {UploadImage} from './UploadImage';
 import { FillTextImage } from './FillTextImage';
-import { putNewPhoto } from '../api/DogfriendsPhotosApi';
+import { putNewPhoto } from '../api/DogfriendsApi';
 import { postPostNew } from '../api/DogfriendsApi';
 import { selectInitInfo } from '../dogfriendsInitInfoSlice';
 import { selectPosts } from '../dogfriendsPostsSlice';

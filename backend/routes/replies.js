@@ -32,7 +32,9 @@ router.get("/:id", async function (req, res, next) {
 router.post("/", authRequired, async function (req, res, next) {
   try {
     const {parent_id, username, body} = req.body;
+    console.log('----------replies parent_id, username, body',req.body)
     const result = await Reply.addNew(parent_id, username, body);
+    console.log('---------replies result',result)
     return res.json({ message: "inserted" });
   } catch (err) {
     return next(err);

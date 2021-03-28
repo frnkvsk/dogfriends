@@ -5,7 +5,8 @@ import { v4 as uuid } from 'uuid';
 import TestData from '../../src/test-utils/test-data';
 
 const BASE_URL = 'http://localhost:5000/api/';
-
+const BUCKET_UP='https://3ynkxwkjf5.execute-api.us-west-2.amazonaws.com/dev/upload'
+const BUCKET_DOWN='https://qljffa4b43.execute-api.us-west-2.amazonaws.com/dev/images'
 // declare which API requests to mock
 const server = setupServer(
   
@@ -142,6 +143,53 @@ const server = setupServer(
       }
     ));
   }),
+  /* patchUserInfo */
+  rest.patch(`${BASE_URL}users/${TestData.user1.username}`, (req, res, ctx) => {
+    data = {
+      ...TestData.user1
+    }
+    return res(ctx.json(
+      {
+        ...TestData.user1
+      }
+    ));
+  }),
+  /* patchUserInfo */
+  rest.patch(`${BASE_URL}users/${TestData.user1.username}`, (req, res, ctx) => {
+    data = {
+      ...TestData.user1
+    }
+    return res(ctx.json(
+      {
+        ...TestData.user1
+      }
+    ));
+  }),
+
+  /* getPhotoBySrc */
+  rest.post(BUCKET_DOWN, (req, res, ctx) => {
+    data = {
+      ...TestData.user1.photo_id
+    }
+    return res(ctx.json(
+      {
+        ...TestData.user1
+      }
+    ));
+  }),
+  
+  /* putNewPhoto */
+  rest.put(`${BUCKET_UP}/${TestData.user1.photo_id}.txt`, (req, res, ctx) => {
+    data = {
+      ...TestData.user1
+    }
+    return res(ctx.json(
+      {
+        ...TestData.user1
+      }
+    ));
+  }),
+
 )
 
 export { server }

@@ -30,6 +30,12 @@ function sqlForPartialUpdate(table, items, key, id) {
     idx += 1;
   }
 
+  // // if updating users table, update the updated_on field
+  // if(table === 'users') {
+  //   const timestamp = 
+  //   columns.push()
+  // }
+
   // build query
   let cols = columns.join(', ');
   let query = `UPDATE ${table} SET ${cols} WHERE UPPER(${key})=UPPER($${idx}) RETURNING *`;

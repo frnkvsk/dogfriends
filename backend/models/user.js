@@ -21,7 +21,7 @@ class User {
         [data.username]
     );
     const user = result.rows[0];
-
+    console.log('---------user',user)
     if (user) {
       // compare hashed password to a new hash from password
       const isValid = await bcrypt.compare(data.password, user.password);
@@ -29,7 +29,7 @@ class User {
         return user;
       }
     }
-
+    
     const invalidPass = new Error('Invalid Credentials');
     invalidPass.status = 401;
     throw invalidPass;
@@ -150,7 +150,7 @@ class User {
     delete user.password;
     delete user.admin;
 
-    return result.rows[0];
+    return user;
   }
 
   /** Delete given user from database; returns undefined. */

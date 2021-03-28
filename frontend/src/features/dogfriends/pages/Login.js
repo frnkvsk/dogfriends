@@ -82,8 +82,12 @@ export default function Login() {
   const handleLogin = async (data) => {
     console.log('handleLogin',data)
     try {
+
+      // STEP 1
       // reset page count 
       pageInitContext.resetInitCount();
+
+      // STEP 2
       // login to database
       let response = await login(data);
 
@@ -91,13 +95,21 @@ export default function Login() {
       // if logged in get user information
       if(response && response.data.token) {
         console.log('response.status',response.status)
-        data['token'] = response.data.token;
-        const userInfo = await getUserInfo(data);
-        await dispatch(addUserInfo(userInfo.data.user));
+        // data['token'] = response.data.token;
+
+        // STEP 3
+        // const userInfo = await getUserInfo(data);
+
+        // STEP 4
+        // await dispatch(addUserInfo(userInfo.data.user));
+
+        // STEP 5
         auth.setAuthState({
           userInfo: {username: data.username},
-          token: data.token,
+          token: response.data.token,
         });
+
+        // STEP 6
         history.push('/');
         return false;
       } else {
@@ -115,7 +127,16 @@ export default function Login() {
    * @param {username} data 
    */
   const handleCheckUsernameAvailability = async (data) => {
-    console.log('Login handeCheckUserAvailablity data',data)
+
+
+    // TODO: change functionality so logic is only in parent
+
+
+
+
+
+
+
     if(data.username.length) {
       return await preSignupUsernameCheck(data);
     }    

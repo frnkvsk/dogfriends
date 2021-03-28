@@ -5,9 +5,8 @@ class Post {
 
   static async findAll() {
     const response = await db.query(
-      `SELECT * FROM posts ORDER BY created_on`
-    );  
-
+      `SELECT * FROM posts ORDER BY created_on DESC`
+    ); 
     if(!response.rows.length) {
       const error = new Error('Server Unavailable');
       error.status = 503;

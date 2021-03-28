@@ -194,7 +194,7 @@ export default function Navbar(props) {
     const getSetUserInfo = async () => {
       const data = {
         username: auth.authState.userInfo.username,
-        token: auth.authState.token
+        _token: auth.authState.token
       }
       const resp = await getUserInfo(data);
       if(resp.status === 200) {

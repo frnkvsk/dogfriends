@@ -8,7 +8,7 @@
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@reduxjs/toolkit": "^1.4.0",
     "axios": "^0.21.1",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-animation": "^1.2.2",
     "react-animations": "^1.0.0",
     "react-dom": "^16.13.1",

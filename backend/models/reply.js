@@ -19,11 +19,13 @@ class Reply {
   }
 
   static async addNew(parent_id, username, body) {
+    console.log('----------reply parent_id, username, body',parent_id, username, body)
     const response = await db.query(
       `INSERT INTO replies (parent_id, username, body) 
         VALUES ($1, $2, $3)
         RETURNING *`,
       [parent_id, username, body]);
+      console.log('----------reply response',response)
     if(response.rows[0].parent_id !== parent_id) {
       const error = new Error('Invalid Credentials');
       error.status = 400;

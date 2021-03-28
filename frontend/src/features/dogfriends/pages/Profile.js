@@ -8,7 +8,7 @@ import { AuthContext } from '../context/AuthContext';
 import { addUserInfo } from '../dogfriendsUserSlice';
 import { selectInitInfo } from '../dogfriendsInitInfoSlice';
 import { addAvatarUrl } from '../dogfriendsAvatarSlice';
-import { putNewPhoto } from '../api/DogfriendsPhotosApi';
+import { putNewPhoto } from '../api/DogfriendsApi';
 import { patchUserInfo } from '../api/DogfriendsApi';
 import ProfileForm from '../components/ProfileForm';
 

@@ -74,13 +74,21 @@ const PostList = () => {
     //eslint-disable-next-line   
   }, [selectPostsData.data]);
 
+  const setPosts = () => {
+
+  }
   useEffect(() => {
+    
     // set the pagination page
     setCurrentPages({
       from: pageCurr * posts_per_page,
       to: pageCurr * posts_per_page + posts_per_page,
-    })
+    });
+
+    
   }, [pageCurr]);
+
+  // let tt = usePosts(currentPages.from, currentPages.to)
 
   return (    
     <div className={classes.root}>   
