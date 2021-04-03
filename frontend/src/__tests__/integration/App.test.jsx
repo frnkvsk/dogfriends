@@ -61,10 +61,12 @@ test('login functionality', async () => {
   const submitButton = screen.getByText(/submit/i);
   // let submitButton = screen.getByRole('button', {'label': /submit/i});
   expect(submitButton).toBeInTheDocument();
-
+  expect(usernameTextfield.value).toBe(TestData.user2.username)
+  expect(passwordTextfield.value).toBe(TestData.user2.password)
+  // fireEvent.click(submitButton);
   // fire Submit button
-  await act(async () => {
-    await fireEvent.click(submitButton);
+  act( () => {
+    fireEvent.click(submitButton);
   });  
 
   // let errorMessage;

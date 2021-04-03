@@ -66,24 +66,24 @@ const server = setupServer(
 
   /* login */
   rest.post(`${BASE_URL}login`, (req, res, ctx) => {
-    validLoginCredentials = {
-      ...TestData.user1.username,
-      ...TestData.user1.password
-    }
+    // const validLoginCredentials = {
+    //   ...TestData.user2.username,
+    //   ...TestData.user2.password
+    // }
     // data = {
     //   ...TestData.user1.username,
     //   ...TestData.user1.password
     // }
-    console.log(JSON.stringify(data) , JSON.stringify(validLoginCredentials))
+    // console.log(JSON.stringify(data) , JSON.stringify(validLoginCredentials))
 
-    if(JSON.stringify(data) === JSON.stringify(validLoginCredentials)) {
+    // if(JSON.stringify(data) === JSON.stringify(validLoginCredentials)) {
       return res(ctx.json(
         {
           ...TestData.user1.token
         }
       ));
-    } 
-    throw new Error('Error login9');
+    // } 
+    // throw new Error('Error login9');
     
   }),
 

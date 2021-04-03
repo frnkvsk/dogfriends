@@ -53,7 +53,9 @@ People who own dogs need help caring for their dogs. People have to go to work, 
 
 
 
+## Task Flow user adds new post
 
+![taskflow](DogfriendsTaskFlowNewPost.svg)
 
 
 ---

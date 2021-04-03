@@ -80,7 +80,7 @@ export default function Login() {
    * @param {username, password} data 
    */
   const handleLogin = async (data) => {
-    console.log('handleLogin',data)
+    // console.log('handleLogin',data)
     try {
 
       // STEP 1
@@ -91,10 +91,10 @@ export default function Login() {
       // login to database
       let response = await login(data);
 
-      console.log('response.status',response.status, response.data.token)
+      // console.log('response.status',response.status, response.data.token)
       // if logged in get user information
       if(response && response.data.token) {
-        console.log('response.status',response.status)
+        // console.log('response.status',response.status)
         // data['token'] = response.data.token;
 
         // STEP 3

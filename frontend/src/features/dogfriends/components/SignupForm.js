@@ -72,7 +72,7 @@ export default function SignupForm({ handlePreSignup, handleSignup }) {
       // console.log('SignupForm checkUsername username',username)
       if(username.length) {
         const res = await handlePreSignup({username});
-        console.log('-----------res',res, res.payload)
+        // console.log('-----------res',res, res.payload)
         if(res.resp) {
           setUsernameValid('Username is already taken.');
           // console.log('--------setUsernameValie','Username is already taken.')
