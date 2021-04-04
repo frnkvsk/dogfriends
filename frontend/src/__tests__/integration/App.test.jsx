@@ -3,19 +3,19 @@ import '@testing-library/jest-dom/extend-expect';
 import { renderHook } from '@testing-library/react-hooks';
 
 import { render, screen, fireEvent, cleanup, act, waitFor } from '../../test-utils/test-providers';
-import { server } from '../../test-utils/test-server';
+import { server } from '../../__mocks__/test-server';
 import TestData from '../../test-utils/test-data';
 
 import App from '../../App';
 
 import { useUserInfo } from '../../features/dogfriends/hooks/useUserInfo';
 
-beforeAll(() => server.listen());
-// reset any request handlers that are declared as a part of our tests
-// (i.e. for testing one-time error scenarios)
-afterEach(() => server.resetHandlers())
-// clean up once the tests are done
-afterAll(() => server.close())
+// beforeAll(() => server.listen());
+// // reset any request handlers that are declared as a part of our tests
+// // (i.e. for testing one-time error scenarios)
+// afterEach(() => server.resetHandlers())
+// // clean up once the tests are done
+// afterAll(() => server.close())
 
 
 // smoke and appearance tests
@@ -53,46 +53,16 @@ test('login functionality', async () => {
   // enter first_name, last_name
   fireEvent.change(usernameTextfield, {target: {value: TestData.user2.username}});
   fireEvent.change(passwordTextfield, {target: {value: TestData.user2.password}});
-  // // enter first_name, last_name
-  // fireEvent.change(usernameTextfield, {target: {value: "TestData.user2.username"}});
-  // fireEvent.change(passwordTextfield, {target: {value: "TestData.user2.password"}});
 
   // Submit button is present
   const submitButton = screen.getByText(/submit/i);
   // let submitButton = screen.getByRole('button', {'label': /submit/i});
   expect(submitButton).toBeInTheDocument();
-  expect(usernameTextfield.value).toBe(TestData.user2.username)
-  expect(passwordTextfield.value).toBe(TestData.user2.password)
-  // fireEvent.click(submitButton);
+
   // fire Submit button
-  act( () => {
-    fireEvent.click(submitButton);
+  await act(async () => {
+    await fireEvent.click(submitButton);
   });  
 
-  // let errorMessage;
-  // await waitFor(() => {
-  //   errorMessage = screen.findByText(/Error\: Invalid Login Credentials/i);
-    
-    
-  // },{ waitForOptions: {timeout: 2000 } });
-  // await waitFor(async () => {
-   
-    
-    
-  // },{ waitForOptions: {timeout: 2000 } });
-  // let em = await errorMessage;
-  // console.log('errorMessage',em)
-  //.toBeInTheDocument();
-  // const errorMessage = await screen.findByText(/Error\: Invalid Login Credentials/i);
-  // expect(errorMessage).toBeInTheDocument();
-
-  // const errorMessage = await screen.findByText(/Error\: Invalid Login Credentials/i);
-  // // console.log('errorMessage',errorMessage)
-  // expect(errorMessage).toBeInTheDocument();
-
-  // const welcomeText = await screen.findByText(`Welcome back ${TestData.user1.username}`);
-  // expect(welcomeText).toBeInTheDocument();
-  // console.log('welcomeText',welcomeText)
-  // expect(welcomeText[0]).toEqual('true');
 
 });
